@@ -1,10 +1,10 @@
 import 'package:cash_box/domain/enteties/unique_component.dart';
+import 'package:meta/meta.dart';
 
-class Tag extends UniqueComponent{
-
+class Tag extends UniqueComponent {
   //Color in HEX
   final String name, color;
 
-  Tag(String id, this.name, this.color) : super(id);
-
+  Tag(String id, {@required this.name, @required this.color})
+      : super(id, params: [name, color]);
 }
