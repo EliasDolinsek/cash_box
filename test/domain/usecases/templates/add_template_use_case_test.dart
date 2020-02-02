@@ -24,6 +24,7 @@ void main(){
   test("should call the repository to add a template", () async {
     when(repository.addTemplate(any)).thenAnswer((_) async => Right(EmptyData()));
 
+
     final params = AddTemplateUseCaseParams(testTemplate);
     final result = await useCase(params);
 
