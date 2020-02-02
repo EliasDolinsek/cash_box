@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/usecases/UseCase.dart';
+import 'package:cash_box/domain/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cash_box/domain/repositories/receipts_repository.dart';

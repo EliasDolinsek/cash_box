@@ -9,4 +9,5 @@ abstract class ReceiptsRepository {
   Future<Either<Failure, Receipt>> getReceipt(String id);
   Future<Either<Failure, EmptyData>> updateReceipt(String id, Receipt receipt);
   Future<Either<Failure, EmptyData>> removeReceipt(String id);
+
 }

@@ -3,7 +3,7 @@ import 'package:cash_box/domain/enteties/field.dart';
 import 'package:cash_box/domain/enteties/receipt.dart';
 import 'package:cash_box/domain/repositories/empty_data.dart';
 import 'package:cash_box/domain/repositories/receipts_repository.dart';
-import 'package:cash_box/domain/usecases/UseCase.dart';
+import 'package:cash_box/domain/usecases/use_case.dart';
 import 'package:cash_box/domain/usecases/receipts/get_receipt_use_case.dart';
 import 'package:dartz/dartz.dart';
 
