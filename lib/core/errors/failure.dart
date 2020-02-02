@@ -8,3 +8,5 @@ abstract class Failure extends Equatable {
 class ReceiptNotFoundFailure extends Failure {}
 
 class TemplateNotFoundFailure extends Failure {}
+
+class BucketNotFoundFailure extends Failure {}
