@@ -91,7 +91,7 @@ void main() {
 
   group("failure tests", () {
     test("should return a ReceiptNotFoundFailure if the given receipt-id doesn't exist", () async {
-      when(repository.getReceipts()).thenAnswer((_) async => Left(ReceiptNotFoundFailure()));
+      when(repository.getReceipts()).thenAnswer((_) async => Right(receiptFixtures));
       final result = await useCase(UpdateReceiptUseCaseParams(testFailureID));
 
       expect(result, Left(ReceiptNotFoundFailure()));

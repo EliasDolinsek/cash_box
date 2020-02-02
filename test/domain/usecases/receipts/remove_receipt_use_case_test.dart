@@ -21,7 +21,7 @@ void main(){
   final testID = "abc-123";
   test("should call the repository to remove the receipt", () async {
     when(repository.removeReceipt(testID)).thenAnswer((_) async => Right(EmptyData()));
-    when(repository.getReceipt(testID)).thenAnswer((_) async => Right(receiptFixtures.receiptFixtures.first));
+    when(repository.getReceipts()).thenAnswer((_) async => Right(receiptFixtures.receiptFixtures));
     final params = RemoveReceiptUseCaseParams(testID);
     final result = await useCase(params);
 
