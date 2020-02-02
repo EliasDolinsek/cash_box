@@ -1,12 +1,11 @@
-import 'package:cash_box/domain/enteties/template.dart';
-import 'package:cash_box/domain/repositories/empty_data.dart';
 import 'package:cash_box/domain/repositories/templates_repository.dart';
 import 'package:cash_box/domain/usecases/templates/get_templates_use_case.dart';
+import 'package:cash_box/domain/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../fixtures/field_fixtures.dart';
+import '../../../fixtures/templates_fixtures.dart';
 
 class MockTemplatesRepository extends Mock implements TemplatesRepository {}
 
@@ -20,13 +19,11 @@ void main(){
     useCase = GetTemplatesUseCase(repository);
   });
 
-  final testTemplate = Template("jkl-101112", name: "Test4", fields: fieldFixtures);
-  test("should call teh repository to add a usecase", () async {
-    when(repository.addTemplate(any)).thenAnswer((_) async => Right(EmptyData()));
+  test("should call teh repository to get all templates", () async {
+    when(repository.getTemplates()).thenAnswer((_) async => Right(templateFixtures));
 
-    final params = GetTemplatesUseCaseParams(testTemplate);
-    final result = await useCase(params);
+    final result = await useCase(NoParams());
 
-    expect(result, Right(EmptyData()));
+    expect(result, Right(templateFixtures));
   });
 }
