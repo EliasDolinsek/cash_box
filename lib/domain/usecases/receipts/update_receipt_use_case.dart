@@ -27,15 +27,10 @@ class UpdateReceiptUseCase
 
   Receipt _getUpdatedReceipt(Receipt receipt,
       UpdateReceiptUseCaseParams params) {
-    var type, fields, tagIDs;
-    if (params.type != null) type = params.type;
-    if (params.fields != null) fields = params.fields;
-    if (params.tagIDs != null) tagIDs = params.tagIDs;
-
-    return Receipt(params.id, type: type ?? receipt.type,
-        fields: fields ?? receipt.fields,
+    return Receipt(params.id, type: params.type ?? receipt.type,
+        fields: params.fields ?? receipt.fields,
         creationDate: receipt.creationDate,
-        tagIDs: tagIDs ?? receipt.tagIDs);
+        tagIDs: params.tagIDs ?? receipt.tagIDs);
   }
 
   Future<Either<Failure, Receipt>> _getReceipt(String id) async {

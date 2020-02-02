@@ -8,4 +8,11 @@ class Template extends UniqueComponent {
 
   Template(String id, {@required this.name, @required this.fields})
       : super(id, params: [name, fields]);
+
+  @override
+  String toString() {
+    return 'Template{id: $id, name: $name, fields: $fields}';
+  }
+
+
 }
