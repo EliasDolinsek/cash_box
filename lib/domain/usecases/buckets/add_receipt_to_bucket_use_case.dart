@@ -5,24 +5,23 @@ import 'package:cash_box/domain/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class AddReceiptToBucketUseCase extends UseCase<EmptyData, AddReceiptUseCaseParams> {
+class AddReceiptToBucketUseCase extends UseCase<EmptyData, AddReceiptToBucketUseCaseParams> {
 
   final BucketsRepository repository;
 
   AddReceiptToBucketUseCase(this.repository);
 
   @override
-  Future<Either<Failure, EmptyData>> call(AddReceiptUseCaseParams params) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> call(AddReceiptToBucketUseCaseParams params) async {
+    return repository.addReceipt(params.bucketID, params.receiptID);
   }
 
 }
 
-class AddReceiptUseCaseParams extends Equatable {
+class AddReceiptToBucketUseCaseParams extends Equatable {
 
   final String bucketID, receiptID;
 
-  AddReceiptUseCaseParams(this.bucketID, this.receiptID) : super([bucketID, receiptID]);
+  AddReceiptToBucketUseCaseParams(this.bucketID, this.receiptID) : super([bucketID, receiptID]);
 
 }
