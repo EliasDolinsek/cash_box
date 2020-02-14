@@ -19,6 +19,7 @@ class Receipt extends UniqueComponent {
   String toString() {
     return 'Receipt{type: $type, creationDate: $creationDate, fields: $fields, tagIDs: $tagIDs}';
   }
+
 }
 
 enum ReceiptType { INCOME, OUTCOME, INVESTMENT }
