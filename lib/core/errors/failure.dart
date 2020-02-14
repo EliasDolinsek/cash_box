@@ -10,3 +10,5 @@ class ReceiptNotFoundFailure extends Failure {}
 class TemplateNotFoundFailure extends Failure {}
 
 class BucketNotFoundFailure extends Failure {}
+
+class ContactNotFoundFailure extends Failure {}
