@@ -26,7 +26,7 @@ void main() {
       type: ReceiptType.OUTCOME,
       creationDate: DateTime.now(),
       fields: fieldFixtures,
-      tagIDs: tagFixtures);
+      tagIDs: tagIDFixtures);
 
   test("should call the repository to add new receipt", () async {
     when(repository.addReceipt(any))

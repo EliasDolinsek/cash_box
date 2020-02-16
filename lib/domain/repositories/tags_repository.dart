@@ -10,5 +10,4 @@ abstract class TagsRepository {
   Future<Either<Failure, EmptyData>> updateTag(String id, Tag update);
 
   Future<Either<Failure, List<Tag>>> getTags();
-  Future<Either<Failure, Tag>> getTag(String id);
 }

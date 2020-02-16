@@ -73,7 +73,7 @@ void main() {
       when(repository.updateReceipt(testID, any))
           .thenAnswer((_) async => Right(EmptyData()));
 
-      final newTagIDs = tagFixtures..removeLast();
+      final newTagIDs = tagIDFixtures..removeLast();
       final params = UpdateReceiptUseCaseParams(testID, tagIDs: newTagIDs);
       final result = await useCase(params);
 
