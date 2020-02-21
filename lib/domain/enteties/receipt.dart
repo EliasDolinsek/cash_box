@@ -22,4 +22,4 @@ class Receipt extends UniqueComponent {
 
 }
 
-enum ReceiptType { INCOME, OUTCOME, INVESTMENT }
+enum ReceiptType { INCOME, OUTCOME, INVESTMENT, BANK_STATEMENT }
