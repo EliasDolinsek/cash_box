@@ -1,10 +1,15 @@
+import 'package:cash_box/data/models/model.dart';
 import 'package:cash_box/domain/enteties/field.dart';
 import 'package:meta/meta.dart';
 
-class FieldModel extends Field {
+class FieldModel extends Field implements Model{
 
   FieldModel(String id, {@required FieldType type, @required String description, @required dynamic value})
       : super(id, type: type, description: description, value: value);
+
+  factory FieldModel.fromField(Field field){
+    return FieldModel(field.id, type: field.type, description: field.description, value: field.value);
+  }
 
   factory FieldModel.fromMap(Map<String, dynamic> map){
     final type = map["type"];
@@ -32,7 +37,9 @@ class FieldModel extends Field {
       return "text";
     } else if(type == FieldType.AMOUNT){
       return "amount";
-    } else {
+    } else if(type == FieldType.FILE) {
+      return "file";
+    } else{
       throw new Exception("Couldn't resolve string for FieldType $type");
     }
   }
@@ -46,9 +53,15 @@ class FieldModel extends Field {
       return _imageModelFromData(id, description, data);
     } else if(type == "text"){
       return _textModelFromData(id, description, data);
+    } else if(type == "file") {
+      return _fileModelFromData(id, description, data);
     } else {
       throw new Exception("Invalid field-type: type=$type value=$data");
     }
+  }
+
+  static FieldModel _fileModelFromData(String id, String description, String data){
+    return FieldModel(id, type: FieldType.FILE, description: description, value: data);
   }
 
   static FieldModel _textModelFromData(String id, String description, String text){

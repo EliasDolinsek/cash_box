@@ -12,4 +12,4 @@ class Field extends UniqueComponent {
 
 }
 
-enum FieldType { AMOUNT, DATE, IMAGE, TEXT }
+enum FieldType { AMOUNT, DATE, IMAGE, TEXT, FILE }

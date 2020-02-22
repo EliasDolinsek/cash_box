@@ -42,6 +42,14 @@ void main(){
 
       expect(map, {"id":"abc-123", "type":"image", "description":"description", "value":testImageSrc});
     });
+
+    test("toMAP for FieldType.FILE", () async {
+      final testFileSrc = "firebase:file-id";
+      final testModel = FieldModel("abc-123", type: FieldType.FILE, description: "description", value: testFileSrc);
+      final map = testModel.toMap();
+
+      expect(map, {"id":"abc-123", "type":"file", "description":"description", "value":testFileSrc});
+    });
   });
 
   group("fromMap", (){
@@ -70,11 +78,19 @@ void main(){
     });
 
     test("fromMap for FieldType.IMAGE", (){
-      final testImageSrc = "local:file-name";
+      final testImageSrc = "local:image-name";
       final testMAP = {"id":"abc-123", "type":"image", "description":"description", "value":testImageSrc};
 
       final result = FieldModel.fromMap(testMAP);
       expect(result, FieldModel("abc-123", type: FieldType.IMAGE, description: "description", value: testImageSrc));
+    });
+
+    test("fromMap for FieldType.FILE", (){
+      final testFileSrc = "local:file-name";
+      final testMAP = {"id":"abc-123", "type":"file", "description":"description", "value":testFileSrc};
+
+      final result = FieldModel.fromMap(testMAP);
+      expect(result, FieldModel("abc-123", type: FieldType.FILE, description: "description", value: testFileSrc));
     });
   });
 }
