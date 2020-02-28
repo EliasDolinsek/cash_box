@@ -4,4 +4,4 @@ abstract class Config {
 
 }
 
-enum DataStorageLocation { LOCAL, REMOTE_FIREBASE }
+enum DataStorageLocation { LOCAL_MOBILE, REMOTE_MOBILE_FIREBASE, REMOTE_WEB_FIREBASE }
