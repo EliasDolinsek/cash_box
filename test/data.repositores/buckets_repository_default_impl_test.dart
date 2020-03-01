@@ -1,8 +1,11 @@
+import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/repositories/buckets_repository_default_impl.dart';
+import 'package:dartz/dartz.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../fixtures/buckets_fixtures.dart';
 import 'mocks/mocks.dart';
 
 void main() {
@@ -24,23 +27,67 @@ void main() {
         config: config);
   });
 
-  group("dataStorageLocation", (){
+  group("dataStorageLocation", () {
     test("test for DataStorageLocation.LOCAL_MOBILE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
       final result = await repository.dataSource;
       expect(result, localMobileDataSource);
     });
 
     test("test for DataStorageLocation.REMOTE_MOBILE_FIREBASE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
       final result = await repository.dataSource;
       expect(result, remoteMobileFirebaseDataSource);
     });
 
     test("test for DataStorageLocation.REMOTE_WEB_FIREBASE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
       final result = await repository.dataSource;
       expect(result, remoteWebFirebaseDataSource);
     });
+  });
+
+  group("getBuckets", () {
+    test(
+        "should check whichd dataSource to use by getting the storage location",
+        () {
+      repository.getBuckets();
+      verify(config.dataStorageLocation);
+    });
+
+    test("getBuckets without an exception and DataStorageLocation.LOCAL_MOBILE",
+        () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.getTypes())
+          .thenAnswer((_) async => bucketFixtures);
+      final result = await repository.getBuckets();
+
+      expect(result, isA<Right>());
+    });
+
+    test("getBuckets with an Exception and DataStorageLocation.LOCAL_MOBILE",
+        () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.getTypes()).thenThrow(Exception("Some error"));
+      final result = await repository.getBuckets();
+
+      expect(result, Left(LocalDataSourceFailure()));
+    });
+
+    test("getBuckets with an DataStorageLocationException and DataStorageLocation.LOCAL_MOBILE",
+            () async {
+          when(config.dataStorageLocation)
+              .thenAnswer((_) async => null);
+          when(localMobileDataSource.getTypes())
+              .thenAnswer((_) async => bucketFixtures);
+          final result = await repository.getBuckets();
+
+          expect(result, Left(LocalDataSourceFailure()));
+        });
   });
 }

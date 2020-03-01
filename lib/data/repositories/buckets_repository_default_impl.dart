@@ -8,6 +8,7 @@ import 'package:cash_box/data/repositories/repository.dart';
 import 'package:cash_box/domain/enteties/bucket.dart';
 import 'package:cash_box/domain/repositories/buckets_repository.dart';
 import 'package:cash_box/domain/repositories/empty_data.dart';
+import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:meta/meta.dart';
@@ -38,9 +39,16 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
   }
 
   @override
-  Future<Either<Failure, List<Bucket>>> getBuckets() {
-    // TODO: implement getBuckets
-    throw UnimplementedError();
+  Future<Either<Failure, List<Bucket>>> getBuckets() async {
+    try {
+      final dataSource = await this.dataSource;
+      final buckets = await dataSource.getTypes();
+      return Right(buckets);
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(LocalDataSourceFailure());
+    }
   }
 
   @override
@@ -63,14 +71,18 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
   }
 
   @override
-  // TODO: implement dataSource
   Future<DataSource> get dataSource async {
     final dataStorageLocation = await config.dataStorageLocation;
-    switch(dataStorageLocation){
-      case DataStorageLocation.LOCAL_MOBILE: return localMobileDataSource;
-      case DataStorageLocation.REMOTE_MOBILE_FIREBASE: return remoteMobileFirebaseDataSource;
-      case DataStorageLocation.REMOTE_WEB_FIREBASE: return remoteWebFirebaseDataSource;
-      default: throw new Exception("Couldn't resolve data storage location for ${config.dataStorageLocation}");
+    switch (dataStorageLocation) {
+      case DataStorageLocation.LOCAL_MOBILE:
+        return localMobileDataSource;
+      case DataStorageLocation.REMOTE_MOBILE_FIREBASE:
+        return remoteMobileFirebaseDataSource;
+      case DataStorageLocation.REMOTE_WEB_FIREBASE:
+        return remoteWebFirebaseDataSource;
+      default:
+        throw new Exception(
+            "Couldn't resolve data storage location for ${config.dataStorageLocation}");
     }
   }
 }

@@ -16,3 +16,7 @@ class ContactNotFoundFailure extends Failure {}
 class ReceiptsNotFoundFailure extends Failure {}
 
 class TagNotFoundFailure extends Failure {}
+
+class LocalDataSourceFailure extends Failure {}
+
+class DataStorageLocationFailure extends Failure {}
