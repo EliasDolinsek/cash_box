@@ -1,6 +1,9 @@
+import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/repositories/buckets_repository_default_impl.dart';
+import 'package:cash_box/domain/enteties/bucket.dart';
+import 'package:cash_box/domain/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -89,5 +92,30 @@ void main() {
 
           expect(result, Left(LocalDataSourceFailure()));
         });
+  });
+
+  group("addBucket", (){
+
+    final testBucket = Bucket("abc-123", name: "Test", description: "Test", receiptsIDs: ["abc-123", "def-456"]);
+
+    test("should get the data source (without an exception)", (){
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      repository.addBucket(testBucket);
+      verify(config.dataStorageLocation);
+    });
+
+    test("should get the data source (with an exception), and return an DataStorageFailure", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+      final result = await repository.addBucket(testBucket);
+      expect(result, Left(DataStorageLocationFailure()));
+    });
+
+    test("should call the DataSource to add a bucket", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      final result = repository.addBucket(testBucket);
+
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.addType(testBucket));
+    });
   });
 }

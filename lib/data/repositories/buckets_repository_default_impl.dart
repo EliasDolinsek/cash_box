@@ -26,9 +26,16 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
       @required this.config});
 
   @override
-  Future<Either<Failure, EmptyData>> addBucket(Bucket bucket) {
-    // TODO: implement addBucket
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> addBucket(Bucket bucket) async {
+    try {
+      final dataSource = await this.dataSource;
+      dataSource.addType(bucket);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override
@@ -47,7 +54,7 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
     } on DataStorageLocationException {
       return Left(DataStorageLocationFailure());
     } on Exception {
-      return Left(LocalDataSourceFailure());
+      return Left(RepositoryFailure());
     }
   }
 
