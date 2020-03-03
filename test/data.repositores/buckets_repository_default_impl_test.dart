@@ -79,7 +79,7 @@ void main() {
       when(localMobileDataSource.getTypes()).thenThrow(Exception("Some error"));
       final result = await repository.getBuckets();
 
-      expect(result, Left(LocalDataSourceFailure()));
+      expect(result, Left(RepositoryFailure()));
     });
 
     test("getBuckets with an DataStorageLocationException and DataStorageLocation.LOCAL_MOBILE",
@@ -90,19 +90,13 @@ void main() {
               .thenAnswer((_) async => bucketFixtures);
           final result = await repository.getBuckets();
 
-          expect(result, Left(LocalDataSourceFailure()));
+          expect(result, Left(RepositoryFailure()));
         });
   });
 
   group("addBucket", (){
 
     final testBucket = Bucket("abc-123", name: "Test", description: "Test", receiptsIDs: ["abc-123", "def-456"]);
-
-    test("should get the data source (without an exception)", (){
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      repository.addBucket(testBucket);
-      verify(config.dataStorageLocation);
-    });
 
     test("should get the data source (with an exception), and return an DataStorageFailure", () async {
       when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
@@ -112,10 +106,32 @@ void main() {
 
     test("should call the DataSource to add a bucket", () async {
       when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      final result = repository.addBucket(testBucket);
+      final result = await repository.addBucket(testBucket);
 
       expect(result, Right(EmptyData()));
       verify(localMobileDataSource.addType(testBucket));
+    });
+  });
+
+  group("removeBucket", () {
+
+    String testID = "abc-123";
+
+    test("should return a DataSourceFailure when dataSource throws an DataStorageLocationException", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+      final result = await repository.removeBucket(testID);
+
+      expect(result, Left(DataStorageLocationFailure()));
+      verify(config.dataStorageLocation);
+    });
+    
+    test("should call the DataSource to remote a bucket", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.removeType(any)).thenAnswer((_) async => Right(EmptyData()));
+      
+      final result = await repository.removeBucket(testID);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.removeType(testID));
     });
   });
 }
