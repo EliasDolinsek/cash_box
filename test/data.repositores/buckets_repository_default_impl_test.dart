@@ -134,4 +134,27 @@ void main() {
       verify(localMobileDataSource.removeType(testID));
     });
   });
+
+  group("updateBucket", () {
+
+    String testID = "abc-123";
+    Bucket testBucket = Bucket(testID, name: "update", description: "update", receiptsIDs: ["123"]);
+
+    test("should return a DataSourceFailure when dataSource throws an DataStorageLocationException", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+      final result = await repository.updateBucket(testID, testBucket);
+
+      expect(result, Left(DataStorageLocationFailure()));
+      verify(config.dataStorageLocation);
+    });
+
+    test("should call the dataSource to update the bucket", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.updateType(any, any)).thenAnswer((_) async => EmptyData());
+
+      final result = await repository.updateBucket(testID, testBucket);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.updateType(testID, testBucket));
+    });
+  });
 }

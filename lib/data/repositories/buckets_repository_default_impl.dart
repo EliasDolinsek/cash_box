@@ -79,9 +79,16 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> updateBucket(String id, Bucket bucket) {
-    // TODO: implement updateBucket
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> updateBucket(String id, Bucket bucket) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.updateType(id, bucket);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override
