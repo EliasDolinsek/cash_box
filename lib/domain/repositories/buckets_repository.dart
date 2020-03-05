@@ -9,8 +9,5 @@ abstract class BucketsRepository {
   Future<Either<Failure, EmptyData>> updateBucket(String id, Bucket bucket);
   Future<Either<Failure, EmptyData>> removeBucket(String id);
 
-  Future<Either<Failure, EmptyData>> addReceipt(String bucketID, String receiptID);
-  Future<Either<Failure, EmptyData>> removeReceipt(String bucketID, String receiptID);
-
   Future<Either<Failure, List<Bucket>>> getBuckets();
 }

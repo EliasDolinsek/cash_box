@@ -24,24 +24,16 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
       bucketsRemoteMobileFirebaseDataSource;
   final BucketsRemoteWebFirebaseDataSource bucketsRemoteWebFirebaseDataSource;
 
-  final ReceiptsLocalMobileDataSource receiptsLocalMobileDataSource;
-  final ReceiptsRemoteMobileFirebaseDataSource
-      receiptsRemoteMobileFirebaseDataSource;
-  final ReceiptsRemoteWebFirebaseDataSource receiptsRemoteWebFirebaseDataSource;
-
   BucketsRepositoryDefaultImpl(
       {@required this.bucketsLocalMobileDataSource,
       @required this.bucketsRemoteMobileFirebaseDataSource,
       @required this.bucketsRemoteWebFirebaseDataSource,
-      @required this.receiptsLocalMobileDataSource,
-      @required this.receiptsRemoteMobileFirebaseDataSource,
-      @required this.receiptsRemoteWebFirebaseDataSource,
       @required this.config});
 
   @override
   Future<Either<Failure, EmptyData>> addBucket(Bucket bucket) async {
     try {
-      final dataSource = await this.bucketsDataSource;
+      final dataSource = await this.dataSource;
       dataSource.addType(bucket);
       return Right(EmptyData());
     } on DataStorageLocationException {
@@ -52,21 +44,9 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> addReceipt(
-      String bucketID, String receiptID) async {
-    try {
-      final dataSource = await this.receiptsDataSource;
-    } on DataStorageLocationException {
-
-    } on Exception {
-
-    }
-  }
-
-  @override
   Future<Either<Failure, List<Bucket>>> getBuckets() async {
     try {
-      final dataSource = await this.bucketsDataSource;
+      final dataSource = await this.dataSource;
       final buckets = await dataSource.getTypes();
       return Right(buckets);
     } on DataStorageLocationException {
@@ -79,7 +59,7 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
   @override
   Future<Either<Failure, EmptyData>> removeBucket(String id) async {
     try {
-      final dataSource = await this.bucketsDataSource;
+      final dataSource = await this.dataSource;
       await dataSource.removeType(id);
       return Right(EmptyData());
     } on DataStorageLocationException {
@@ -90,17 +70,10 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> removeReceipt(
-      String bucketID, String receiptID) {
-    // TODO: implement removeReceipt
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, EmptyData>> updateBucket(
       String id, Bucket bucket) async {
     try {
-      final dataSource = await this.bucketsDataSource;
+      final dataSource = await this.dataSource;
       await dataSource.updateType(id, bucket);
       return Right(EmptyData());
     } on DataStorageLocationException {
@@ -109,8 +82,6 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
       return Left(RepositoryFailure());
     }
   }
-
-  Future<DataSource> get bucketsDataSource => dataSource;
 
   @override
   Future<DataSource> get dataSource async {
@@ -125,16 +96,6 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
       default:
         throw new Exception(
             "Couldn't resolve data storage location for $dataStorageLocation");
-    }
-  }
-
-  Future<DataSource> get receiptsDataSource async {
-    final dataStorageLocation = await config.dataStorageLocation;
-    switch(dataStorageLocation){
-      case DataStorageLocation.LOCAL_MOBILE: return receiptsLocalMobileDataSource;
-      case DataStorageLocation.REMOTE_MOBILE_FIREBASE: return receiptsRemoteMobileFirebaseDataSource;
-      case DataStorageLocation.REMOTE_WEB_FIREBASE: return receiptsRemoteWebFirebaseDataSource;
-      default: throw new Exception("Couldn't reslove data storage location for $dataStorageLocation");
     }
   }
 }

@@ -25,26 +25,12 @@ void main() {
   MockBucketsRemoteWebFirebaseDataSource bucketsRemoteWebFirebaseDataSource =
       MockBucketsRemoteWebFirebaseDataSource();
 
-  //Receipts-data-sources
-  MockReceiptsLocalMobileDataSource receiptsLocalMobileDataSource =
-      MockReceiptsLocalMobileDataSource();
-  MockReceiptsRemoteMobileFirebaseDataSource
-      receiptsRemoteMobileFirebaseDataSource =
-      MockReceiptsRemoteMobileFirebaseDataSource();
-  MockReceiptsRemoteWebFirebaseDataSource receiptsRemoteWebFirebaseDataSource =
-      MockReceiptsRemoteWebFirebaseDataSource();
-
   setUp(() {
     repository = BucketsRepositoryDefaultImpl(
         bucketsLocalMobileDataSource: bucketsLocalMobileDataSource,
         bucketsRemoteMobileFirebaseDataSource:
             bucketsRemoteMobileFirebaseDataSource,
         bucketsRemoteWebFirebaseDataSource: bucketsRemoteWebFirebaseDataSource,
-        receiptsLocalMobileDataSource: receiptsLocalMobileDataSource,
-        receiptsRemoteMobileFirebaseDataSource:
-            receiptsRemoteMobileFirebaseDataSource,
-        receiptsRemoteWebFirebaseDataSource:
-            receiptsRemoteWebFirebaseDataSource,
         config: config);
   });
 
@@ -190,26 +176,4 @@ void main() {
     });
   });
 
-  group("receiptsDataSource", (){
-    test("with dataStorageLcoation = LOCAL_MOBILE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-
-      final result = await repository.receiptsDataSource;
-      expect(result, receiptsLocalMobileDataSource);
-    });
-
-    test("with dataStorageLcoation = REMOTE_MOBILE_FIREBASE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
-
-      final result = await repository.receiptsDataSource;
-      expect(result, receiptsRemoteMobileFirebaseDataSource);
-    });
-
-    test("with dataStorageLcoation = REMOTE_WEB_FIREBASE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
-
-      final result = await repository.receiptsDataSource;
-      expect(result, receiptsRemoteWebFirebaseDataSource);
-    });
-  });
 }
