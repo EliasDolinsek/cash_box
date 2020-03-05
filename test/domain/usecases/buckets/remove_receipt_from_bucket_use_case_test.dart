@@ -5,6 +5,8 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../fixtures/buckets_fixtures.dart';
+
 class MockBucketsRepository extends Mock implements BucketsRepository {}
 
 void main(){
@@ -19,13 +21,16 @@ void main(){
   });
 
   test("should call the repository to remove the receipt from the bucket", () async {
-    when(repository.removeReceipt(any, any)).thenAnswer((_) async => Right(EmptyData()));
+    when(repository.getBuckets()).thenAnswer((_) async => Right(bucketFixtures));
+    when(repository.updateBucket(any, any)).thenAnswer((_) async => Right(EmptyData()));
 
     final testReceiptID = "abc-123", testBucketID = "abc-123";
     final params = RemoveReceiptFromBucketUseCaseParams(testReceiptID, testBucketID);
     final result = await useCase(params);
 
     expect(result, Right(EmptyData()));
-    verify(repository.removeReceipt(testBucketID, testReceiptID));
+
+    final expectedBucket = bucketFixtures.first..receiptsIDs.remove(testReceiptID);
+    verify(repository.updateBucket(testBucketID, expectedBucket));
   });
 }
