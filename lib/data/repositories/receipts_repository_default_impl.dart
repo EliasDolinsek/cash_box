@@ -1,3 +1,4 @@
+import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/datasources/datasource.dart';
@@ -28,20 +29,26 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository, Repository {
       @required this.receiptsRemoteWebFirebaseDataSource});
 
   @override
-  Future<Either<Failure, EmptyData>> addReceipt(Receipt receipt) {
-    // TODO: implement addReceipt
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> addReceipt(Receipt receipt) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.addType(receipt);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override
-  // TODO: implement dataSource
   Future<DataSource> get dataSource async {
     final dataStorageLocation = await config.dataStorageLocation;
     switch(dataStorageLocation){
       case DataStorageLocation.LOCAL_MOBILE: return receiptsLocalMobileDataSource;
       case DataStorageLocation.REMOTE_MOBILE_FIREBASE: return receiptsRemoteMobileFirebaseDataSource;
       case DataStorageLocation.REMOTE_WEB_FIREBASE: return receiptsRemoteWebFirebaseDataSource;
-      default: throw new Exception("Couldn't resolve a DataSource for dataStorageLcation $dataStorageLocation");
+      default: throw DataStorageLocationException();
     }
   }
 
