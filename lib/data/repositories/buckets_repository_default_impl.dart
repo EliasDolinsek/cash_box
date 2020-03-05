@@ -14,10 +14,12 @@ import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
 class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
+
+  final Config config;
+
   final BucketsLocalMobileDataSource localMobileDataSource;
   final BucketsRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource;
   final BucketsRemoteWebFirebaseDataSource remoteWebFirebaseDataSource;
-  final Config config;
 
   BucketsRepositoryDefaultImpl(
       {@required this.localMobileDataSource,
