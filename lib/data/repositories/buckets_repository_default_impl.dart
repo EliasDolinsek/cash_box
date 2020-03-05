@@ -4,9 +4,6 @@ import 'package:cash_box/data/datasources/buckets/buckets_local_mobile_data_sour
 import 'package:cash_box/data/datasources/buckets/buckets_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/buckets/buckets_remote_web_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/datasource.dart';
-import 'package:cash_box/data/datasources/receipts/receipts_local_mobile_data_source.dart';
-import 'package:cash_box/data/datasources/receipts/receipts_remote_mobile_firebase_data_source.dart';
-import 'package:cash_box/data/datasources/receipts/receipts_remote_web_firebase_data_source.dart';
 import 'package:cash_box/data/repositories/repository.dart';
 import 'package:cash_box/domain/enteties/bucket.dart';
 import 'package:cash_box/domain/repositories/buckets_repository.dart';
