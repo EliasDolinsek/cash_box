@@ -14,19 +14,37 @@ import 'mocks/mocks.dart';
 void main() {
   BucketsRepositoryDefaultImpl repository;
 
-  MockBucketsLocalMobileDataSource localMobileDataSource =
-      MockBucketsLocalMobileDataSource();
-  MockBucketsRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource =
-      MockBucketsRemoteMobileFirebaseDataSource();
-  MockBucketsRemoteWebFirebaseDataSource remoteWebFirebaseDataSource =
-      MockBucketsRemoteWebFirebaseDataSource();
   MockConfig config = MockConfig();
+
+  //Buckets-data-sources
+  MockBucketsLocalMobileDataSource bucketsLocalMobileDataSource =
+      MockBucketsLocalMobileDataSource();
+  MockBucketsRemoteMobileFirebaseDataSource
+      bucketsRemoteMobileFirebaseDataSource =
+      MockBucketsRemoteMobileFirebaseDataSource();
+  MockBucketsRemoteWebFirebaseDataSource bucketsRemoteWebFirebaseDataSource =
+      MockBucketsRemoteWebFirebaseDataSource();
+
+  //Receipts-data-sources
+  MockReceiptsLocalMobileDataSource receiptsLocalMobileDataSource =
+      MockReceiptsLocalMobileDataSource();
+  MockReceiptsRemoteMobileFirebaseDataSource
+      receiptsRemoteMobileFirebaseDataSource =
+      MockReceiptsRemoteMobileFirebaseDataSource();
+  MockReceiptsRemoteWebFirebaseDataSource receiptsRemoteWebFirebaseDataSource =
+      MockReceiptsRemoteWebFirebaseDataSource();
 
   setUp(() {
     repository = BucketsRepositoryDefaultImpl(
-        localMobileDataSource: localMobileDataSource,
-        remoteMobileFirebaseDataSource: remoteMobileFirebaseDataSource,
-        remoteWebFirebaseDataSource: remoteWebFirebaseDataSource,
+        bucketsLocalMobileDataSource: bucketsLocalMobileDataSource,
+        bucketsRemoteMobileFirebaseDataSource:
+            bucketsRemoteMobileFirebaseDataSource,
+        bucketsRemoteWebFirebaseDataSource: bucketsRemoteWebFirebaseDataSource,
+        receiptsLocalMobileDataSource: receiptsLocalMobileDataSource,
+        receiptsRemoteMobileFirebaseDataSource:
+            receiptsRemoteMobileFirebaseDataSource,
+        receiptsRemoteWebFirebaseDataSource:
+            receiptsRemoteWebFirebaseDataSource,
         config: config);
   });
 
@@ -35,21 +53,21 @@ void main() {
       when(config.dataStorageLocation)
           .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
       final result = await repository.dataSource;
-      expect(result, localMobileDataSource);
+      expect(result, bucketsLocalMobileDataSource);
     });
 
     test("test for DataStorageLocation.REMOTE_MOBILE_FIREBASE", () async {
       when(config.dataStorageLocation)
           .thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteMobileFirebaseDataSource);
+      expect(result, bucketsRemoteMobileFirebaseDataSource);
     });
 
     test("test for DataStorageLocation.REMOTE_WEB_FIREBASE", () async {
       when(config.dataStorageLocation)
           .thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteWebFirebaseDataSource);
+      expect(result, bucketsRemoteWebFirebaseDataSource);
     });
   });
 
@@ -65,7 +83,7 @@ void main() {
         () async {
       when(config.dataStorageLocation)
           .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.getTypes())
+      when(bucketsLocalMobileDataSource.getTypes())
           .thenAnswer((_) async => bucketFixtures);
       final result = await repository.getBuckets();
 
@@ -76,72 +94,84 @@ void main() {
         () async {
       when(config.dataStorageLocation)
           .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.getTypes()).thenThrow(Exception("Some error"));
+      when(bucketsLocalMobileDataSource.getTypes())
+          .thenThrow(Exception("Some error"));
       final result = await repository.getBuckets();
 
       expect(result, Left(RepositoryFailure()));
     });
 
-    test("getBuckets with an DataStorageLocationException and DataStorageLocation.LOCAL_MOBILE",
-            () async {
-          when(config.dataStorageLocation)
-              .thenAnswer((_) async => null);
-          when(localMobileDataSource.getTypes())
-              .thenAnswer((_) async => bucketFixtures);
-          final result = await repository.getBuckets();
+    test(
+        "getBuckets with an DataStorageLocationException and DataStorageLocation.LOCAL_MOBILE",
+        () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => null);
+      when(bucketsLocalMobileDataSource.getTypes())
+          .thenAnswer((_) async => bucketFixtures);
+      final result = await repository.getBuckets();
 
-          expect(result, Left(RepositoryFailure()));
-        });
+      expect(result, Left(RepositoryFailure()));
+    });
   });
 
-  group("addBucket", (){
+  group("addBucket", () {
+    final testBucket = Bucket("abc-123",
+        name: "Test", description: "Test", receiptsIDs: ["abc-123", "def-456"]);
 
-    final testBucket = Bucket("abc-123", name: "Test", description: "Test", receiptsIDs: ["abc-123", "def-456"]);
-
-    test("should get the data source (with an exception), and return an DataStorageFailure", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should get the data source (with an exception), and return an DataStorageFailure",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
       final result = await repository.addBucket(testBucket);
       expect(result, Left(DataStorageLocationFailure()));
     });
 
     test("should call the DataSource to add a bucket", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
       final result = await repository.addBucket(testBucket);
 
       expect(result, Right(EmptyData()));
-      verify(localMobileDataSource.addType(testBucket));
+      verify(bucketsLocalMobileDataSource.addType(testBucket));
     });
   });
 
   group("removeBucket", () {
-
     String testID = "abc-123";
 
-    test("should return a DataSourceFailure when dataSource throws an DataStorageLocationException", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should return a DataSourceFailure when dataSource throws an DataStorageLocationException",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
       final result = await repository.removeBucket(testID);
 
       expect(result, Left(DataStorageLocationFailure()));
       verify(config.dataStorageLocation);
     });
-    
+
     test("should call the DataSource to remote a bucket", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.removeType(any)).thenAnswer((_) async => Right(EmptyData()));
-      
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(bucketsLocalMobileDataSource.removeType(any))
+          .thenAnswer((_) async => Right(EmptyData()));
+
       final result = await repository.removeBucket(testID);
       expect(result, Right(EmptyData()));
-      verify(localMobileDataSource.removeType(testID));
+      verify(bucketsLocalMobileDataSource.removeType(testID));
     });
   });
 
   group("updateBucket", () {
-
     String testID = "abc-123";
-    Bucket testBucket = Bucket(testID, name: "update", description: "update", receiptsIDs: ["123"]);
+    Bucket testBucket = Bucket(testID,
+        name: "update", description: "update", receiptsIDs: ["123"]);
 
-    test("should return a DataSourceFailure when dataSource throws an DataStorageLocationException", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should return a DataSourceFailure when dataSource throws an DataStorageLocationException",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
       final result = await repository.updateBucket(testID, testBucket);
 
       expect(result, Left(DataStorageLocationFailure()));
@@ -149,12 +179,37 @@ void main() {
     });
 
     test("should call the dataSource to update the bucket", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.updateType(any, any)).thenAnswer((_) async => EmptyData());
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(bucketsLocalMobileDataSource.updateType(any, any))
+          .thenAnswer((_) async => EmptyData());
 
       final result = await repository.updateBucket(testID, testBucket);
       expect(result, Right(EmptyData()));
-      verify(localMobileDataSource.updateType(testID, testBucket));
+      verify(bucketsLocalMobileDataSource.updateType(testID, testBucket));
+    });
+  });
+
+  group("receiptsDataSource", (){
+    test("with dataStorageLcoation = LOCAL_MOBILE", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+
+      final result = await repository.receiptsDataSource;
+      expect(result, receiptsLocalMobileDataSource);
+    });
+
+    test("with dataStorageLcoation = REMOTE_MOBILE_FIREBASE", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
+
+      final result = await repository.receiptsDataSource;
+      expect(result, receiptsRemoteMobileFirebaseDataSource);
+    });
+
+    test("with dataStorageLcoation = REMOTE_WEB_FIREBASE", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
+
+      final result = await repository.receiptsDataSource;
+      expect(result, receiptsRemoteWebFirebaseDataSource);
     });
   });
 }
