@@ -112,7 +112,6 @@ void main() {
   });
 
   group("removeContacts", () {
-
     final testID = "abc-123";
 
     test("should call the dataSource to remove a contact", () async {
@@ -126,13 +125,40 @@ void main() {
       verify(localMobileDataSource.removeType(testID));
     });
 
-    test("should call the dataSource to remove a contact, but return a DataStorageLocationFailure when an DataStorageLocationException gets thrown", () async {
+    test(
+        "should call the dataSource to remove a contact, but return a DataStorageLocationFailure when an DataStorageLocationException gets thrown",
+        () async {
       when(config.dataStorageLocation)
           .thenThrow(DataStorageLocationException());
 
       final result = await repository.removeContact(testID);
       expect(result, Left(DataStorageLocationFailure()));
       verifyNever(localMobileDataSource.removeType(testID));
+    });
+  });
+
+  group("updateContact", () {
+    final testID = "abc-123";
+    final testContact = contactFixtures.first;
+
+    test("should call the dataSource to update a contact", () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.updateType(any, any))
+          .thenAnswer((_) async => Right(EmptyData()));
+
+      final result = await repository.updateContact(testID, testContact);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.updateType(testID, testContact));
+    });
+
+    test("should call the dataSource to update a contact", () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
+
+      verifyNoMoreInteractions(localMobileDataSource);
+      final result = await repository.updateContact(testID, testContact);
+      expect(result, Left(DataStorageLocationFailure()));
     });
   });
 }

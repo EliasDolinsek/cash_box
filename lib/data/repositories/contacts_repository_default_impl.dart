@@ -65,9 +65,16 @@ class ContactsRepositoryDefaultImpl implements ContactsRepository, Repository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> updateContact(String id, Contact update) {
-    // TODO: implement updateContact
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> updateContact(String id, Contact update) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.updateType(id, update);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override
