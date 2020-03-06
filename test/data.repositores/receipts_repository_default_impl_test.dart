@@ -141,4 +141,33 @@ void main() {
       expect(result, Left(DataStorageLocationFailure()));
     });
   });
+
+  group("updateReceipt", (){
+
+    final testID = "abc-123";
+    final testReceipt = receiptFixtures.first;
+
+    test("updateReceipt without an Exception in dataSource", () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(receiptsLocalMobileDataSource.updateType(any, any))
+          .thenAnswer((_) async => Right(EmptyData()));
+
+      final result = await repository.updateReceipt(testID, testReceipt);
+      expect(result, Right(EmptyData()));
+      verify(receiptsLocalMobileDataSource.updateType(testID, testReceipt));
+    });
+
+    test("updateReceipt with an Exception in dataSource", () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(receiptsLocalMobileDataSource.updateType(any, any))
+          .thenThrow(DataStorageLocationException());
+
+      verifyNoMoreInteractions(receiptsLocalMobileDataSource);
+
+      final result = await repository.updateReceipt(testID, testReceipt);
+      expect(result, Left(DataStorageLocationFailure()));
+    });
+  });
 }
