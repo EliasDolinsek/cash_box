@@ -85,4 +85,26 @@ void main() {
       verifyNever(localMobileDataSource.addType(testContact));
     });
   });
+
+  group("getContacts", (){
+    test("should call the dataSource to get all contacts", () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.getTypes())
+          .thenAnswer((_) async => contactFixtures);
+
+      final result = await repository.getContacts();
+      expect(result, Right(contactFixtures));
+      verify(localMobileDataSource.getTypes()); //NOT WORKING BECAUSE IT'S A LIST
+    });
+
+    test("should call the dataSource to get all contacts and return a DataStorageLocationFailure when an DataStorageLocationException gets thrown", () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
+
+      final result = await repository.getContacts();
+      expect(result, Left(DataStorageLocationFailure()));
+      verifyNever(localMobileDataSource.getTypes());
+    });
+  });
 }
