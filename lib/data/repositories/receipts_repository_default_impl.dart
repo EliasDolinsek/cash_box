@@ -66,9 +66,16 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository, Repository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> removeReceipt(String id) {
-    // TODO: implement removeReceipt
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> removeReceipt(String id) async {
+    try {
+      final dataSource = await this.dataSource;
+      await  dataSource.removeType(id);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override

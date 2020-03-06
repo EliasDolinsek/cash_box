@@ -113,4 +113,20 @@ void main() {
       verifyNoMoreInteractions(receiptsLocalMobileDataSource);
     });
   });
+
+  group("removeReceipt", () {
+
+    final String testID = "abc-123";
+
+    test("removeReceipts without an Exception in dataSource", () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(receiptsLocalMobileDataSource.removeType(any))
+          .thenAnswer((_) async => Right(EmptyData()));
+
+      final result = await repository.removeReceipt(testID);
+      expect(result, Right(EmptyData()));
+      verify(receiptsLocalMobileDataSource.removeType(testID));
+    });
+  });
 }
