@@ -26,9 +26,16 @@ class ContactsRepositoryDefaultImpl implements ContactsRepository, Repository {
       @required this.remoteWebFirebaseDataSource});
 
   @override
-  Future<Either<Failure, EmptyData>> addContact(Contact contact) {
-    // TODO: implement addContact
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> addContact(Contact contact) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.addType(contact);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override
