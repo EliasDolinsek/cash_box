@@ -52,9 +52,16 @@ class ContactsRepositoryDefaultImpl implements ContactsRepository, Repository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> removeContact(String id) {
-    // TODO: implement removeContact
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> removeContact(String id) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.removeType(id);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override

@@ -86,7 +86,7 @@ void main() {
     });
   });
 
-  group("getContacts", (){
+  group("getContacts", () {
     test("should call the dataSource to get all contacts", () async {
       when(config.dataStorageLocation)
           .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
@@ -95,16 +95,44 @@ void main() {
 
       final result = await repository.getContacts();
       expect(result, Right(contactFixtures));
-      verify(localMobileDataSource.getTypes()); //NOT WORKING BECAUSE IT'S A LIST
+      verify(
+          localMobileDataSource.getTypes()); //NOT WORKING BECAUSE IT'S A LIST
     });
 
-    test("should call the dataSource to get all contacts and return a DataStorageLocationFailure when an DataStorageLocationException gets thrown", () async {
+    test(
+        "should call the dataSource to get all contacts and return a DataStorageLocationFailure when an DataStorageLocationException gets thrown",
+        () async {
       when(config.dataStorageLocation)
           .thenThrow(DataStorageLocationException());
 
       final result = await repository.getContacts();
       expect(result, Left(DataStorageLocationFailure()));
       verifyNever(localMobileDataSource.getTypes());
+    });
+  });
+
+  group("removeContacts", () {
+
+    final testID = "abc-123";
+
+    test("should call the dataSource to remove a contact", () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.removeType(any))
+          .thenAnswer((_) async => Right(EmptyData()));
+
+      final result = await repository.removeContact(testID);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.removeType(testID));
+    });
+
+    test("should call the dataSource to remove a contact, but return a DataStorageLocationFailure when an DataStorageLocationException gets thrown", () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
+
+      final result = await repository.removeContact(testID);
+      expect(result, Left(DataStorageLocationFailure()));
+      verifyNever(localMobileDataSource.removeType(testID));
     });
   });
 }
