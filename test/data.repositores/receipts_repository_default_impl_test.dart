@@ -128,5 +128,17 @@ void main() {
       expect(result, Right(EmptyData()));
       verify(receiptsLocalMobileDataSource.removeType(testID));
     });
+
+    test("removeReceipts with an Exception in dataSource", () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
+      when(receiptsLocalMobileDataSource.removeType(any))
+          .thenAnswer((_) async => Right(EmptyData()));
+
+      verifyNoMoreInteractions(receiptsLocalMobileDataSource);
+
+      final result = await repository.removeReceipt(testID);
+      expect(result, Left(DataStorageLocationFailure()));
+    });
   });
 }
