@@ -33,15 +33,15 @@ class Receipt extends UniqueComponent {
 
 enum ReceiptType { INCOME, OUTCOME, INVESTMENT, BANK_STATEMENT }
 
-extension ReceiptTypeConverter on ReceiptType {
+class ReceiptTypeConverter {
 
-  String get asString {
-    switch(this){
+  static String asString(ReceiptType type) {
+    switch(type){
       case ReceiptType.INCOME: return "income";
       case ReceiptType.OUTCOME: return "outcome";
       case ReceiptType.INVESTMENT: return "investment";
       case ReceiptType.BANK_STATEMENT: return "bank_statement";
-      default: throw new Exception("Couldn't convert ReceiptType: $this to string");
+      default: throw new Exception("Couldn't convert ReceiptType: $type to string");
     }
   }
 
@@ -55,3 +55,4 @@ extension ReceiptTypeConverter on ReceiptType {
     }
   }
 }
+

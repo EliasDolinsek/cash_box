@@ -33,7 +33,7 @@ class ReceiptModel extends Receipt implements Model {
     final fieldsAsMap = fields.map((field) => FieldModel.fromField(field).toMap()).toList();
     return {
       "id":id,
-      "type":type.asString,
+      "type":ReceiptTypeConverter.asString(type),
       "creationDate":creationDate.millisecondsSinceEpoch,
       "fields":fieldsAsMap,
       "tagIDs":tagIDs

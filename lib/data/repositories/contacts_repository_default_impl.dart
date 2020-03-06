@@ -7,6 +7,9 @@ import 'package:cash_box/domain/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 
 class ContactsRepositoryDefaultImpl implements ContactsRepository, Repository {
+
+
+
   @override
   Future<Either<Failure, EmptyData>> addContact(Contact contact) {
     // TODO: implement addContact
