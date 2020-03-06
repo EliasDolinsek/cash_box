@@ -91,6 +91,7 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
       case DataStorageLocation.REMOTE_WEB_FIREBASE:
         return bucketsRemoteWebFirebaseDataSource;
       default:
+
         throw DataStorageLocationException();
     }
   }
