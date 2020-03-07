@@ -110,4 +110,27 @@ void main() {
       expect(result, Left(DataStorageLocationFailure()));
     });
   });
+
+  group("updateTemplate", (){
+
+    final testID = "abc-123";
+    final testTemplate = templateFixtures.first;
+
+    test("should call the dataSource to remove a template", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.updateType(any, any)).thenAnswer((_) async => null);
+
+      final result = await repository.updateTemplate(testID, testTemplate);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.updateType(testID, testTemplate));
+    });
+
+    test("should call the dataSource to remove a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+
+      verifyNoMoreInteractions(localMobileDataSource);
+      final result = await repository.updateTemplate(testID, testTemplate);
+      expect(result, Left(DataStorageLocationFailure()));
+    });
+  });
 }

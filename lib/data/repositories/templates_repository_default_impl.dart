@@ -79,8 +79,15 @@ class TemplatesRepositoryDefaultImpl implements TemplatesRepository {
 
   @override
   Future<Either<Failure, EmptyData>> updateTemplate(
-      String id, Template template) {
-    // TODO: implement updateTemplate
-    throw UnimplementedError();
+      String id, Template template) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.updateType(id, template);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 }
