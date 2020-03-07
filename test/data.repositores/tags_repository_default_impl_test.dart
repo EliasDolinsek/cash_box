@@ -70,11 +70,30 @@ void main() {
       verify(localMobileDataSource.addType(testTag));
     });
 
-    test("should call the dataSource to add a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
+    test("should call the dataSource to add a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
       when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.addTag(testTag);
+      expect(result, Left(DataStorageLocationFailure()));
+    });
+  });
+
+  group("getTags", (){
+    test("should call the dataSource to get all tags", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.getTypes()).thenAnswer((realInvocation) async => tagFixtures);
+
+      final result = await repository.getTags();
+      expect(result, Right(tagFixtures)); //NOT WORKING BECAUSE IT'S A LIST
+      verify(localMobileDataSource.getTypes());
+    });
+
+    test("should call the dataSource to get all tags, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+
+      verifyNoMoreInteractions(localMobileDataSource);
+      final result = await repository.getTags();
       expect(result, Left(DataStorageLocationFailure()));
     });
   });
