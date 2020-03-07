@@ -25,9 +25,16 @@ class TagsRepositoryDefaultImpl implements TagsRepository {
       @required this.remoteWebFirebaseDataSource});
 
   @override
-  Future<Either<Failure, EmptyData>> addTag(Tag tag) {
-    // TODO: implement addTag
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> addTag(Tag tag) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.addType(tag);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override

@@ -1,8 +1,13 @@
+import 'package:cash_box/core/errors/exceptions.dart';
+import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/repositories/tags_repository_default_impl.dart';
+import 'package:cash_box/domain/repositories/empty_data.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../fixtures/tag_ids_fixtures.dart';
 import 'mocks/mocks.dart';
 
 void main() {
@@ -49,6 +54,28 @@ void main() {
           .thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
       final result = await repository.dataSource;
       expect(result, remoteWebFirebaseDataSource);
+    });
+  });
+
+  group("addTag", (){
+
+    final testTag = tagFixtures.first;
+
+    test("should call the dataSource to add a tag", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.addType(any)).thenAnswer((realInvocation) async => Right(EmptyData()));
+
+      final result = await repository.addTag(testTag);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.addType(testTag));
+    });
+
+    test("should call the dataSource to add a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+
+      verifyNoMoreInteractions(localMobileDataSource);
+      final result = await repository.addTag(testTag);
+      expect(result, Left(DataStorageLocationFailure()));
     });
   });
 }
