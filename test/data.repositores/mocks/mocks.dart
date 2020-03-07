@@ -8,9 +8,13 @@ import 'package:cash_box/data/datasources/contacts/contacts_remote_web_firebase_
 import 'package:cash_box/data/datasources/receipts/receipts_local_mobile_data_source.dart';
 import 'package:cash_box/data/datasources/receipts/receipts_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/receipts/receipts_remote_web_firebase_data_source.dart';
+import 'package:cash_box/data/datasources/tags/tags_local_mobile_data_source.dart';
+import 'package:cash_box/data/datasources/tags/tags_remote_mobile_firebase_data_source.dart';
+import 'package:cash_box/data/datasources/tags/tags_remote_web_firebase_datasource.dart';
 import 'package:cash_box/data/datasources/templates/templates_local_mobile_data_source.dart';
 import 'package:cash_box/data/datasources/templates/templates_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/templates/templates_remote_web_firebase_data_source.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
 class MockConfig extends Mock implements Config {}
@@ -54,3 +58,13 @@ class MockTemplatesRemoteMobileFirebaseDataSource extends Mock
 
 class MockTemplatesRemoteWebFirebaseDataSource extends Mock
     implements TemplatesRemoteWebFirebaseDataSource {}
+
+//Tags
+class MockTagsLocalMobileDataSource extends Mock
+    implements TagsLocalMobileDataSource {}
+
+class MockTagsRemoteMobileFirebaseDataSource extends Mock
+    implements TagsRemoteMobileFirebaseDataSource {}
+
+class MockTagsRemoteWebFirebaseDataSource extends Mock
+    implements TagsRemoteWebFirebaseDataSource {}
