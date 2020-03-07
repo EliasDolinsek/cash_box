@@ -13,6 +13,7 @@ import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
 class TagsRepositoryDefaultImpl implements TagsRepository {
+
   final Config config;
   final TagsLocalMobileDataSource localMobileDataSource;
   final TagsRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource;
@@ -67,9 +68,16 @@ class TagsRepositoryDefaultImpl implements TagsRepository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> removeTag(String id) {
-    // TODO: implement removeTag
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> removeTag(String id) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.removeType(id);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override
