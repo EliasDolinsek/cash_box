@@ -46,9 +46,16 @@ class TemplatesRepositoryDefaultImpl implements TemplatesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Template>>> getTemplates() {
-    // TODO: implement getTemplates
-    throw UnimplementedError();
+  Future<Either<Failure, List<Template>>> getTemplates() async {
+    try {
+      final dataSource = await this.dataSource;
+      final templates = await dataSource.getTypes();
+      return Right(templates);
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
   @override

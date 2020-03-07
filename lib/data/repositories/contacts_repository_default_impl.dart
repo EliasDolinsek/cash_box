@@ -5,14 +5,13 @@ import 'package:cash_box/data/datasources/contacts/contacts_local_mobile_data_so
 import 'package:cash_box/data/datasources/contacts/contacts_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/contacts/contacts_remote_web_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/datasource.dart';
-import 'package:cash_box/data/repositories/repository.dart';
 import 'package:cash_box/domain/enteties/contact.dart';
 import 'package:cash_box/domain/repositories/contacts_repository.dart';
 import 'package:cash_box/domain/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
-class ContactsRepositoryDefaultImpl implements ContactsRepository, Repository {
+class ContactsRepositoryDefaultImpl implements ContactsRepository {
   final Config config;
 
   final ContactsLocalMobileDataSource localMobileDataSource;

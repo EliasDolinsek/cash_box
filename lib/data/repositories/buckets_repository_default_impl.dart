@@ -13,7 +13,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:meta/meta.dart';
 
-class BucketsRepositoryDefaultImpl implements BucketsRepository, Repository {
+class BucketsRepositoryDefaultImpl implements BucketsRepository {
   final Config config;
 
   final BucketsLocalMobileDataSource bucketsLocalMobileDataSource;

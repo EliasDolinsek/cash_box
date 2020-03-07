@@ -5,7 +5,6 @@ import 'package:cash_box/data/datasources/datasource.dart';
 import 'package:cash_box/data/datasources/receipts/receipts_local_mobile_data_source.dart';
 import 'package:cash_box/data/datasources/receipts/receipts_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/receipts/receipts_remote_web_firebase_data_source.dart';
-import 'package:cash_box/data/repositories/repository.dart';
 import 'package:cash_box/domain/enteties/receipt.dart';
 import 'package:cash_box/domain/repositories/empty_data.dart';
 import 'package:cash_box/domain/repositories/receipts_repository.dart';
@@ -13,7 +12,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:meta/meta.dart';
 
-class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository, Repository {
+class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository {
 
   final Config config;
 
