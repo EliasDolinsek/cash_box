@@ -119,4 +119,27 @@ void main() {
       expect(result, Left(DataStorageLocationFailure()));
     });
   });
+
+  group("updateTag", (){
+
+    final testID = "abc-123";
+    final testTag = tagFixtures.first;
+
+    test("should call the dataSource to remove a tag", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.updateType(any, any)).thenAnswer((_) async => null);
+
+      final result = await repository.updateTag(testID, testTag);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.updateType(testID, testTag));
+    });
+
+    test("should call the dataSource to remove a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+
+      verifyNoMoreInteractions(localMobileDataSource);
+      final result = await repository.updateTag(testID, testTag);
+      expect(result, Left(DataStorageLocationFailure()));
+    });
+  });
 }

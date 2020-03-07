@@ -81,8 +81,15 @@ class TagsRepositoryDefaultImpl implements TagsRepository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> updateTag(String id, Tag update) {
-    // TODO: implement updateTag
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> updateTag(String id, Tag update) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.updateType(id, update);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 }
