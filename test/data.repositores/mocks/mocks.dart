@@ -8,6 +8,9 @@ import 'package:cash_box/data/datasources/contacts/contacts_remote_web_firebase_
 import 'package:cash_box/data/datasources/receipts/receipts_local_mobile_data_source.dart';
 import 'package:cash_box/data/datasources/receipts/receipts_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/datasources/receipts/receipts_remote_web_firebase_data_source.dart';
+import 'package:cash_box/data/datasources/templates/templates_local_mobile_data_source.dart';
+import 'package:cash_box/data/datasources/templates/templates_remote_mobile_firebase_data_source.dart';
+import 'package:cash_box/data/datasources/templates/templates_remote_web_firebase_data_source.dart';
 import 'package:mockito/mockito.dart';
 
 class MockConfig extends Mock implements Config {}
@@ -41,3 +44,13 @@ class MockContactsRemoteMobileFirebaseDataSource extends Mock
 
 class MockContactsRemoteWebFirebaseDataSource extends Mock
     implements ContactsRemoteWebFirebaseDataSource {}
+
+//Templates
+class MockTemplatesLocalMobileDataSource extends Mock
+    implements TemplatesLocalMobileDataSource {}
+
+class MockTemplatesRemoteMobileFirebaseDataSource extends Mock
+    implements TemplatesRemoteMobileFirebaseDataSource {}
+
+class MockTemplatesRemoteWebFirebaseDataSource extends Mock
+    implements TemplatesRemoteWebFirebaseDataSource {}
