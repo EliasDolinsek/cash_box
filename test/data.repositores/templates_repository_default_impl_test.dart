@@ -2,6 +2,7 @@ import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/repositories/templates_repository_default_impl.dart';
+import 'package:cash_box/domain/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -63,7 +64,28 @@ void main() {
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.getTemplates();
-      expect(result, Left(DataStorageLocationFailure())); //NOT WORKING BECAUSE IT'S A LIST
+      expect(result, Left(DataStorageLocationFailure()));
+    });
+  });
+
+  group("addTemplate", (){
+
+    final testTemplate = templateFixtures.first;
+    test("should call the dataSource to add a template", () async {
+      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.addType(any)).thenAnswer((realInvocation) async => Right(EmptyData()));
+
+      final result = await repository.addTemplate(testTemplate);
+      expect(result, Right(EmptyData()));
+      verify(localMobileDataSource.addType(testTemplate));
+    });
+
+    test("should call the dataSource to add a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
+      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+
+      verifyNoMoreInteractions(localMobileDataSource);
+      final result = await repository.addTemplate(testTemplate);
+      expect(result, Left(DataStorageLocationFailure()));
     });
   });
 }

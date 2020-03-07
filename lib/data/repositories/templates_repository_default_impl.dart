@@ -24,12 +24,18 @@ class TemplatesRepositoryDefaultImpl implements TemplatesRepository {
       @required this.remoteWebFirebaseDataSource});
 
   @override
-  Future<Either<Failure, EmptyData>> addTemplate(Template template) {
-    // TODO: implement addTemplate
-    throw UnimplementedError();
+  Future<Either<Failure, EmptyData>> addTemplate(Template template) async {
+    try {
+      final dataSource = await this.dataSource;
+      await dataSource.addType(template);
+      return Right(EmptyData());
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 
-  @override
   @override
   Future<DataSource> get dataSource async {
     final dataStorageLocation = await config.dataStorageLocation;
