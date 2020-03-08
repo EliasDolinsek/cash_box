@@ -1,9 +1,8 @@
 import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
-import 'package:cash_box/data/repositories/contacts_repository_default_impl.dart';
-import 'package:cash_box/domain/repositories/contacts_repository.dart';
-import 'package:cash_box/domain/repositories/empty_data.dart';
+import 'package:cash_box/data/core/repositories/contacts_repository_default_impl.dart';
+import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';

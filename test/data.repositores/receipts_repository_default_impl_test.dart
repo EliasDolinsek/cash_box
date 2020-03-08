@@ -1,16 +1,15 @@
 import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
-import 'package:cash_box/data/repositories/receipts_repository_default_impl.dart';
-import 'package:cash_box/domain/enteties/receipt.dart';
-import 'package:cash_box/domain/repositories/empty_data.dart';
+import 'package:cash_box/data/core/repositories/receipts_repository_default_impl.dart';
+import 'package:cash_box/domain/core/enteties/receipt.dart';
+import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
 import '../fixtures/field_fixtures.dart';
 import '../fixtures/receipts_fixtures.dart';
-import '../fixtures/tag_ids_fixtures.dart';
 import 'mocks/mocks.dart';
 
 void main() {

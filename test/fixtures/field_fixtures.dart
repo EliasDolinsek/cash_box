@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/enteties/field.dart';
+import 'package:cash_box/domain/core/enteties/field.dart';
 
 List<Field> get fieldFixtures => [
   Field("abc-123", description: "description1", value: 12.5, type: FieldType.AMOUNT),
