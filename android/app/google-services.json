@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "79279269876",
+    "firebase_url": "https://cash-box-797d2.firebaseio.com",
+    "project_id": "cash-box-797d2",
+    "storage_bucket": "cash-box-797d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79279269876:android:ea7402e79df3206d083ba1",
+        "android_client_info": {
+          "package_name": "com.eliasdolinsek.cash_box"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79279269876-61qbkis2kdneh8ut5rv7l06llvvkhens.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eliasdolinsek.cash_box",
+            "certificate_hash": "0ae3f61d3ae2bf88470e4512ee857d0b327b6450"
+          }
+        },
+        {
+          "client_id": "79279269876-v7v6sipnp67q4ucqh9otssi2cscqusfl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDjcdeMT4waO8ebupC7nJciEYj6nIgpK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79279269876-v7v6sipnp67q4ucqh9otssi2cscqusfl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "79279269876-ar2k4oe4q0scmveppttuvvb00dkepe9s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.eliasdolinsek.cashBox"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
