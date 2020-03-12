@@ -22,3 +22,5 @@ class LocalDataSourceFailure extends Failure {}
 class DataStorageLocationFailure extends Failure {}
 
 class RepositoryFailure extends Failure {}
+
+class SendResetPasswordEmailFailure extends Failure {}
