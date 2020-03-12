@@ -10,7 +10,7 @@ part 'account.g.dart';
 class Account extends Equatable {
   final SignInSource signInSource;
   final AccountType accountType;
-  final String email, password;
+  final String email, appPassword;
   final String name;
   final String userID;
 
@@ -19,7 +19,7 @@ class Account extends Equatable {
       @required this.signInSource,
       @required this.accountType,
       @required this.email,
-      @required this.password,
+      @required this.appPassword,
       @required this.name});
 
   factory Account.fromJSON(Map<String, dynamic> json) =>
@@ -28,7 +28,7 @@ class Account extends Equatable {
   Map<String, dynamic> toJSON() => _$AccountToJson(this);
 
   @override
-  List get props => [accountType, email, password, name, userID, signInSource];
+  List get props => [accountType, email, appPassword, name, userID, signInSource];
 }
 
 enum AccountType { private, business }

@@ -22,7 +22,7 @@ void main() {
         signInSource: SignInSource.firebase,
         accountType: AccountType.business,
         email: "elias.dolinsek@gmail.com",
-        password: "Test",
+        appPassword: "Test",
         name: "Elias Dolinsek");
 
     when(repository.createAccount(any))

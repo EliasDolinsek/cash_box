@@ -7,7 +7,7 @@ void main() {
         name: "Elias Dolinsek",
         email: "elias.dolinsek@gmail.com",
         accountType: AccountType.business,
-        password: "Test",
+        appPassword: "Test",
         signInSource: SignInSource.firebase,
         userID: "user-id-01");
 

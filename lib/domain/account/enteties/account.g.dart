@@ -12,7 +12,7 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
     signInSource: _$enumDecode(_$SignInSourceEnumMap, json['signInSource']),
     accountType: _$enumDecode(_$AccountTypeEnumMap, json['accountType']),
     email: json['email'] as String,
-    password: json['password'] as String,
+    appPassword: json['appPassword'] as String,
     name: json['name'] as String,
   );
 }
@@ -21,7 +21,7 @@ Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'signInSource': _$SignInSourceEnumMap[instance.signInSource],
       'accountType': _$AccountTypeEnumMap[instance.accountType],
       'email': instance.email,
-      'password': instance.password,
+      'appPassword': instance.appPassword,
       'name': instance.name,
       'userID': instance.userID,
     };
