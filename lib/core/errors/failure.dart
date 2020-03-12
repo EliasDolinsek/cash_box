@@ -31,3 +31,5 @@ class SignInFailure extends Failure {
 
   SignInFailure(this.message) : super([message]);
 }
+
+class SignOutFailure extends Failure {}
