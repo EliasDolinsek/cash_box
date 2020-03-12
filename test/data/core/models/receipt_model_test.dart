@@ -8,7 +8,7 @@ import '../../../fixtures/field_fixtures.dart';
 void main(){
 
   final testFieldFixtures = fieldFixtures.map((field) => FieldModel.fromField(field)).toList();
-  final testReceiptModel = ReceiptModel("abc-123", type: ReceiptType.OUTCOME, creationDate: DateTime.now(), fields: testFieldFixtures, tagIDs: ["abc-123", "def-456"]);
+  final testReceiptModel = ReceiptModel("abc-123", type: ReceiptType.outcome, creationDate: DateTime.now(), fields: testFieldFixtures, tagIDs: ["abc-123", "def-456"]);
 
   test("should test if ReceiptModel extends Receipt", (){
     expect(testReceiptModel, isA<Receipt>());

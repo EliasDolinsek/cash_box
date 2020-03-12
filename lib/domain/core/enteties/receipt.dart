@@ -32,26 +32,26 @@ class Receipt extends UniqueComponent {
   }
 }
 
-enum ReceiptType { INCOME, OUTCOME, INVESTMENT, BANK_STATEMENT }
+enum ReceiptType { income, outcome, investment, bank_statement }
 
 class ReceiptTypeConverter {
 
   static String asString(ReceiptType type) {
     switch(type){
-      case ReceiptType.INCOME: return "income";
-      case ReceiptType.OUTCOME: return "outcome";
-      case ReceiptType.INVESTMENT: return "investment";
-      case ReceiptType.BANK_STATEMENT: return "bank_statement";
+      case ReceiptType.income: return "income";
+      case ReceiptType.outcome: return "outcome";
+      case ReceiptType.investment: return "investment";
+      case ReceiptType.bank_statement: return "bank_statement";
       default: throw new Exception("Couldn't convert ReceiptType: $type to string");
     }
   }
 
   static ReceiptType fromString(String type){
     switch(type){
-      case "income": return ReceiptType.INCOME;
-      case "outcome": return ReceiptType.OUTCOME;
-      case "investment": return ReceiptType.INVESTMENT;
-      case "bank_statement": return ReceiptType.BANK_STATEMENT;
+      case "income": return ReceiptType.income;
+      case "outcome": return ReceiptType.outcome;
+      case "investment": return ReceiptType.investment;
+      case "bank_statement": return ReceiptType.bank_statement;
       default: throw new Exception("Couldn't resolve ReceiptType from String $type");
     }
   }

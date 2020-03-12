@@ -31,13 +31,13 @@ void main() {
       when(repository.updateReceipt(testID, any))
           .thenAnswer((_) async => Right(EmptyData()));
 
-      final params = UpdateReceiptUseCaseParams(testID, type: ReceiptType.INVESTMENT);
+      final params = UpdateReceiptUseCaseParams(testID, type: ReceiptType.investment);
       final result = await useCase(params);
 
       expect(result, Right(EmptyData()));
       final originalReceipt = receiptFixtures.firstWhere((r) => r.id == testID);
       final expectedUpdateReceipt = Receipt(
-          testID, type: ReceiptType.INVESTMENT,
+          testID, type: ReceiptType.investment,
           tagIDs: originalReceipt
               .tagIDs,
           creationDate: originalReceipt.creationDate,

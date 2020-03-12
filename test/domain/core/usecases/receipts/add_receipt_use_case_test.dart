@@ -21,7 +21,7 @@ void main() {
   });
 
   final receiptToAdd = Receipt("new_receipt",
-      type: ReceiptType.OUTCOME,
+      type: ReceiptType.outcome,
       creationDate: DateTime.now(),
       fields: fieldFixtures,
       tagIDs: tagIDFixtures);

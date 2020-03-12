@@ -61,7 +61,7 @@ void main() {
 
   group("addReceipt", () {
     final testReceipt = Receipt("abc-123",
-        type: ReceiptType.BANK_STATEMENT,
+        type: ReceiptType.bank_statement,
         creationDate: DateTime.now(),
         fields: fieldFixtures,
         tagIDs: ["abc-123", "def-456"]);
