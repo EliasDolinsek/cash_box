@@ -8,18 +8,22 @@ part of 'account.dart';
 
 Account _$AccountFromJson(Map<String, dynamic> json) {
   return Account(
-    _$enumDecode(_$AccountTypeEnumMap, json['accountType']),
-    json['email'] as String,
-    json['password'] as String,
-    json['name'] as String,
+    userID: json['userID'] as String,
+    signInSource: _$enumDecode(_$SignInSourceEnumMap, json['signInSource']),
+    accountType: _$enumDecode(_$AccountTypeEnumMap, json['accountType']),
+    email: json['email'] as String,
+    password: json['password'] as String,
+    name: json['name'] as String,
   );
 }
 
 Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
+      'signInSource': _$SignInSourceEnumMap[instance.signInSource],
       'accountType': _$AccountTypeEnumMap[instance.accountType],
       'email': instance.email,
       'password': instance.password,
       'name': instance.name,
+      'userID': instance.userID,
     };
 
 T _$enumDecode<T>(
@@ -42,6 +46,10 @@ T _$enumDecode<T>(
   }
   return value ?? unknownValue;
 }
+
+const _$SignInSourceEnumMap = {
+  SignInSource.firebase: 'firebase',
+};
 
 const _$AccountTypeEnumMap = {
   AccountType.private: 'private',
