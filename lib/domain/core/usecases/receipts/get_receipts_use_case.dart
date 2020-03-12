@@ -3,7 +3,7 @@ import 'package:cash_box/domain/core/enteties/receipt.dart';
 import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:dartz/dartz.dart';
 
-import '../use_case.dart';
+import '../../../../core/usecases/use_case.dart';
 
 class GetReceiptsUseCase extends UseCase<List<Receipt>, NoParams> {
 

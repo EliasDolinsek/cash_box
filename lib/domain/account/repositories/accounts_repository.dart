@@ -4,7 +4,7 @@ import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 
-abstract class AccountRepository implements Repository {
+abstract class AccountsRepository implements Repository {
 
   Future<Either<Failure, EmptyData>> createAccount(Account account);
   Future<Either<Failure, Account>> getAccount(String userID);

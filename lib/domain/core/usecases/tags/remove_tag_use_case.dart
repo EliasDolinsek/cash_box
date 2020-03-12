@@ -6,7 +6,7 @@ import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-import '../use_case.dart';
+import '../../../../core/usecases/use_case.dart';
 
 class RemoveTagUseCase extends UseCase<EmptyData, RemoveTagUseCaseParams> {
 
