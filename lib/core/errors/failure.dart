@@ -24,3 +24,10 @@ class DataStorageLocationFailure extends Failure {}
 class RepositoryFailure extends Failure {}
 
 class SendResetPasswordEmailFailure extends Failure {}
+
+class SignInFailure extends Failure {
+
+  final String message;
+
+  SignInFailure(this.message) : super([message]);
+}
