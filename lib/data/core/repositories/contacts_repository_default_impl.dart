@@ -5,7 +5,7 @@ import 'package:cash_box/data/core/datasources/contacts/contacts_local_mobile_da
 import 'package:cash_box/data/core/datasources/contacts/contacts_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/contacts/contacts_remote_web_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
-import 'package:cash_box/domain/core/enteties/contact.dart';
+import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/repositories/contacts_repository.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';

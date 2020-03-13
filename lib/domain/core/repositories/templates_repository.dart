@@ -1,6 +1,6 @@
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/data/core/repositories/repository.dart';
-import 'package:cash_box/domain/core/enteties/template.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:dartz/dartz.dart';
 
 import 'empty_data.dart';

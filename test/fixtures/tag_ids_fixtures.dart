@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/tag.dart';
+import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 
 List<String> get tagIDFixtures => ["abc-123", "def-456", "hij-789"];
 List<Tag> get tagFixtures => [

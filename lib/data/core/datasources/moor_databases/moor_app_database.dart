@@ -181,5 +181,5 @@ class AppDatabase extends _$AppDatabase {
 
   Future deleteTemplate(String id) async => delete(templatesMoor).delete(await getTemplate(id));
 
-  Future updateTemplate(TemplatesMoorData template) => update(bucketsMoor).replace(template);
+  Future updateTemplate(TemplatesMoorData template) => update(templatesMoor).replace(template);
 }

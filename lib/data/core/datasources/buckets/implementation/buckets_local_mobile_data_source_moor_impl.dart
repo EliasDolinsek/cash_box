@@ -1,5 +1,5 @@
 import 'package:cash_box/data/core/datasources/buckets/buckets_local_mobile_data_source.dart';
-import 'package:cash_box/domain/core/enteties/bucket.dart';
+import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 
 class BucketsLocalMobileDataSourceMoorImpl implements BucketsLocalMobileDataSource {
 

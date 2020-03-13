@@ -1,5 +1,5 @@
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/domain/core/enteties/tag.dart';
+import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:dartz/dartz.dart';
 

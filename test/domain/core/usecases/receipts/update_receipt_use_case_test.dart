@@ -1,5 +1,5 @@
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/domain/core/enteties/receipt.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:cash_box/domain/core/usecases/receipts/update_receipt_use_case.dart';

@@ -1,6 +1,6 @@
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/domain/core/enteties/field.dart';
-import 'package:cash_box/domain/core/enteties/template.dart';
+import 'package:cash_box/domain/core/enteties/fields/field.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/templates_repository.dart';
 import 'package:cash_box/domain/core/usecases/templates/get_template_use_case.dart';

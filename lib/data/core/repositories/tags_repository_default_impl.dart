@@ -5,7 +5,7 @@ import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/data/core/datasources/tags/tags_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/tags/tags_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/tags/tags_remote_web_firebase_datasource.dart';
-import 'package:cash_box/domain/core/enteties/tag.dart';
+import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:dartz/dartz.dart';

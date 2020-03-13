@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/template.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/templates_repository.dart';
 import 'package:cash_box/domain/core/usecases/templates/update_template_use_case.dart';

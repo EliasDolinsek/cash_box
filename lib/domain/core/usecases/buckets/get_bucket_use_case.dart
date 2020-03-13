@@ -1,5 +1,5 @@
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/domain/core/enteties/bucket.dart';
+import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/repositories/buckets_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';

@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/contact.dart';
+import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 
 import 'field_fixtures.dart';
 

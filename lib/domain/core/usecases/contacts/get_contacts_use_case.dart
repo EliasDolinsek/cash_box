@@ -1,5 +1,5 @@
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/domain/core/enteties/contact.dart';
+import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/repositories/contacts_repository.dart';
 import 'package:dartz/dartz.dart';
 

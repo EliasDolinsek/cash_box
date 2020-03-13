@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/contact.dart';
+import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/usecases/contacts/update_contact_use_case.dart';
 import 'package:dartz/dartz.dart';

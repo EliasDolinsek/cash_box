@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/bucket.dart';
+import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/repositories/buckets_repository.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/usecases/buckets/add_bucket_use_case.dart';

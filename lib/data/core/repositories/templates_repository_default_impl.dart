@@ -5,7 +5,7 @@ import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_remote_web_firebase_data_source.dart';
-import 'package:cash_box/domain/core/enteties/template.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/templates_repository.dart';
 import 'package:dartz/dartz.dart';

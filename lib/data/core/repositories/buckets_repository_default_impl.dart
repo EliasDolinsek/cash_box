@@ -4,7 +4,7 @@ import 'package:cash_box/data/core/datasources/buckets/buckets_local_mobile_data
 import 'package:cash_box/data/core/datasources/buckets/buckets_remote_mobile_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_remote_web_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
-import 'package:cash_box/domain/core/enteties/bucket.dart';
+import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/repositories/buckets_repository.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/core/errors/exceptions.dart';

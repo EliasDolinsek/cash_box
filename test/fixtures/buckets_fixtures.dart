@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/bucket.dart';
+import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 
 List<Bucket> get bucketFixtures => [
   Bucket("abc-123", name: "Test1", description: "Description1", receiptsIDs: defaultReceiptIDFixtures),

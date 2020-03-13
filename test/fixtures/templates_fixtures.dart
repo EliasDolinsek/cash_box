@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/template.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'field_fixtures.dart';
 
 List<Template> get templateFixtures => [

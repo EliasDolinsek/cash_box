@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/core/enteties/receipt.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'field_fixtures.dart' as fieldFixtures;
 import 'tag_ids_fixtures.dart' as tagFixtures;
 

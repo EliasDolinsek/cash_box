@@ -1,8 +1,12 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:cash_box/domain/core/enteties/unique_component.dart';
 import 'package:meta/meta.dart';
 
-import 'field.dart';
+import '../fields/field.dart';
 
+part 'receipt.g.dart';
+
+@JsonSerializable(nullable: false)
 class Receipt extends UniqueComponent {
   final ReceiptType type;
   final DateTime creationDate;
@@ -26,6 +30,10 @@ class Receipt extends UniqueComponent {
           tagIDs
         ]);
 
+  factory Receipt.fromJson(Map<String, dynamic> json) => _$ReceiptFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReceiptToJson(this);
+
   @override
   String toString() {
     return 'Receipt{type: $type, creationDate: $creationDate, fields: $fields, tagIDs: $tagIDs}';
@@ -33,27 +41,3 @@ class Receipt extends UniqueComponent {
 }
 
 enum ReceiptType { income, outcome, investment, bank_statement }
-
-class ReceiptTypeConverter {
-
-  static String asString(ReceiptType type) {
-    switch(type){
-      case ReceiptType.income: return "income";
-      case ReceiptType.outcome: return "outcome";
-      case ReceiptType.investment: return "investment";
-      case ReceiptType.bank_statement: return "bank_statement";
-      default: throw new Exception("Couldn't convert ReceiptType: $type to string");
-    }
-  }
-
-  static ReceiptType fromString(String type){
-    switch(type){
-      case "income": return ReceiptType.income;
-      case "outcome": return ReceiptType.outcome;
-      case "investment": return ReceiptType.investment;
-      case "bank_statement": return ReceiptType.bank_statement;
-      default: throw new Exception("Couldn't resolve ReceiptType from String $type");
-    }
-  }
-}
-
