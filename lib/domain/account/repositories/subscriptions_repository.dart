@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class SubscriptionsRepository {
 
-  Future<Either<Failure, SubscriptionInfo>> getCurrentSubscription();
-  Future<Either<Failure, Stream<SubscriptionInfo>>> getSubscriptionStream();
+  Future<Either<Failure, SubscriptionInfo>> getCurrentSubscription(String userID);
+  Future<Either<Failure, Stream<SubscriptionInfo>>> getSubscriptionStream(String userID);
 
 }

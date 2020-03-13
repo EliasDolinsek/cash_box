@@ -1,4 +1,3 @@
-import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/domain/account/enteties/subscription.dart';
 import 'package:cash_box/domain/account/usecases/purchase_subscription_use_case.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
