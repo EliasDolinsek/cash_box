@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../../fixtures/buckets_fixtures.dart';
 import '../../../../fixtures/contact_fixtures.dart';
 import '../../../../fixtures/field_fixtures.dart';
+import '../../../../fixtures/receipts_fixtures.dart';
 import '../../../../fixtures/tag_ids_fixtures.dart';
 import '../../../../fixtures/templates_fixtures.dart';
 
@@ -76,7 +77,7 @@ void main() {
       final expectedFieldIDs = json.encode(fieldIDsList);
 
       final expectedContactsMoorData =
-      ContactsMoorData(id: contact.id, fieldIDs: expectedFieldIDs);
+          ContactsMoorData(id: contact.id, fieldIDs: expectedFieldIDs);
       expect(result, expectedContactsMoorData);
     });
 
@@ -84,10 +85,10 @@ void main() {
       final contact = contactFixtures.first;
       final fieldIDsList = contact.fields.map((e) => e.id).toList();
       final contactsMoorData =
-      ContactsMoorData(id: contact.id, fieldIDs: json.encode(fieldIDsList));
+          ContactsMoorData(id: contact.id, fieldIDs: json.encode(fieldIDsList));
 
       final result =
-      contactFromContactsMoorData(contactsMoorData, contact.fields);
+          contactFromContactsMoorData(contactsMoorData, contact.fields);
       expect(result, contact);
     });
   });
@@ -98,7 +99,7 @@ void main() {
       final result = tagsMoorDataFromTag(tag);
 
       final expectedTagsMoorData =
-      TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
+          TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
 
       expect(result, expectedTagsMoorData);
     });
@@ -106,7 +107,7 @@ void main() {
     test("tagFromTagsMoorData", () {
       final tag = tagFixtures.first;
       final tagsMoorData =
-      TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
+          TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
 
       final result = tagFromTagsMoorData(tagsMoorData);
       expect(result, tag);
@@ -129,13 +130,47 @@ void main() {
 
     test("templateFromTemplatesMoorData", () async {
       final template = templateFixtures.first;
-      final templatesMoorData = TemplatesMoorData(
-          id: template.id,
-          name: template.name,
-          fields: null);
+      final templatesMoorData =
+          TemplatesMoorData(id: template.id, name: template.name, fields: null);
 
-      final result = templateFromTemplatesMoorData(templatesMoorData, template.fields);
+      final result =
+          templateFromTemplatesMoorData(templatesMoorData, template.fields);
       expect(result, template);
+    });
+  });
+
+  group("receipts", () {
+    test("receiptFromReceiptsMoorData", () async {
+      final receipt = receiptFixtures.first;
+      final fieldIDsAsStringList = receipt.fields.map((e) => e.id).toList();
+
+      final receiptsMoorData = ReceiptsMoorData(
+        id: receipt.id,
+        type: receipt.type.toString(),
+        creationDate: receipt.creationDate,
+        fieldIDs: json.encode(fieldIDsAsStringList),
+        tagIDs: json.encode(receipt.tagIDs),
+      );
+
+      final result = receiptFromReceiptsMoorData(receiptsMoorData, receipt.fields);
+      expect(receipt, result);
+    });
+
+    test("receiptsMoorDataFromReceipt", () async {
+      final receipt = receiptFixtures.first;
+      final fieldIDsAsStringList = receipt.fields.map((e) => e.id).toList();
+
+      final result = receiptsMoorDataFromReceipt(receipt);
+
+      final expectedReceiptsMoorData = ReceiptsMoorData(
+        id: receipt.id,
+        type: receipt.type.toString(),
+        creationDate: receipt.creationDate,
+        fieldIDs: json.encode(fieldIDsAsStringList),
+        tagIDs: json.encode(receipt.tagIDs),
+      );
+
+      expect(result, expectedReceiptsMoorData);
     });
   });
 }
