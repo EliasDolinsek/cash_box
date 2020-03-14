@@ -8,14 +8,12 @@ part of 'moor_app_database.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
-  final int moorID;
   final String id;
   final String description;
   final String name;
   final String receiptsIDs;
   BucketsMoorData(
-      {@required this.moorID,
-      @required this.id,
+      {@required this.id,
       @required this.description,
       @required this.name,
       @required this.receiptsIDs});
@@ -23,11 +21,8 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     return BucketsMoorData(
-      moorID:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}moor_i_d']),
       id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       description: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}description']),
@@ -40,7 +35,6 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return BucketsMoorData(
-      moorID: serializer.fromJson<int>(json['moorID']),
       id: serializer.fromJson<String>(json['id']),
       description: serializer.fromJson<String>(json['description']),
       name: serializer.fromJson<String>(json['name']),
@@ -51,7 +45,6 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
   Map<String, dynamic> toJson({ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'moorID': serializer.toJson<int>(moorID),
       'id': serializer.toJson<String>(id),
       'description': serializer.toJson<String>(description),
       'name': serializer.toJson<String>(name),
@@ -62,8 +55,6 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
   @override
   BucketsMoorCompanion createCompanion(bool nullToAbsent) {
     return BucketsMoorCompanion(
-      moorID:
-          moorID == null && nullToAbsent ? const Value.absent() : Value(moorID),
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       description: description == null && nullToAbsent
           ? const Value.absent()
@@ -76,13 +67,8 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
   }
 
   BucketsMoorData copyWith(
-          {int moorID,
-          String id,
-          String description,
-          String name,
-          String receiptsIDs}) =>
+          {String id, String description, String name, String receiptsIDs}) =>
       BucketsMoorData(
-        moorID: moorID ?? this.moorID,
         id: id ?? this.id,
         description: description ?? this.description,
         name: name ?? this.name,
@@ -91,7 +77,6 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
   @override
   String toString() {
     return (StringBuffer('BucketsMoorData(')
-          ..write('moorID: $moorID, ')
           ..write('id: $id, ')
           ..write('description: $description, ')
           ..write('name: $name, ')
@@ -101,17 +86,12 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      moorID.hashCode,
-      $mrjc(
-          id.hashCode,
-          $mrjc(description.hashCode,
-              $mrjc(name.hashCode, receiptsIDs.hashCode)))));
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(description.hashCode, $mrjc(name.hashCode, receiptsIDs.hashCode))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is BucketsMoorData &&
-          other.moorID == this.moorID &&
           other.id == this.id &&
           other.description == this.description &&
           other.name == this.name &&
@@ -119,33 +99,28 @@ class BucketsMoorData extends DataClass implements Insertable<BucketsMoorData> {
 }
 
 class BucketsMoorCompanion extends UpdateCompanion<BucketsMoorData> {
-  final Value<int> moorID;
   final Value<String> id;
   final Value<String> description;
   final Value<String> name;
   final Value<String> receiptsIDs;
   const BucketsMoorCompanion({
-    this.moorID = const Value.absent(),
     this.id = const Value.absent(),
     this.description = const Value.absent(),
     this.name = const Value.absent(),
     this.receiptsIDs = const Value.absent(),
   });
   BucketsMoorCompanion.insert({
-    this.moorID = const Value.absent(),
     @required String id,
     this.description = const Value.absent(),
     this.name = const Value.absent(),
     this.receiptsIDs = const Value.absent(),
   }) : id = Value(id);
   BucketsMoorCompanion copyWith(
-      {Value<int> moorID,
-      Value<String> id,
+      {Value<String> id,
       Value<String> description,
       Value<String> name,
       Value<String> receiptsIDs}) {
     return BucketsMoorCompanion(
-      moorID: moorID ?? this.moorID,
       id: id ?? this.id,
       description: description ?? this.description,
       name: name ?? this.name,
@@ -159,15 +134,6 @@ class $BucketsMoorTable extends BucketsMoor
   final GeneratedDatabase _db;
   final String _alias;
   $BucketsMoorTable(this._db, [this._alias]);
-  final VerificationMeta _moorIDMeta = const VerificationMeta('moorID');
-  GeneratedIntColumn _moorID;
-  @override
-  GeneratedIntColumn get moorID => _moorID ??= _constructMoorID();
-  GeneratedIntColumn _constructMoorID() {
-    return GeneratedIntColumn('moor_i_d', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedTextColumn _id;
   @override
@@ -212,8 +178,7 @@ class $BucketsMoorTable extends BucketsMoor
   }
 
   @override
-  List<GeneratedColumn> get $columns =>
-      [moorID, id, description, name, receiptsIDs];
+  List<GeneratedColumn> get $columns => [id, description, name, receiptsIDs];
   @override
   $BucketsMoorTable get asDslTable => this;
   @override
@@ -224,10 +189,6 @@ class $BucketsMoorTable extends BucketsMoor
   VerificationContext validateIntegrity(BucketsMoorCompanion d,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.moorID.present) {
-      context.handle(
-          _moorIDMeta, moorID.isAcceptableValue(d.moorID.value, _moorIDMeta));
-    }
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
     } else if (isInserting) {
@@ -249,7 +210,7 @@ class $BucketsMoorTable extends BucketsMoor
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {moorID};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   BucketsMoorData map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
@@ -259,9 +220,6 @@ class $BucketsMoorTable extends BucketsMoor
   @override
   Map<String, Variable> entityToSql(BucketsMoorCompanion d) {
     final map = <String, Variable>{};
-    if (d.moorID.present) {
-      map['moor_i_d'] = Variable<int, IntType>(d.moorID.value);
-    }
     if (d.id.present) {
       map['id'] = Variable<String, StringType>(d.id.value);
     }
@@ -1570,8 +1528,8 @@ class $TemplatesMoorTable extends TemplatesMoor
   }
 }
 
-abstract class _$AppDatabase extends GeneratedDatabase {
-  _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+abstract class _$MoorAppDatabase extends GeneratedDatabase {
+  _$MoorAppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $BucketsMoorTable _bucketsMoor;
   $BucketsMoorTable get bucketsMoor => _bucketsMoor ??= $BucketsMoorTable(this);
   $ContactsMoorTable _contactsMoor;

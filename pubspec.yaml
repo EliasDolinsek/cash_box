@@ -60,6 +60,9 @@ dev_dependencies:
   # Moor database generator
   moor_generator: ^2.4.0
 
+  # Moor database testing
+  moor_ffi: ^0.4.0
+
   # Used by json_serializable and moor database
   build_runner: ^1.8.0
 
