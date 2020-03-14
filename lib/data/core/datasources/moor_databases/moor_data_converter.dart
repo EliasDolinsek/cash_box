@@ -2,8 +2,13 @@ import 'dart:convert';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
+import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 
 import 'moor_app_database.dart';
+
+//
+// Buckets
+//
 
 BucketsMoorData bucketsMoorDataFromBucket(Bucket bucket) {
   final receiptIDsAsString = json.encode(bucket.receiptsIDs);
@@ -26,6 +31,10 @@ Bucket bucketFromBucketsMoorData(BucketsMoorData bucketsMoorData) {
   );
 }
 
+//
+// Contacts
+//
+
 ContactsMoorData contactsMoorDataFromContact(Contact contact){
   final fieldIDs = json.encode(contact.fields.map((f) => f.id).toList());
 
@@ -38,6 +47,10 @@ ContactsMoorData contactsMoorDataFromContact(Contact contact){
 Contact contactFromContactsMoorData(ContactsMoorData contactsMoorData, List<Field> fields){
   return Contact(contactsMoorData.id, fields: fields);
 }
+
+//
+// Fields
+//
 
 FieldsMoorData fieldsMoorDataFromField(Field field){
   return FieldsMoorData(id: field.id, description: field.description, type: field.type.toString(), value: field.value.toString());
@@ -73,4 +86,16 @@ FieldType fieldTypeFromString(String type){
   } else {
     throw new Exception("Couldn't resolve FieldType from String $type");
   }
+}
+
+//
+// Tags
+//
+
+TagsMoorData tagsMoorDataFromTag(Tag tag){
+  return TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
+}
+
+Tag tagFromTagsMoorData(TagsMoorData tagsMoorData){
+  return Tag(tagsMoorData.id, name: tagsMoorData.name, color: tagsMoorData.color);
 }

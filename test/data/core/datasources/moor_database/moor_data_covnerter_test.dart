@@ -6,10 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../../fixtures/buckets_fixtures.dart';
 import '../../../../fixtures/contact_fixtures.dart';
 import '../../../../fixtures/field_fixtures.dart';
+import '../../../../fixtures/tag_ids_fixtures.dart';
 
 void main() {
-
-  group("buckets", (){
+  group("buckets", () {
     test("bucketFromBucketsMoorData", () async {
       final testBucket = bucketFixtures.first;
       final bucketsMoorData = BucketsMoorData(
@@ -37,7 +37,7 @@ void main() {
     });
   });
 
-  group("fields", (){
+  group("fields", () {
     test("fieldsMoorDataFromField", () async {
       final field = fieldFixtures.first;
       final result = fieldsMoorDataFromField(field);
@@ -66,7 +66,7 @@ void main() {
     });
   });
 
-  group("contacts", (){
+  group("contacts", () {
     test("contactsMoorDataFromContact", () async {
       final contact = contactFixtures.first;
       final result = contactsMoorDataFromContact(contact);
@@ -74,17 +74,41 @@ void main() {
       final fieldIDsList = contact.fields.map((e) => e.id).toList();
       final expectedFieldIDs = json.encode(fieldIDsList);
 
-      final expectedContactsMoorData = ContactsMoorData(id: contact.id, fieldIDs: expectedFieldIDs);
+      final expectedContactsMoorData =
+          ContactsMoorData(id: contact.id, fieldIDs: expectedFieldIDs);
       expect(result, expectedContactsMoorData);
     });
 
     test("contactFromContactsMoorData", () async {
       final contact = contactFixtures.first;
       final fieldIDsList = contact.fields.map((e) => e.id).toList();
-      final contactsMoorData = ContactsMoorData(id: contact.id, fieldIDs: json.encode(fieldIDsList));
-      
-      final result = contactFromContactsMoorData(contactsMoorData, contact.fields);
+      final contactsMoorData =
+          ContactsMoorData(id: contact.id, fieldIDs: json.encode(fieldIDsList));
+
+      final result =
+          contactFromContactsMoorData(contactsMoorData, contact.fields);
       expect(result, contact);
+    });
+  });
+
+  group("tags", () {
+    test("tagsMoorDataFromTag", () {
+      final tag = tagFixtures.first;
+      final result = tagsMoorDataFromTag(tag);
+
+      final expectedTagsMoorData =
+          TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
+
+      expect(result, expectedTagsMoorData);
+    });
+
+    test("tagFromTagsMoorData", () {
+      final tag = tagFixtures.first;
+      final tagsMoorData =
+          TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
+
+      final result = tagFromTagsMoorData(tagsMoorData);
+      expect(result, tag);
     });
   });
 }
