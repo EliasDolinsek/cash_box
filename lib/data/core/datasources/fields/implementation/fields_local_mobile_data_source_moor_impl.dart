@@ -39,4 +39,18 @@ class FieldsLocalMobileDataSourceMoorImpl extends FieldsLocalMobileDataSource {
     final allFields = await getTypes();
     return allFields.where((element) => ids.contains(element.id)).toList();
   }
+
+  @override
+  Future addAllFields(List<Field> fields) async {
+    for(Field field in fields){
+      await addType(field);
+    }
+  }
+
+  @override
+  Future removeAllFieldsWithIDs(List<String> ids) async {
+    for(String id in ids){
+      await removeType(id);
+    }
+  }
 }

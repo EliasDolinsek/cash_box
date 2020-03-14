@@ -5,8 +5,6 @@ import 'package:cash_box/data/core/datasources/moor_databases/moor_data_converte
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'dart:convert';
 
-import 'package:cash_box/domain/core/enteties/fields/field.dart';
-
 class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSource {
 
   final FieldsLocalMobileDataSource fieldsDataSource;
@@ -17,6 +15,7 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
   @override
   Future<void> addType(Contact type) async {
     final contactsMoorData = contactsMoorDataFromContact(type);
+    await fieldsDataSource.addAllFields(type.fields);
     await database.addContact(contactsMoorData);
   }
 
@@ -44,10 +43,10 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
   Future<void> updateType(String id, Contact contact) async {
     final originalContact = await getContactByID(id);
     final fieldIDsAsList = originalContact.fields.map((e) => e.id).toList();
-    await deleteAllFields(fieldIDsAsList);
+    await fieldsDataSource.removeAllFieldsWithIDs(fieldIDsAsList);
 
     final update = Contact(id, fields: contact.fields);
-    await addAllFields(update.fields);
+    await fieldsDataSource.addAllFields(update.fields);
 
     await database.updateContact(contactsMoorDataFromContact(update));
   }
@@ -58,18 +57,6 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
 
     final fields = await fieldsDataSource.getFieldsWithIDs(fieldsIDsAsList);
     return contactFromContactsMoorData(contactsMoorData, fields);
-  }
-
-  Future addAllFields(List<Field> fields) async {
-    for(Field field in fields){
-      await fieldsDataSource.addType(field);
-    }
-  }
-
-  Future deleteAllFields(List<String> fieldIDs) async {
-    for(String fieldID in fieldIDs){
-      await fieldsDataSource.removeType(fieldID);
-    }
   }
 
 }

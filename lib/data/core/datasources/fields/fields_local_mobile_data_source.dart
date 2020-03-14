@@ -4,4 +4,8 @@ import 'package:cash_box/domain/core/enteties/fields/field.dart';
 abstract class FieldsLocalMobileDataSource implements DataSource<Field> {
 
   Future<List<Field>> getFieldsWithIDs(List<String> ids);
+
+  Future removeAllFieldsWithIDs(List<String> id);
+
+  Future addAllFields(List<Field> fields);
 }

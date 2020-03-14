@@ -67,6 +67,21 @@ void main(){
     expect(result, expectedResult);
   });
 
+  test("addAllFields", () async {
+    await dataSource.addAllFields(fieldFixtures);
+    final result = await dataSource.getTypes();
+    expect(result, fieldFixtures);
+  });
+  
+  test("removeAllFieldsWithIDs", () async {
+    await dataSource.addAllFields(fieldFixtures);
+    final idsAsList = fieldFixtures.map((e) => e.id).toList();
+    await dataSource.removeAllFieldsWithIDs(idsAsList);
+
+    final result = await dataSource.getTypes();
+    expect(result.length, 0);
+  });
+
   tearDown(() async {
     await appDatabase.close();
   });
