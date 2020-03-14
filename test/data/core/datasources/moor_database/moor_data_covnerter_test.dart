@@ -4,6 +4,7 @@ import 'package:cash_box/data/core/datasources/moor_databases/moor_data_converte
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../fixtures/buckets_fixtures.dart';
+import '../../../../fixtures/field_fixtures.dart';
 
 void main() {
   test("bucketFromBucketsMoorData", () async {
@@ -30,5 +31,32 @@ void main() {
 
     final result = bucketsMoorDataFromBucket(testBucket);
     expect(result, bucketsMoorData);
+  });
+
+  test("fieldsMoorDataFromField", () async {
+    final field = fieldFixtures.first;
+    final result = fieldsMoorDataFromField(field);
+
+    final expectedFieldsMoorData = FieldsMoorData(
+      id: field.id,
+      description: field.description,
+      type: field.type.toString(),
+      value: field.value.toString(),
+    );
+
+    expect(result, expectedFieldsMoorData);
+  });
+
+  test("fieldFromFieldsMoorData", () async {
+    final field = fieldFixtures.first;
+    final fieldsMoorData = FieldsMoorData(
+      id: field.id,
+      description: field.description,
+      type: field.type.toString(),
+      value: field.value.toString(),
+    );
+
+    final result = fieldFromFieldsMoorData(fieldsMoorData);
+    expect(result, field);
   });
 }

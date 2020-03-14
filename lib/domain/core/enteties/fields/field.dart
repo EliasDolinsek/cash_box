@@ -19,4 +19,4 @@ class Field extends UniqueComponent {
   Map<String, dynamic> toJson() => _$FieldToJson(this);
 }
 
-enum FieldType { AMOUNT, DATE, IMAGE, TEXT, FILE }
+enum FieldType { amount, date, image, text, file }

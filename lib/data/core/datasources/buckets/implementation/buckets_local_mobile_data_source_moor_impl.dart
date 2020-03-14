@@ -5,6 +5,7 @@ import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 
 class BucketsLocalMobileDataSourceMoorImpl
     implements BucketsLocalMobileDataSource {
+
   final MoorAppDatabase database;
 
   BucketsLocalMobileDataSourceMoorImpl(this.database);

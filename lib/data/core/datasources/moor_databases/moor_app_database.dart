@@ -20,8 +20,6 @@ class BucketsMoor extends Table {
 class ContactsMoor extends Table {
   TextColumn get id => text()();
 
-  IntColumn get moorID => integer().autoIncrement()();
-
   TextColumn get fieldIDs => text().withDefault(Constant(""))();
 
   @override
@@ -62,8 +60,6 @@ class FieldsMoor extends Table {
 class TagsMoor extends Table {
   TextColumn get id => text()();
 
-  IntColumn get moorID => integer().autoIncrement()();
-
   TextColumn get name => text().withLength(max: 50)();
 
   TextColumn get color => text()();
@@ -74,8 +70,6 @@ class TagsMoor extends Table {
 
 class TemplatesMoor extends Table {
   TextColumn get id => text()();
-
-  IntColumn get moorID => integer().autoIncrement()();
 
   TextColumn get name => text().withDefault(Constant("")).withLength(max: 50)();
 

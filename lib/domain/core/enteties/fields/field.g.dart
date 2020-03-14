@@ -44,9 +44,9 @@ T _$enumDecode<T>(
 }
 
 const _$FieldTypeEnumMap = {
-  FieldType.AMOUNT: 'AMOUNT',
-  FieldType.DATE: 'DATE',
-  FieldType.IMAGE: 'IMAGE',
-  FieldType.TEXT: 'TEXT',
-  FieldType.FILE: 'FILE',
+  FieldType.amount: 'AMOUNT',
+  FieldType.date: 'DATE',
+  FieldType.image: 'IMAGE',
+  FieldType.text: 'TEXT',
+  FieldType.file: 'FILE',
 };
