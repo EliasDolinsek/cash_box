@@ -168,6 +168,12 @@ class MoorAppDatabase extends _$MoorAppDatabase {
     return (await selectStatement.get()).first;
   }
 
+  Future<ReceiptsMoorData> getReceipt(String id) async {
+    final selectStatement = select(receiptsMoor)
+      ..where((tbl) => tbl.id.equals(id));
+    return (await selectStatement.get()).first;
+  }
+
   Future deleteReceipt(String id) async =>
       delete(receiptsMoor).delete(await getReceipts(id));
 
