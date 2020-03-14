@@ -3,6 +3,7 @@ import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 
 import 'moor_app_database.dart';
 
@@ -98,4 +99,17 @@ TagsMoorData tagsMoorDataFromTag(Tag tag){
 
 Tag tagFromTagsMoorData(TagsMoorData tagsMoorData){
   return Tag(tagsMoorData.id, name: tagsMoorData.name, color: tagsMoorData.color);
+}
+
+//
+// Templates
+//
+
+TemplatesMoorData templatesMoorDataFromTemplate(Template template){
+  final fieldIDsAsString = template.fields.map((e) => e.id).toList();
+  return TemplatesMoorData(id: template.id, name: template.name, fields: json.encode(fieldIDsAsString));
+}
+
+Template templateFromTemplatesMoorData(TemplatesMoorData templatesMoorData, List<Field> fields){
+  return Template(templatesMoorData.id, name: templatesMoorData.name, fields: fields);
 }

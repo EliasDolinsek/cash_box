@@ -7,6 +7,7 @@ import '../../../../fixtures/buckets_fixtures.dart';
 import '../../../../fixtures/contact_fixtures.dart';
 import '../../../../fixtures/field_fixtures.dart';
 import '../../../../fixtures/tag_ids_fixtures.dart';
+import '../../../../fixtures/templates_fixtures.dart';
 
 void main() {
   group("buckets", () {
@@ -75,7 +76,7 @@ void main() {
       final expectedFieldIDs = json.encode(fieldIDsList);
 
       final expectedContactsMoorData =
-          ContactsMoorData(id: contact.id, fieldIDs: expectedFieldIDs);
+      ContactsMoorData(id: contact.id, fieldIDs: expectedFieldIDs);
       expect(result, expectedContactsMoorData);
     });
 
@@ -83,10 +84,10 @@ void main() {
       final contact = contactFixtures.first;
       final fieldIDsList = contact.fields.map((e) => e.id).toList();
       final contactsMoorData =
-          ContactsMoorData(id: contact.id, fieldIDs: json.encode(fieldIDsList));
+      ContactsMoorData(id: contact.id, fieldIDs: json.encode(fieldIDsList));
 
       final result =
-          contactFromContactsMoorData(contactsMoorData, contact.fields);
+      contactFromContactsMoorData(contactsMoorData, contact.fields);
       expect(result, contact);
     });
   });
@@ -97,7 +98,7 @@ void main() {
       final result = tagsMoorDataFromTag(tag);
 
       final expectedTagsMoorData =
-          TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
+      TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
 
       expect(result, expectedTagsMoorData);
     });
@@ -105,10 +106,36 @@ void main() {
     test("tagFromTagsMoorData", () {
       final tag = tagFixtures.first;
       final tagsMoorData =
-          TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
+      TagsMoorData(id: tag.id, name: tag.name, color: tag.color);
 
       final result = tagFromTagsMoorData(tagsMoorData);
       expect(result, tag);
+    });
+  });
+
+  group("templates", () {
+    test("templatesMoorDataFromTemplate", () async {
+      final template = templateFixtures.first;
+      final result = templatesMoorDataFromTemplate(template);
+
+      final fieldIDsAsList = template.fields.map((e) => e.id).toList();
+      final expectedResult = TemplatesMoorData(
+          id: template.id,
+          name: template.name,
+          fields: json.encode(fieldIDsAsList));
+
+      expect(result, expectedResult);
+    });
+
+    test("templateFromTemplatesMoorData", () async {
+      final template = templateFixtures.first;
+      final templatesMoorData = TemplatesMoorData(
+          id: template.id,
+          name: template.name,
+          fields: null);
+
+      final result = templateFromTemplatesMoorData(templatesMoorData, template.fields);
+      expect(result, template);
     });
   });
 }
