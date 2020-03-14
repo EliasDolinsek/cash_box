@@ -2,6 +2,7 @@ import 'package:cash_box/data/core/datasources/fields/implementation/fields_loca
 import 'package:cash_box/data/core/datasources/moor_databases/moor_app_database.dart';
 import 'package:cash_box/data/core/datasources/moor_databases/moor_data_converter.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 
@@ -52,6 +53,18 @@ void main(){
 
     final result = await dataSource.getTypes();
     expect(result, [field]);
+  });
+
+  test("fieldsWithIDs", () async {
+    await dataSource.addType(fieldFixtures[0]);
+    await dataSource.addType(fieldFixtures[1]);
+    await dataSource.addType(fieldFixtures[2]);
+
+    final ids = [fieldFixtures[0].id, fieldFixtures[1].id];
+    final result = await dataSource.getFieldsWithIDs(ids);
+
+    final expectedResult = [fieldFixtures[0], fieldFixtures[1]];
+    expect(result, expectedResult);
   });
 
   tearDown(() async {

@@ -33,4 +33,10 @@ class FieldsLocalMobileDataSourceMoorImpl extends FieldsLocalMobileDataSource {
 
     await appDatabase.updateField(fieldsMoorDataFromField(update));
   }
+
+  @override
+  Future<List<Field>> getFieldsWithIDs(List<String> ids) async{
+    final allFields = await getTypes();
+    return allFields.where((element) => ids.contains(element.id)).toList();
+  }
 }

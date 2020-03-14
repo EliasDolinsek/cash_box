@@ -4,59 +4,87 @@ import 'package:cash_box/data/core/datasources/moor_databases/moor_data_converte
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../fixtures/buckets_fixtures.dart';
+import '../../../../fixtures/contact_fixtures.dart';
 import '../../../../fixtures/field_fixtures.dart';
 
 void main() {
-  test("bucketFromBucketsMoorData", () async {
-    final testBucket = bucketFixtures.first;
-    final bucketsMoorData = BucketsMoorData(
-      id: testBucket.id,
-      description: testBucket.description,
-      name: testBucket.name,
-      receiptsIDs: json.encode(testBucket.receiptsIDs),
-    );
 
-    final result = bucketFromBucketsMoorData(bucketsMoorData);
-    expect(result, testBucket);
+  group("buckets", (){
+    test("bucketFromBucketsMoorData", () async {
+      final testBucket = bucketFixtures.first;
+      final bucketsMoorData = BucketsMoorData(
+        id: testBucket.id,
+        description: testBucket.description,
+        name: testBucket.name,
+        receiptsIDs: json.encode(testBucket.receiptsIDs),
+      );
+
+      final result = bucketFromBucketsMoorData(bucketsMoorData);
+      expect(result, testBucket);
+    });
+
+    test("bucketsMoorDataFromBucket", () async {
+      final testBucket = bucketFixtures.first;
+      final bucketsMoorData = BucketsMoorData(
+        id: testBucket.id,
+        description: testBucket.description,
+        name: testBucket.name,
+        receiptsIDs: json.encode(testBucket.receiptsIDs),
+      );
+
+      final result = bucketsMoorDataFromBucket(testBucket);
+      expect(result, bucketsMoorData);
+    });
   });
 
-  test("bucketsMoorDataFromBucket", () async {
-    final testBucket = bucketFixtures.first;
-    final bucketsMoorData = BucketsMoorData(
-      id: testBucket.id,
-      description: testBucket.description,
-      name: testBucket.name,
-      receiptsIDs: json.encode(testBucket.receiptsIDs),
-    );
+  group("fields", (){
+    test("fieldsMoorDataFromField", () async {
+      final field = fieldFixtures.first;
+      final result = fieldsMoorDataFromField(field);
 
-    final result = bucketsMoorDataFromBucket(testBucket);
-    expect(result, bucketsMoorData);
+      final expectedFieldsMoorData = FieldsMoorData(
+        id: field.id,
+        description: field.description,
+        type: field.type.toString(),
+        value: field.value.toString(),
+      );
+
+      expect(result, expectedFieldsMoorData);
+    });
+
+    test("fieldFromFieldsMoorData", () async {
+      final field = fieldFixtures.first;
+      final fieldsMoorData = FieldsMoorData(
+        id: field.id,
+        description: field.description,
+        type: field.type.toString(),
+        value: field.value.toString(),
+      );
+
+      final result = fieldFromFieldsMoorData(fieldsMoorData);
+      expect(result, field);
+    });
   });
 
-  test("fieldsMoorDataFromField", () async {
-    final field = fieldFixtures.first;
-    final result = fieldsMoorDataFromField(field);
+  group("contacts", (){
+    test("contactsMoorDataFromContact", () async {
+      final contact = contactFixtures.first;
+      final result = contactsMoorDataFromContact(contact);
 
-    final expectedFieldsMoorData = FieldsMoorData(
-      id: field.id,
-      description: field.description,
-      type: field.type.toString(),
-      value: field.value.toString(),
-    );
+      final fieldIDsList = contact.fields.map((e) => e.id).toList();
+      final expectedFieldIDs = json.encode(fieldIDsList);
 
-    expect(result, expectedFieldsMoorData);
-  });
+      final expectedContactsMoorData = ContactsMoorData(id: contact.id, fieldIDs: expectedFieldIDs);
+      expect(result, expectedContactsMoorData);
+    });
 
-  test("fieldFromFieldsMoorData", () async {
-    final field = fieldFixtures.first;
-    final fieldsMoorData = FieldsMoorData(
-      id: field.id,
-      description: field.description,
-      type: field.type.toString(),
-      value: field.value.toString(),
-    );
-
-    final result = fieldFromFieldsMoorData(fieldsMoorData);
-    expect(result, field);
+    test("contactFromContactsMoorData", () async {
+      final contact = contactFixtures.first;
+      final fieldIDsList = contact.fields.map((e) => e.id).toList();
+      final contactsMoorData = ContactsMoorData(id: contact.id, fieldIDs: json.encode(fieldIDsList));
+      
+      final result = contactFromContactsMoorData(contactsMoorData, contact.fields);
+      expect(result, contact);
+    });
   });
 }
