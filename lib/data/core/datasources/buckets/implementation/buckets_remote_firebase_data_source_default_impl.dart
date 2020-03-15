@@ -16,6 +16,7 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
   @override
   Future<void> addType(Bucket type) async {
     await baseCollection.add(type.toJson());
+    buckets = null;
   }
 
   @override
@@ -39,6 +40,8 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
     query.documents.forEach((ds) {
       ds.reference.delete();
     });
+
+    buckets = null;
   }
 
   @override
@@ -48,11 +51,13 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
     query.documents.forEach((ds) {
       ds.reference.updateData(update.toJson());
     });
+
+    buckets = null;
   }
 
   @override
   CollectionReference get baseCollection => firestore
       .collection("buckets")
-      .document("user_id")
+      .document(userID)
       .collection("user_buckets");
 }
