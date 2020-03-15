@@ -1,5 +1,5 @@
 import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
-import 'package:cash_box/domain/core/usecases/receipts/get_receipt_in_receipt_month_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
