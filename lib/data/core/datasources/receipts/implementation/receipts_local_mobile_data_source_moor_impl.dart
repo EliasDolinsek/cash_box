@@ -5,6 +5,7 @@ import 'package:cash_box/data/core/datasources/moor_databases/moor_app_database.
 import 'package:cash_box/data/core/datasources/moor_databases/moor_data_converter.dart';
 import 'package:cash_box/data/core/datasources/receipts/receipts_local_mobile_data_source.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 
 class ReceiptsLocalMobileDataSourceMoorImpl
     implements ReceiptsLocalMobileDataSource {
@@ -23,15 +24,7 @@ class ReceiptsLocalMobileDataSourceMoorImpl
   @override
   Future<List<Receipt>> getTypes() async {
     final receiptsMoorDataAsList = await database.getAllReceipts();
-
-    final receipts = <Receipt>[];
-    for (ReceiptsMoorData data in receiptsMoorDataAsList) {
-      final fieldIDs = json.decode(data.fieldIDs).cast<String>();
-      final fields = await fieldsDataSource.getFieldsWithIDs(fieldIDs);
-      receipts.add(receiptFromReceiptsMoorData(data, fields));
-    }
-
-    return receipts;
+    return _receiptsFromReceiptsMoorDataList(receiptsMoorDataAsList);
   }
 
   @override
@@ -69,5 +62,22 @@ class ReceiptsLocalMobileDataSourceMoorImpl
 
     final fields = await fieldsDataSource.getFieldsWithIDs(fieldsIDsAsList);
     return receiptFromReceiptsMoorData(receiptsMoorData, fields);
+  }
+
+  @override
+  Future<List<Receipt>> getReceiptsInReceiptMonth(ReceiptMonth receiptMonth) async {
+    final receiptsMoorDataAsList = await database.getReceiptsInReceiptMonth(receiptMonth);
+    return _receiptsFromReceiptsMoorDataList(receiptsMoorDataAsList);
+  }
+
+  Future<List<Receipt>> _receiptsFromReceiptsMoorDataList(List<ReceiptsMoorData> receiptsMoorDataList) async {
+    final receipts = <Receipt>[];
+    for (ReceiptsMoorData data in receiptsMoorDataList) {
+      final fieldIDs = json.decode(data.fieldIDs).cast<String>();
+      final fields = await fieldsDataSource.getFieldsWithIDs(fieldIDs);
+      receipts.add(receiptFromReceiptsMoorData(data, fields));
+    }
+
+    return receipts;
   }
 }

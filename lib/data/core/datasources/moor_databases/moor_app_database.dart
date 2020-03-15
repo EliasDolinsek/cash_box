@@ -1,9 +1,9 @@
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 part 'moor_app_database.g.dart';
 
 class BucketsMoor extends Table {
-
   TextColumn get id => text()();
 
   TextColumn get description =>
@@ -27,7 +27,6 @@ class ContactsMoor extends Table {
 }
 
 class FieldsMoor extends Table {
-
   TextColumn get id => text()();
 
   TextColumn get description =>
@@ -41,8 +40,7 @@ class FieldsMoor extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-  class ReceiptsMoor extends Table {
-
+class ReceiptsMoor extends Table {
   TextColumn get id => text()();
 
   TextColumn get type => text()();
@@ -179,6 +177,12 @@ class MoorAppDatabase extends _$MoorAppDatabase {
 
   Future updateReceipt(ReceiptsMoorData receipt) =>
       update(receiptsMoor).replace(receipt);
+
+  Future getReceiptsInReceiptMonth(ReceiptMonth receiptMonth) {
+    select(receiptsMoor)
+      ..where((tbl) => tbl.creationDate.month.equals(receiptMonth.monthAsInt))
+      ..where((tbl) => tbl.creationDate.year.equals(receiptMonth.yearAsInt));
+  }
 
   //
   // Tags

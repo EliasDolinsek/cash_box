@@ -5,6 +5,7 @@ import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/data/core/datasources/receipts/receipts_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/receipts/receipts_remote_firebase_data_source.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -88,5 +89,10 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository {
     } on Exception {
       return Left(RepositoryFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, List<Receipt>>> getReceiptsInReceiptMonth(ReceiptMonth receiptMonth) {
+
   }
 }

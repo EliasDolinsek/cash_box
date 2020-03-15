@@ -1,3 +1,5 @@
+import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class DataSource<Type> {
@@ -12,5 +14,11 @@ abstract class DataSource<Type> {
 abstract class FirestoreDataSource {
 
   CollectionReference get baseCollection;
+
+}
+
+abstract class ReceiptsDataSource implements DataSource<Receipt> {
+
+  Future<List<Receipt>> getReceiptsInReceiptMonth(ReceiptMonth receiptMonth);
 
 }
