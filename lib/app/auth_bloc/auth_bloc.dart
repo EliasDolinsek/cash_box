@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/account/usecases/get_sign_in_state_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
@@ -10,6 +11,7 @@ import 'package:meta/meta.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SendResetPasswordEmailUseCase sendResetPasswordEmailUseCase;
   final SignInWithEmailAndPasswordUseCase signInWithEmailAndPasswordUseCase;
+  final GetSignInStateUseCase getSignInStateUseCase;
   final SignOutUseCase signOutUseCase;
 
   @override
@@ -18,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(
       {@required this.sendResetPasswordEmailUseCase,
       @required this.signInWithEmailAndPasswordUseCase,
+      @required this.getSignInStateUseCase,
       @required this.signOutUseCase});
 
   @override
@@ -34,7 +37,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else if (event is SignOutEvent) {
       await signOutUseCase(NoParams());
     } else if (event is LoadAuthEvent) {
-
+      yield await getSignInState();
     }
+  }
+
+  Future<AuthState> getSignInState() async{
+    final signInStateEither = await getSignInStateUseCase(NoParams());
+    return signInStateEither.fold((l) => AuthErrorState(l.toString()), (signInState){
+      return SignInStateAvailable(signInState);
+    });
   }
 }

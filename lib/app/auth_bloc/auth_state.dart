@@ -1,3 +1,4 @@
+import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AuthState extends Equatable {}
@@ -7,9 +8,15 @@ class InitialAuthState extends AuthState {
   List<Object> get props => [];
 }
 
-class SignedInAuthState extends AuthState {}
+class SignInStateAvailable extends AuthState {
 
-class SignedOutAuthState extends AuthState {}
+  final SignInState signInState;
+
+  SignInStateAvailable(this.signInState);
+
+  @override
+  List get props => [signInState];
+}
 
 class AuthErrorState extends AuthState {
 
