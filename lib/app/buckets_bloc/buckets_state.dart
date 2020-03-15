@@ -21,7 +21,12 @@ class BucketsAvailableState extends BucketsState {
 
 class BucketsUnavailableState extends BucketsState {}
 
-class BucketsErrorState extends BucketsState {}
+class BucketsErrorState extends BucketsState {
+
+  final String errorMessage;
+
+  BucketsErrorState(this.errorMessage);
+}
 
 class BucketAvailableState extends BucketsState {
 

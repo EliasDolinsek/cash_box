@@ -11,4 +11,9 @@ class SignedInAuthState extends AuthState {}
 
 class SignedOutAuthState extends AuthState {}
 
-class AuthErrorState extends AuthState {}
+class AuthErrorState extends AuthState {
+
+  final String errorMessage;
+
+  AuthErrorState(this.errorMessage);
+}
