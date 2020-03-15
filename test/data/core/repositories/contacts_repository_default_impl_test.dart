@@ -17,17 +17,15 @@ void main() {
 
   MockContactsLocalMobileDataSource localMobileDataSource =
       MockContactsLocalMobileDataSource();
-  MockContactsRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource =
-      MockContactsRemoteMobileFirebaseDataSource();
-  MockContactsRemoteWebFirebaseDataSource remoteWebFirebaseDataSource =
-      MockContactsRemoteWebFirebaseDataSource();
+  MockContactsRemoteFirebaseDataSource remoteFirebaseDataSource =
+      MockContactsRemoteFirebaseDataSource();
 
   setUp(() {
     repository = ContactsRepositoryDefaultImpl(
-        config: config,
-        localMobileDataSource: localMobileDataSource,
-        remoteMobileFirebaseDataSource: remoteMobileFirebaseDataSource,
-        remoteWebFirebaseDataSource: remoteWebFirebaseDataSource);
+      config: config,
+      localMobileDataSource: localMobileDataSource,
+      remoteFirebaseDataSource: remoteFirebaseDataSource,
+    );
   });
 
   group("dataSource", () {
@@ -43,18 +41,18 @@ void main() {
         "should get the dataSource for dataStorageLocation = REMOTE_MOBILE_FIREBASE",
         () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteMobileFirebaseDataSource);
+      expect(result, remoteFirebaseDataSource);
     });
 
     test(
         "should get the dataSource for dataStorageLocation = REMOTE_WEB_FIREBASE",
         () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteWebFirebaseDataSource);
+      expect(result, remoteFirebaseDataSource);
     });
   });
 

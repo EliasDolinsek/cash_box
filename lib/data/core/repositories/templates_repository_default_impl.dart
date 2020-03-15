@@ -3,8 +3,7 @@ import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_local_mobile_data_source.dart';
-import 'package:cash_box/data/core/datasources/templates/templates_remote_mobile_firebase_data_source.dart';
-import 'package:cash_box/data/core/datasources/templates/templates_remote_web_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/templates/templates_remote_firebase_data_source.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/templates_repository.dart';
@@ -14,14 +13,13 @@ import 'package:meta/meta.dart';
 class TemplatesRepositoryDefaultImpl implements TemplatesRepository {
   final Config config;
   final TemplatesLocalMobileDataSource localMobileDataSource;
-  final TemplatesRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource;
-  final TemplatesRemoteWebFirebaseDataSource remoteWebFirebaseDataSource;
+  final TemplatesRemoteFirebaseDataSource remoteMobileFirebaseDataSource;
 
-  TemplatesRepositoryDefaultImpl(
-      {@required this.config,
-      @required this.localMobileDataSource,
-      @required this.remoteMobileFirebaseDataSource,
-      @required this.remoteWebFirebaseDataSource});
+  TemplatesRepositoryDefaultImpl({
+    @required this.config,
+    @required this.localMobileDataSource,
+    @required this.remoteMobileFirebaseDataSource,
+  });
 
   @override
   Future<Either<Failure, EmptyData>> addTemplate(Template template) async {
@@ -42,10 +40,8 @@ class TemplatesRepositoryDefaultImpl implements TemplatesRepository {
     switch (dataStorageLocation) {
       case DataStorageLocation.LOCAL_MOBILE:
         return localMobileDataSource;
-      case DataStorageLocation.REMOTE_MOBILE_FIREBASE:
+      case DataStorageLocation.REMOTE_FIREBASE:
         return remoteMobileFirebaseDataSource;
-      case DataStorageLocation.REMOTE_WEB_FIREBASE:
-        return remoteWebFirebaseDataSource;
       default:
         throw DataStorageLocationException();
     }

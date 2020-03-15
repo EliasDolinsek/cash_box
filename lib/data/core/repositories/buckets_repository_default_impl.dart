@@ -1,8 +1,7 @@
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_local_mobile_data_source.dart';
-import 'package:cash_box/data/core/datasources/buckets/buckets_remote_mobile_firebase_data_source.dart';
-import 'package:cash_box/data/core/datasources/buckets/buckets_remote_web_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/buckets/buckets_remote_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/repositories/buckets_repository.dart';
@@ -16,14 +15,12 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository {
   final Config config;
 
   final BucketsLocalMobileDataSource bucketsLocalMobileDataSource;
-  final BucketsRemoteMobileFirebaseDataSource
-      bucketsRemoteMobileFirebaseDataSource;
-  final BucketsRemoteWebFirebaseDataSource bucketsRemoteWebFirebaseDataSource;
+  final BucketsRemoteFirebaseDataSource
+      bucketsRemoteFirebaseDataSource;
 
   BucketsRepositoryDefaultImpl(
       {@required this.bucketsLocalMobileDataSource,
-      @required this.bucketsRemoteMobileFirebaseDataSource,
-      @required this.bucketsRemoteWebFirebaseDataSource,
+      @required this.bucketsRemoteFirebaseDataSource,
       @required this.config});
 
   @override
@@ -85,10 +82,8 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository {
     switch (dataStorageLocation) {
       case DataStorageLocation.LOCAL_MOBILE:
         return bucketsLocalMobileDataSource;
-      case DataStorageLocation.REMOTE_MOBILE_FIREBASE:
-        return bucketsRemoteMobileFirebaseDataSource;
-      case DataStorageLocation.REMOTE_WEB_FIREBASE:
-        return bucketsRemoteWebFirebaseDataSource;
+      case DataStorageLocation.REMOTE_FIREBASE:
+        return bucketsRemoteFirebaseDataSource;
       default:
 
         throw DataStorageLocationException();

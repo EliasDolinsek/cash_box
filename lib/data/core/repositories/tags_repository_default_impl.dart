@@ -4,7 +4,6 @@ import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/data/core/datasources/tags/tags_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/tags/tags_remote_mobile_firebase_data_source.dart';
-import 'package:cash_box/data/core/datasources/tags/tags_remote_web_firebase_datasource.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
@@ -13,17 +12,15 @@ import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
 class TagsRepositoryDefaultImpl implements TagsRepository {
-
   final Config config;
   final TagsLocalMobileDataSource localMobileDataSource;
-  final TagsRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource;
-  final TagsRemoteWebFirebaseDataSource remoteWebFirebaseDataSource;
+  final TagsRemoteFirebaseDataSource remoteFirebaseDataSource;
 
-  TagsRepositoryDefaultImpl(
-      {@required this.config,
-      @required this.localMobileDataSource,
-      @required this.remoteMobileFirebaseDataSource,
-      @required this.remoteWebFirebaseDataSource});
+  TagsRepositoryDefaultImpl({
+    @required this.config,
+    @required this.localMobileDataSource,
+    @required this.remoteFirebaseDataSource,
+  });
 
   @override
   Future<Either<Failure, EmptyData>> addTag(Tag tag) async {
@@ -44,15 +41,12 @@ class TagsRepositoryDefaultImpl implements TagsRepository {
     switch (dataStorageLocation) {
       case DataStorageLocation.LOCAL_MOBILE:
         return localMobileDataSource;
-      case DataStorageLocation.REMOTE_MOBILE_FIREBASE:
-        return remoteMobileFirebaseDataSource;
-      case DataStorageLocation.REMOTE_WEB_FIREBASE:
-        return remoteWebFirebaseDataSource;
+      case DataStorageLocation.REMOTE_FIREBASE:
+        return remoteFirebaseDataSource;
       default:
         throw DataStorageLocationException();
     }
   }
-
 
   @override
   Future<Either<Failure, List<Tag>>> getTags() async {

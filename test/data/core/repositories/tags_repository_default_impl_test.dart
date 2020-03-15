@@ -16,17 +16,15 @@ void main() {
   MockConfig config = MockConfig();
   MockTagsLocalMobileDataSource localMobileDataSource =
       MockTagsLocalMobileDataSource();
-  MockTagsRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource =
-      MockTagsRemoteMobileFirebaseDataSource();
-  MockTagsRemoteWebFirebaseDataSource remoteWebFirebaseDataSource =
-      MockTagsRemoteWebFirebaseDataSource();
+  MockTagsRemoteFirebaseDataSource remoteFirebaseDataSource =
+      MockTagsRemoteFirebaseDataSource();
 
   setUp(() {
     repository = TagsRepositoryDefaultImpl(
-        config: config,
-        localMobileDataSource: localMobileDataSource,
-        remoteMobileFirebaseDataSource: remoteMobileFirebaseDataSource,
-        remoteWebFirebaseDataSource: remoteWebFirebaseDataSource);
+      config: config,
+      localMobileDataSource: localMobileDataSource,
+      remoteFirebaseDataSource: remoteFirebaseDataSource,
+    );
   });
 
   group("dataSource", () {
@@ -42,36 +40,40 @@ void main() {
         "should get the dataSource for dataStorageLocation = REMOTE_MOBILE_FIREBASE",
         () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteMobileFirebaseDataSource);
+      expect(result, remoteFirebaseDataSource);
     });
 
     test(
         "should get the dataSource for dataStorageLocation = REMOTE_WEB_FIREBASE",
         () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteWebFirebaseDataSource);
+      expect(result, remoteFirebaseDataSource);
     });
   });
 
-  group("addTag", (){
-
+  group("addTag", () {
     final testTag = tagFixtures.first;
 
     test("should call the dataSource to add a tag", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.addType(any)).thenAnswer((realInvocation) async => Right(EmptyData()));
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.addType(any))
+          .thenAnswer((realInvocation) async => Right(EmptyData()));
 
       final result = await repository.addTag(testTag);
       expect(result, Right(EmptyData()));
       verify(localMobileDataSource.addType(testTag));
     });
 
-    test("should call the dataSource to add a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to add a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.addTag(testTag);
@@ -79,18 +81,23 @@ void main() {
     });
   });
 
-  group("getTags", (){
+  group("getTags", () {
     test("should call the dataSource to get all tags", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.getTypes()).thenAnswer((realInvocation) async => tagFixtures);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.getTypes())
+          .thenAnswer((realInvocation) async => tagFixtures);
 
       final result = await repository.getTags();
       expect(result, Right(tagFixtures)); //NOT WORKING BECAUSE IT'S A LIST
       verify(localMobileDataSource.getTypes());
     });
 
-    test("should call the dataSource to get all tags, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to get all tags, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.getTags();
@@ -99,20 +106,24 @@ void main() {
   });
 
   group("removeTag", () {
-
     final testID = "abc-123";
 
     test("should call the dataSource to remove a tag", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.removeType(any)).thenAnswer((realInvocation) async => null);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.removeType(any))
+          .thenAnswer((realInvocation) async => null);
 
       final result = await repository.removeTag(testID);
       expect(result, Right(EmptyData()));
       verify(localMobileDataSource.removeType(testID));
     });
 
-    test("should call the dataSource to remove a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to remove a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.removeTag(testID);
@@ -120,22 +131,26 @@ void main() {
     });
   });
 
-  group("updateTag", (){
-
+  group("updateTag", () {
     final testID = "abc-123";
     final testTag = tagFixtures.first;
 
     test("should call the dataSource to remove a tag", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.updateType(any, any)).thenAnswer((_) async => null);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.updateType(any, any))
+          .thenAnswer((_) async => null);
 
       final result = await repository.updateTag(testID, testTag);
       expect(result, Right(EmptyData()));
       verify(localMobileDataSource.updateType(testID, testTag));
     });
 
-    test("should call the dataSource to remove a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to remove a tag, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.updateTag(testID, testTag);

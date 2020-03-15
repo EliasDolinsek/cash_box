@@ -2,8 +2,7 @@ import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/contacts/contacts_local_mobile_data_source.dart';
-import 'package:cash_box/data/core/datasources/contacts/contacts_remote_mobile_firebase_data_source.dart';
-import 'package:cash_box/data/core/datasources/contacts/contacts_remote_web_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/contacts/contacts_remote_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/repositories/contacts_repository.dart';
@@ -15,14 +14,12 @@ class ContactsRepositoryDefaultImpl implements ContactsRepository {
   final Config config;
 
   final ContactsLocalMobileDataSource localMobileDataSource;
-  final ContactsRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource;
-  final ContactsRemoteWebFirebaseDataSource remoteWebFirebaseDataSource;
+  final ContactsRemoteFirebaseDataSource remoteFirebaseDataSource;
 
   ContactsRepositoryDefaultImpl(
       {@required this.config,
       @required this.localMobileDataSource,
-      @required this.remoteMobileFirebaseDataSource,
-      @required this.remoteWebFirebaseDataSource});
+      @required this.remoteFirebaseDataSource});
 
   @override
   Future<Either<Failure, EmptyData>> addContact(Contact contact) async {
@@ -64,7 +61,8 @@ class ContactsRepositoryDefaultImpl implements ContactsRepository {
   }
 
   @override
-  Future<Either<Failure, EmptyData>> updateContact(String id, Contact update) async {
+  Future<Either<Failure, EmptyData>> updateContact(
+      String id, Contact update) async {
     try {
       final dataSource = await this.dataSource;
       await dataSource.updateType(id, update);
@@ -82,10 +80,8 @@ class ContactsRepositoryDefaultImpl implements ContactsRepository {
     switch (dataStorageLocation) {
       case DataStorageLocation.LOCAL_MOBILE:
         return localMobileDataSource;
-      case DataStorageLocation.REMOTE_MOBILE_FIREBASE:
-        return remoteMobileFirebaseDataSource;
-      case DataStorageLocation.REMOTE_WEB_FIREBASE:
-        return remoteWebFirebaseDataSource;
+      case DataStorageLocation.REMOTE_FIREBASE:
+        return remoteFirebaseDataSource;
       default:
         throw DataStorageLocationException();
     }

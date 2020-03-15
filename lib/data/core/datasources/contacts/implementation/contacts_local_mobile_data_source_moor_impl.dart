@@ -36,12 +36,16 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
 
   @override
   Future<void> removeType(String id) async {
+    Contact contact = await _getContactByID(id);
+    final fieldIDsAsList = contact.fields.map((e) => e.id).toList();
+
+    await fieldsDataSource.removeAllFieldsWithIDs(fieldIDsAsList);
     await database.deleteContact(id);
   }
 
   @override
   Future<void> updateType(String id, Contact contact) async {
-    final originalContact = await getContactByID(id);
+    final originalContact = await _getContactByID(id);
     final fieldIDsAsList = originalContact.fields.map((e) => e.id).toList();
     await fieldsDataSource.removeAllFieldsWithIDs(fieldIDsAsList);
 
@@ -51,7 +55,7 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
     await database.updateContact(contactsMoorDataFromContact(update));
   }
 
-  Future<Contact> getContactByID(String id) async {
+  Future<Contact> _getContactByID(String id) async {
     final contactsMoorData = await database.getContact(id);
     final fieldsIDsAsList = json.decode(contactsMoorData.fieldIDs).cast<String>();
 

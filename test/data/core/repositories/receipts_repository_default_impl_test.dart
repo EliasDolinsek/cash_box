@@ -19,20 +19,15 @@ void main() {
 
   MockReceiptsLocalMobileDataSource receiptsLocalMobileDataSource =
       MockReceiptsLocalMobileDataSource();
-  MockReceiptsRemoteMobileFirebaseDataSource
-      receiptsRemoteMobileFirebaseDataSource =
-      MockReceiptsRemoteMobileFirebaseDataSource();
-  MockReceiptsRemoteWebFirebaseDataSource receiptsRemoteWebFirebaseDataSource =
-      MockReceiptsRemoteWebFirebaseDataSource();
+  MockReceiptsRemoteFirebaseDataSource receiptsRemoteFirebaseDataSource =
+      MockReceiptsRemoteFirebaseDataSource();
 
   setUp(() {
     repository = ReceiptsRepositoryDefaultImpl(
-        config: config,
-        receiptsLocalMobileDataSource: receiptsLocalMobileDataSource,
-        receiptsRemoteMobileFirebaseDataSource:
-            receiptsRemoteMobileFirebaseDataSource,
-        receiptsRemoteWebFirebaseDataSource:
-            receiptsRemoteWebFirebaseDataSource);
+      config: config,
+      receiptsLocalMobileDataSource: receiptsLocalMobileDataSource,
+      receiptsRemoteFirebaseDataSource: receiptsRemoteFirebaseDataSource,
+    );
   });
 
   group("dataStorageLocation", () {
@@ -46,16 +41,16 @@ void main() {
     test("dataSource with dataStorageLocation = REMOTE_MOBILE_FIREBASE",
         () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, receiptsRemoteMobileFirebaseDataSource);
+      expect(result, receiptsRemoteFirebaseDataSource);
     });
 
     test("dataSource with dataStorageLocation = LOCAL_MOBILE", () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, receiptsRemoteWebFirebaseDataSource);
+      expect(result, receiptsRemoteFirebaseDataSource);
     });
   });
 
@@ -114,7 +109,6 @@ void main() {
   });
 
   group("removeReceipt", () {
-
     final String testID = "abc-123";
 
     test("removeReceipts without an Exception in dataSource", () async {
@@ -141,8 +135,7 @@ void main() {
     });
   });
 
-  group("updateReceipt", (){
-
+  group("updateReceipt", () {
     final testID = "abc-123";
     final testReceipt = receiptFixtures.first;
 

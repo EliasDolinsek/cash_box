@@ -16,51 +16,62 @@ void main() {
   MockConfig config = MockConfig();
   MockTemplatesLocalMobileDataSource localMobileDataSource =
       MockTemplatesLocalMobileDataSource();
-  MockTemplatesRemoteMobileFirebaseDataSource remoteMobileFirebaseDataSource =
-      MockTemplatesRemoteMobileFirebaseDataSource();
-  MockTemplatesRemoteWebFirebaseDataSource remoteWebFirebaseDataSource =
-      MockTemplatesRemoteWebFirebaseDataSource();
+  MockTemplatesRemoteFirebaseDataSource remoteFirebaseDataSource =
+      MockTemplatesRemoteFirebaseDataSource();
 
   setUp(() {
     repository = TemplatesRepositoryDefaultImpl(
-        config: config,
-        localMobileDataSource: localMobileDataSource,
-        remoteMobileFirebaseDataSource: remoteMobileFirebaseDataSource,
-        remoteWebFirebaseDataSource: remoteWebFirebaseDataSource);
+      config: config,
+      localMobileDataSource: localMobileDataSource,
+      remoteMobileFirebaseDataSource: remoteFirebaseDataSource,
+    );
   });
 
-  group("dataSource", (){
-    test("should get the dataSource for dataStorageLocation = LOCAL_MOBILE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+  group("dataSource", () {
+    test("should get the dataSource for dataStorageLocation = LOCAL_MOBILE",
+        () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
       final result = await repository.dataSource;
       expect(result, localMobileDataSource);
     });
 
-    test("should get the dataSource for dataStorageLocation = REMOTE_MOBILE_FIREBASE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
+    test(
+        "should get the dataSource for dataStorageLocation = REMOTE_MOBILE_FIREBASE",
+        () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteMobileFirebaseDataSource);
+      expect(result, remoteFirebaseDataSource);
     });
 
-    test("should get the dataSource for dataStorageLocation = REMOTE_WEB_FIREBASE", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
+    test(
+        "should get the dataSource for dataStorageLocation = REMOTE_WEB_FIREBASE",
+        () async {
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, remoteWebFirebaseDataSource);
+      expect(result, remoteFirebaseDataSource);
     });
   });
 
-  group("getTemplates", (){
+  group("getTemplates", () {
     test("should call the dataSource to get all templates", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.getTypes()).thenAnswer((realInvocation) async => templateFixtures);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.getTypes())
+          .thenAnswer((realInvocation) async => templateFixtures);
 
       final result = await repository.getTemplates();
       expect(result, Right(templateFixtures)); //NOT WORKING BECAUSE IT'S A LIST
       verify(localMobileDataSource.getTypes());
     });
 
-    test("should call the dataSource to get all templates, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to get all templates, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.getTemplates();
@@ -68,20 +79,24 @@ void main() {
     });
   });
 
-  group("addTemplate", (){
-
+  group("addTemplate", () {
     final testTemplate = templateFixtures.first;
     test("should call the dataSource to add a template", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.addType(any)).thenAnswer((realInvocation) async => Right(EmptyData()));
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.addType(any))
+          .thenAnswer((realInvocation) async => Right(EmptyData()));
 
       final result = await repository.addTemplate(testTemplate);
       expect(result, Right(EmptyData()));
       verify(localMobileDataSource.addType(testTemplate));
     });
 
-    test("should call the dataSource to add a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to add a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.addTemplate(testTemplate);
@@ -90,20 +105,24 @@ void main() {
   });
 
   group("removeTemplate", () {
-
     final testID = "abc-123";
 
     test("should call the dataSource to remove a template", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.removeType(any)).thenAnswer((realInvocation) async => null);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.removeType(any))
+          .thenAnswer((realInvocation) async => null);
 
       final result = await repository.removeTemplate(testID);
       expect(result, Right(EmptyData()));
       verify(localMobileDataSource.removeType(testID));
     });
 
-    test("should call the dataSource to remove a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to remove a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.removeTemplate(testID);
@@ -111,22 +130,26 @@ void main() {
     });
   });
 
-  group("updateTemplate", (){
-
+  group("updateTemplate", () {
     final testID = "abc-123";
     final testTemplate = templateFixtures.first;
 
     test("should call the dataSource to remove a template", () async {
-      when(config.dataStorageLocation).thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
-      when(localMobileDataSource.updateType(any, any)).thenAnswer((_) async => null);
+      when(config.dataStorageLocation)
+          .thenAnswer((_) async => DataStorageLocation.LOCAL_MOBILE);
+      when(localMobileDataSource.updateType(any, any))
+          .thenAnswer((_) async => null);
 
       final result = await repository.updateTemplate(testID, testTemplate);
       expect(result, Right(EmptyData()));
       verify(localMobileDataSource.updateType(testID, testTemplate));
     });
 
-    test("should call the dataSource to remove a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown", () async {
-      when(config.dataStorageLocation).thenThrow(DataStorageLocationException());
+    test(
+        "should call the dataSource to remove a template, but return a DataStorageLocationFailure when a DataStorageLcoationException gets thrown",
+        () async {
+      when(config.dataStorageLocation)
+          .thenThrow(DataStorageLocationException());
 
       verifyNoMoreInteractions(localMobileDataSource);
       final result = await repository.updateTemplate(testID, testTemplate);

@@ -19,18 +19,15 @@ void main() {
   //Buckets-data-sources
   MockBucketsLocalMobileDataSource bucketsLocalMobileDataSource =
       MockBucketsLocalMobileDataSource();
-  MockBucketsRemoteMobileFirebaseDataSource
+  MockBucketsRemoteFirebaseDataSource
       bucketsRemoteMobileFirebaseDataSource =
-      MockBucketsRemoteMobileFirebaseDataSource();
-  MockBucketsRemoteWebFirebaseDataSource bucketsRemoteWebFirebaseDataSource =
-      MockBucketsRemoteWebFirebaseDataSource();
+      MockBucketsRemoteFirebaseDataSource();
 
   setUp(() {
     repository = BucketsRepositoryDefaultImpl(
         bucketsLocalMobileDataSource: bucketsLocalMobileDataSource,
-        bucketsRemoteMobileFirebaseDataSource:
+        bucketsRemoteFirebaseDataSource:
             bucketsRemoteMobileFirebaseDataSource,
-        bucketsRemoteWebFirebaseDataSource: bucketsRemoteWebFirebaseDataSource,
         config: config);
   });
 
@@ -44,16 +41,16 @@ void main() {
 
     test("test for DataStorageLocation.REMOTE_MOBILE_FIREBASE", () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_MOBILE_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
       expect(result, bucketsRemoteMobileFirebaseDataSource);
     });
 
     test("test for DataStorageLocation.REMOTE_WEB_FIREBASE", () async {
       when(config.dataStorageLocation)
-          .thenAnswer((_) async => DataStorageLocation.REMOTE_WEB_FIREBASE);
+          .thenAnswer((_) async => DataStorageLocation.REMOTE_FIREBASE);
       final result = await repository.dataSource;
-      expect(result, bucketsRemoteWebFirebaseDataSource);
+      expect(result, bucketsRemoteMobileFirebaseDataSource);
     });
   });
 
