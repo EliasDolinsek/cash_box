@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cash_box/domain/core/enteties/unique_component.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
 part 'bucket.g.dart';
 
@@ -14,6 +15,17 @@ class Bucket extends UniqueComponent {
       @required this.description,
       @required this.receiptsIDs})
       : super(id, params: [name, description, receiptsIDs]);
+
+  factory Bucket.newBucket(
+      {@required String name,
+      @required String description,
+      @required List<String> receiptsIDs}) {
+
+    final id = Uuid().v4();
+
+    return Bucket(id,
+        name: name, description: description, receiptsIDs: receiptsIDs);
+  }
 
   factory Bucket.fromJson(Map<String, dynamic> json) => _$BucketFromJson(json);
 

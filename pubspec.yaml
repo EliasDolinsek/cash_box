@@ -49,6 +49,9 @@ dependencies:
   # Enum to and from String conversion
   enum_to_string: ^1.0.9
 
+  # ID-Generation
+  uuid: ^2.0.4
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2

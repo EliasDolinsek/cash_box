@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cash_box/domain/core/enteties/unique_component.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
 import '../fields/field.dart';
 
@@ -13,6 +14,12 @@ class Template extends UniqueComponent {
 
   Template(String id, {@required this.name, @required this.fields})
       : super(id, params: [name, fields]);
+
+  factory Template.newTemplate({@required String name, @required List<Field> fields}){
+    final id = Uuid().v4();
+
+    return Template(id, name: name, fields: fields);
+  }
 
   factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
 

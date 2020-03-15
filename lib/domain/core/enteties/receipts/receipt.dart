@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cash_box/domain/core/enteties/unique_component.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
 import '../fields/field.dart';
 
@@ -30,7 +31,20 @@ class Receipt extends UniqueComponent {
           tagIDs
         ]);
 
-  factory Receipt.fromJson(Map<String, dynamic> json) => _$ReceiptFromJson(json);
+  factory Receipt.newReceipt(
+      {@required ReceiptType type,
+      @required DateTime creationDate,
+      @required List<Field> fields,
+      @required List<String> tagIDs}) {
+
+    final id = Uuid().v4();
+
+    return Receipt(id,
+        type: type, creationDate: creationDate, fields: fields, tagIDs: tagIDs);
+  }
+
+  factory Receipt.fromJson(Map<String, dynamic> json) =>
+      _$ReceiptFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReceiptToJson(this);
 

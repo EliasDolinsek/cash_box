@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cash_box/domain/core/enteties/unique_component.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
 part 'tag.g.dart';
 
@@ -11,6 +12,12 @@ class Tag extends UniqueComponent {
 
   Tag(String id, {@required this.name, @required this.color})
       : super(id, params: [name, color]);
+
+  factory Tag.newTag({@required String name, @required String color}){
+    final id = Uuid().v4();
+
+    return Tag(id, name: name, color: color);
+  }
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
 
