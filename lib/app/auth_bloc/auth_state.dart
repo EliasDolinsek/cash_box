@@ -16,4 +16,7 @@ class AuthErrorState extends AuthState {
   final String errorMessage;
 
   AuthErrorState(this.errorMessage);
+
+  @override
+  List get props => [errorMessage];
 }

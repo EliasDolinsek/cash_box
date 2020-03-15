@@ -35,4 +35,7 @@ class ContactsErrorState extends ContactsState {
   final String errorMessage;
 
   ContactsErrorState(this.errorMessage);
+
+  @override
+  List get props => [errorMessage];
 }

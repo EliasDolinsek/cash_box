@@ -26,6 +26,9 @@ class BucketsErrorState extends BucketsState {
   final String errorMessage;
 
   BucketsErrorState(this.errorMessage);
+
+  @override
+  List get props => [errorMessage];
 }
 
 class BucketAvailableState extends BucketsState {
@@ -33,5 +36,8 @@ class BucketAvailableState extends BucketsState {
   final Bucket bucket;
 
   BucketAvailableState(this.bucket);
+
+  @override
+  List get props => [bucket];
 
 }
