@@ -6,7 +6,7 @@ import 'package:cash_box/data/core/datasources/contacts/contacts_remote_firebase
 import 'package:cash_box/data/core/datasources/receipts/receipts_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/receipts/receipts_remote_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/tags/tags_local_mobile_data_source.dart';
-import 'package:cash_box/data/core/datasources/tags/tags_remote_mobile_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/tags/tags_remote_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_remote_firebase_data_source.dart';
 import 'package:mockito/mockito.dart';

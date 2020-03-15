@@ -14,7 +14,7 @@ class ContactsRemoteFirebaseDataSourceDefaultImpl implements ContactsRemoteFireb
 
   @override
   Future<void> addType(Contact type) async {
-    await baseCollection.add(type.toJson());
+    await baseCollection.document(type.id).setData(type.toJson());
     contacts = null;
   }
 
@@ -37,23 +37,13 @@ class ContactsRemoteFirebaseDataSourceDefaultImpl implements ContactsRemoteFireb
 
   @override
   Future<void> removeType(String id) async {
-    final query =
-        await baseCollection.where("id", isEqualTo: id).getDocuments();
-    query.documents.forEach((ds) {
-      ds.reference.delete();
-    });
-
+    await baseCollection.document(id).delete();
     contacts = null;
   }
 
   @override
   Future<void> updateType(String id, Contact update) async {
-    final query =
-        await baseCollection.where("id", isEqualTo: id).getDocuments();
-    query.documents.forEach((ds) {
-      ds.reference.updateData(update.toJson());
-    });
-
+    await baseCollection.document(id).setData(update.toJson());
     contacts = null;
   }
 

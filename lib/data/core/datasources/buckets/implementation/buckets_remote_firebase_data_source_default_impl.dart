@@ -15,7 +15,7 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
 
   @override
   Future<void> addType(Bucket type) async {
-    await baseCollection.add(type.toJson());
+    await baseCollection.document(type.id).setData(type.toJson());
     buckets = null;
   }
 
@@ -35,23 +35,13 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
 
   @override
   Future<void> removeType(String id) async {
-    final query =
-        await baseCollection.where("id", isEqualTo: id).getDocuments();
-    query.documents.forEach((ds) {
-      ds.reference.delete();
-    });
-
+    await baseCollection.document(id).delete();
     buckets = null;
   }
 
   @override
   Future<void> updateType(String id, Bucket update) async {
-    final query =
-        await baseCollection.where("id", isEqualTo: id).getDocuments();
-    query.documents.forEach((ds) {
-      ds.reference.updateData(update.toJson());
-    });
-
+    await baseCollection.document(id).setData(update.toJson());
     buckets = null;
   }
 

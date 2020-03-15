@@ -3,7 +3,7 @@ import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/data/core/datasources/tags/tags_local_mobile_data_source.dart';
-import 'package:cash_box/data/core/datasources/tags/tags_remote_mobile_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/tags/tags_remote_firebase_data_source.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
