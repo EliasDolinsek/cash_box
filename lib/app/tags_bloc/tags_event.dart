@@ -1,4 +1,5 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class TagsEvent {}
+abstract class TagsEvent extends Equatable {
+  const TagsEvent();
+}

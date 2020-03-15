@@ -1,6 +1,10 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class BucketsState {}
+abstract class BucketsState extends Equatable {
+  const BucketsState();
+}
 
-class InitialBucketsState extends BucketsState {}
+class InitialBucketsState extends BucketsState {
+  @override
+  List<Object> get props => [];
+}

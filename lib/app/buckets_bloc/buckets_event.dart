@@ -1,4 +1,5 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class BucketsEvent {}
+abstract class BucketsEvent extends Equatable {
+  const BucketsEvent();
+}

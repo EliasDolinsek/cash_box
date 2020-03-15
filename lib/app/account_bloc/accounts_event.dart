@@ -31,12 +31,12 @@ class GetAccountEvent extends AccountsEvent {
   List get props => [userID];
 }
 
-class UpdateAccountUserCase extends AccountsEvent {
+class UpdateAccountEvent extends AccountsEvent {
   final String userID;
   final String email, appPassword, name;
   final SubscriptionInfo subscriptionInfo;
 
-  UpdateAccountUserCase(
+  UpdateAccountEvent(
       {this.userID,
       this.email,
       this.appPassword,

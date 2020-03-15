@@ -1,6 +1,10 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class ContactsState {}
+abstract class ContactsState extends Equatable {
+  const ContactsState();
+}
 
-class InitialContactsState extends ContactsState {}
+class InitialContactsState extends ContactsState {
+  @override
+  List<Object> get props => [];
+}

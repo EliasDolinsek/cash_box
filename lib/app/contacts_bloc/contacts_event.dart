@@ -1,4 +1,5 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class ContactsEvent {}
+abstract class ContactsEvent extends Equatable {
+  const ContactsEvent();
+}

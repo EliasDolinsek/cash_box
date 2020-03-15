@@ -1,6 +1,10 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class TemplatesState {}
+abstract class TemplatesState extends Equatable {
+  const TemplatesState();
+}
 
-class InitialTemplatesState extends TemplatesState {}
+class InitialTemplatesState extends TemplatesState {
+  @override
+  List<Object> get props => [];
+}
