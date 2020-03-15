@@ -32,8 +32,8 @@ dependencies:
   # Functional programming thingies
   dartz: ^0.8.6
 
-  # Local cache
-  shared_preferences: ^0.5.3+4
+  # Shared preferences
+  shared_preferences: ^0.5.6+3
 
   # Json converting
   json_serializable: ^3.2.5
