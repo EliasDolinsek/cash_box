@@ -35,3 +35,5 @@ class SignInFailure extends Failure {
 class SignOutFailure extends Failure {}
 
 class AccountsRepositoryFailure extends Failure {}
+
+class FirebaseFailure extends Failure {}

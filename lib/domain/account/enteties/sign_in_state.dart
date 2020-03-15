@@ -1,0 +1,1 @@
+enum SignInState { signedOut, signedInFirebase, signedInAnonymously }

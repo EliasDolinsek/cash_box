@@ -2,9 +2,18 @@ import 'package:equatable/equatable.dart';
 
 abstract class AuthEvent extends Equatable {}
 
-class SendResetPasswordEmailEvent extends Equatable {}
+class SendResetPasswordEmailEvent extends AuthEvent {
 
-class SignInWithEmailAndPasswordEvent extends Equatable {
+  final String email;
+
+  SendResetPasswordEmailEvent(this.email);
+
+  @override
+  List get props => [email];
+
+}
+
+class SignInWithEmailAndPasswordEvent extends AuthEvent {
 
   final String email, password;
 
