@@ -24,6 +24,6 @@ class SignInWithEmailAndPasswordEvent extends AuthEvent {
 
 }
 
-class SignOutEvent extends Equatable {}
+class SignOutEvent extends AuthEvent {}
 
-class LoadAuthEvent extends Equatable {}
+class LoadAuthEvent extends AuthEvent {}
