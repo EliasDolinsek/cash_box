@@ -58,7 +58,7 @@ class UpdateBucketEvent extends BucketsEvent {
   final String name, description;
   final List<String> receiptIDs;
 
-  UpdateBucketEvent({this.id, this.name, this.description, this.receiptIDs});
+  UpdateBucketEvent(this.id, {this.name, this.description, this.receiptIDs});
 
   @override
   List get props => [id, name, description, receiptIDs];
