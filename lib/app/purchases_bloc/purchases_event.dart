@@ -3,9 +3,26 @@ import 'package:equatable/equatable.dart';
 
 abstract class PurchasesEvent extends Equatable {}
 
-class GetCurrentSubscriptionEvent extends PurchasesEvent {}
+class GetCurrentSubscriptionEvent extends PurchasesEvent {
 
-class GetSubscriptionsStreamEvent extends PurchasesEvent {}
+  final String userID;
+
+  GetCurrentSubscriptionEvent(this.userID);
+
+  @override
+  List get props => [userID];
+
+}
+
+class GetSubscriptionsStreamEvent extends PurchasesEvent {
+
+  final String userID;
+
+  GetSubscriptionsStreamEvent(this.userID);
+
+  @override
+  List get props => [userID];
+}
 
 class PurchaseSubscriptionEvent extends PurchasesEvent {
 

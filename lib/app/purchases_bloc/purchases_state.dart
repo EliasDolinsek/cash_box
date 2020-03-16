@@ -8,11 +8,11 @@ class InitialPurchasesState extends PurchasesState {
   List<Object> get props => [];
 }
 
-class SubscriptionsStreamState extends PurchasesState {
+class SubscriptionsStreamAvailableState extends PurchasesState {
 
   final Stream<SubscriptionInfo> stream;
 
-  SubscriptionsStreamState(this.stream);
+  SubscriptionsStreamAvailableState(this.stream);
 
   @override
   List get props => [stream];
@@ -30,11 +30,11 @@ class CurrentSubscriptionState extends PurchasesState {
 
 }
 
-class SubscriptionErrorState extends PurchasesState {
+class PurchasesErrorState extends PurchasesState {
 
   final String errorMessage;
 
-  SubscriptionErrorState(this.errorMessage);
+  PurchasesErrorState(this.errorMessage);
 
   @override
   List get props => [errorMessage];
