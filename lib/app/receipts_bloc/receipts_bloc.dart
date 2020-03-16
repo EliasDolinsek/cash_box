@@ -5,6 +5,7 @@ import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart
 import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/remove_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/update_receipt_use_case.dart';
 import './bloc.dart';
 import 'package:meta/meta.dart';
@@ -15,13 +16,15 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
   final GetReceiptsUseCase getReceiptsUseCase;
   final GetReceiptsInReceiptMonthUseCase getReceiptsInReceiptMonthUseCase;
   final UpdateReceiptUseCase updateReceiptUseCase;
+  final RemoveReceiptUseCase removeReceiptUseCase;
 
   ReceiptsBloc(
       {@required this.addReceiptUseCase,
       @required this.getReceiptUseCase,
       @required this.getReceiptsUseCase,
       @required this.getReceiptsInReceiptMonthUseCase,
-      @required this.updateReceiptUseCase});
+      @required this.updateReceiptUseCase,
+      @required this.removeReceiptUseCase});
 
   @override
   ReceiptsState get initialState => InitialReceiptsState();
@@ -41,6 +44,9 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
       yield await _getReceiptsInReceiptMonth(event);
     } else if (event is UpdateReceiptEvent) {
       await _updateReceipt(event);
+    } else if(event is RemoveReceiptEvent){
+      final params = RemoveReceiptUseCaseParams(event.receiptID);
+      await removeReceiptUseCase(params);
     }
   }
 

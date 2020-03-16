@@ -45,3 +45,13 @@ class UpdateReceiptEvent extends ReceiptsEvent {
   @override
   List get props => [id, type, fields, tagIDs];
 }
+
+class RemoveReceiptEvent extends ReceiptsEvent {
+
+  final String receiptID;
+
+  RemoveReceiptEvent(this.receiptID);
+
+  @override
+  List get props => [receiptID];
+}

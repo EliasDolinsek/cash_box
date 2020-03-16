@@ -7,6 +7,7 @@ import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart
 import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/remove_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/update_receipt_use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,6 +27,8 @@ class MockGetReceiptsInReceiptMonthUseCase extends Mock
 
 class MockUpdateReceiptUseCase extends Mock implements UpdateReceiptUseCase {}
 
+class MockRemoveReceiptUseCase extends Mock implements RemoveReceiptUseCase {}
+
 void main() {
   final MockAddReceiptUseCase addReceiptUseCase = MockAddReceiptUseCase();
   final MockGetReceiptUseCase getReceiptUseCase = MockGetReceiptUseCase();
@@ -34,6 +37,8 @@ void main() {
       MockGetReceiptsInReceiptMonthUseCase();
   final MockUpdateReceiptUseCase updateReceiptUseCase =
       MockUpdateReceiptUseCase();
+  final MockRemoveReceiptUseCase removeReceiptUseCase =
+      MockRemoveReceiptUseCase();
 
   ReceiptsBloc bloc;
 
@@ -43,7 +48,8 @@ void main() {
         getReceiptUseCase: getReceiptUseCase,
         getReceiptsUseCase: getReceiptsUseCase,
         getReceiptsInReceiptMonthUseCase: getReceiptsInReceiptMonthUseCase,
-        updateReceiptUseCase: updateReceiptUseCase);
+        updateReceiptUseCase: updateReceiptUseCase,
+        removeReceiptUseCase: removeReceiptUseCase);
   });
 
   test("AddReceiptEvent", () async {
@@ -108,7 +114,7 @@ void main() {
     bloc.dispatch(event);
   });
 
-  test("UpdateReceipt", () async {
+  test("UpdateReceiptEvent", () async {
     final receipt = receiptFixtures.first;
     final update = Receipt(receipt.id,
         type: ReceiptType.income,
@@ -128,6 +134,21 @@ void main() {
 
     final event = UpdateReceiptEvent(update.id,
         type: update.type, fields: update.fields, tagIDs: update.tagIDs);
+    bloc.dispatch(event);
+  });
+
+  test("RemoveReceiptEvent", () async {
+    final receipt = receiptFixtures.first;
+    final params = RemoveReceiptUseCaseParams(receipt.id);
+
+    when(removeReceiptUseCase.call(params))
+        .thenAnswer((_) async => Right(EmptyData()));
+
+    final expect = [InitialReceiptsState()];
+
+    expectLater(bloc.state, emitsInOrder(expect));
+
+    final event = RemoveReceiptEvent(receipt.id);
     bloc.dispatch(event);
   });
 }
