@@ -37,11 +37,10 @@ class RemoveTagEvent extends TagsEvent {
 class UpdateTagEvent extends TagsEvent {
 
   final String id;
-  final String name, description;
-  final List<String> receiptIDs;
+  final String name, color;
 
-  UpdateTagEvent({this.id, this.name, this.description, this.receiptIDs});
+  UpdateTagEvent({this.id, this.name, this.color});
 
   @override
-  List get props => [id, name, description, receiptIDs];
+  List get props => [id, name, color];
 }
