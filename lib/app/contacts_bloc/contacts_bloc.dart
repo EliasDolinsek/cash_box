@@ -1,8 +1,28 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/add_contact_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/get_contact_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/remove_contact_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/update_contact_use_case.dart';
 import './bloc.dart';
+import 'package:meta/meta.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
+  final AddContactUseCase addContactUseCase;
+  final GetContactUseCase getContactUseCase;
+  final GetContactsUseCase getContactsUseCase;
+  final RemoveContactUseCase removeContactUseCase;
+  final UpdateContactUseCase updateContactUseCase;
+
+  ContactsBloc(
+      {@required this.addContactUseCase,
+      @required this.getContactUseCase,
+      @required this.getContactsUseCase,
+      @required this.removeContactUseCase,
+      @required this.updateContactUseCase});
+
   @override
   ContactsState get initialState => InitialContactsState();
 
@@ -10,6 +30,33 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   Stream<ContactsState> mapEventToState(
     ContactsEvent event,
   ) async* {
-    // TODO: Add Logic
+    if (event is AddContactEvent) {
+      final params = AddContactParams(event.contact);
+      await addContactUseCase(params);
+    } else if (event is GetContactEvent) {
+      yield await _getContact(event);
+    } else if (event is GetContactsEvent) {
+      yield await _getContacts();
+    } else if (event is UpdateContactEvent) {
+      final params = UpdateContactUseCaseParams(event.contactID, event.fields);
+      await updateContactUseCase(params);
+    }
+  }
+
+  Future<ContactsState> _getContact(GetContactEvent event) async {
+    final params = GetContactUseCaseParams(event.contactID);
+    final contactEither = await getContactUseCase(params);
+    return contactEither.fold((l) => ContactsErrorState(l.toString()),
+        (contact) {
+      return ContactAvailableState(contact);
+    });
+  }
+
+  Future<ContactsState> _getContacts() async {
+    final contactEither = await getContactsUseCase(NoParams());
+    return contactEither.fold((l) => ContactsErrorState(l.toString()),
+        (contacts) {
+      return ContactsAvailableState(contacts);
+    });
   }
 }
