@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:cash_box/core/usecases/use_case.dart';
 import 'package:cash_box/domain/core/usecases/tags/add_tag_use_case.dart';
 import 'package:cash_box/domain/core/usecases/tags/get_tag_use_case.dart';
 import 'package:cash_box/domain/core/usecases/tags/get_tags_use_case.dart';
@@ -37,21 +38,27 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     } else if (event is GetTagsEvent) {
       yield await _getTags();
     } else if (event is RemoveTagEvent) {
-      final params = RemoveTagUseCaseParams(event.bucketID);
+      final params = RemoveTagUseCaseParams(event.tagID);
       await removeTagUseCase(params);
     } else if (event is UpdateTagEvent) {
-      final params = UpdateTagUseCaseParams(event.id, name: event.name, color: event.color);
+      final params = UpdateTagUseCaseParams(event.id,
+          name: event.name, color: event.color);
       await updateTagUseCase(params);
     }
   }
 
   Future<TagsState> _getTag(GetTagEvent event) async {
-    final params = GetTagUseCaseParams(event.bucketID);
+    final params = GetTagUseCaseParams(event.tagID);
     final tagEither = await getTagUseCase(params);
     return tagEither.fold((l) => TagsErrorState(l.toString()), (tag) {
       return TagAvailableState(tag);
     });
   }
 
-  Future<TagsState> _getTags() async {}
+  Future<TagsState> _getTags() async {
+    final tagsEither = await getTagsUseCase(NoParams());
+    return tagsEither.fold((l) => TagsErrorState(l.toString()), (tags) {
+      return TagsAvailableState(tags);
+    });
+  }
 }

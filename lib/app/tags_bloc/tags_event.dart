@@ -14,24 +14,24 @@ class AddTagEvent extends TagsEvent {
 }
 
 class GetTagEvent extends TagsEvent {
-  final String bucketID;
+  final String tagID;
 
-  GetTagEvent(this.bucketID);
+  GetTagEvent(this.tagID);
 
   @override
-  List get props => [bucketID];
+  List get props => [tagID];
 }
 
 class GetTagsEvent extends TagsEvent {}
 
 class RemoveTagEvent extends TagsEvent {
 
-  final String bucketID;
+  final String tagID;
 
-  RemoveTagEvent(this.bucketID);
+  RemoveTagEvent(this.tagID);
 
   @override
-  List get props => [bucketID];
+  List get props => [tagID];
 }
 
 class UpdateTagEvent extends TagsEvent {
@@ -39,7 +39,7 @@ class UpdateTagEvent extends TagsEvent {
   final String id;
   final String name, color;
 
-  UpdateTagEvent({this.id, this.name, this.color});
+  UpdateTagEvent(this.id, {this.name, this.color});
 
   @override
   List get props => [id, name, color];
