@@ -56,10 +56,11 @@ void main() {
     final receipt = receiptFixtures.first;
     final params = AddReceiptUseCaseParams(receipt);
 
+    when(getReceiptsUseCase.call(any)).thenAnswer((_) async => Right(receiptFixtures));
     when(addReceiptUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialReceiptsState()];
+    final expect = [InitialReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -125,10 +126,12 @@ void main() {
     final params = UpdateReceiptUseCaseParams(update.id,
         tagIDs: update.tagIDs, fields: update.fields, type: update.type);
 
+    when(getReceiptsUseCase.call(any)).thenAnswer((_) async => Right(receiptFixtures));
+
     when(updateReceiptUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialReceiptsState()];
+    final expect = [InitialReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -141,10 +144,12 @@ void main() {
     final receipt = receiptFixtures.first;
     final params = RemoveReceiptUseCaseParams(receipt.id);
 
+    when(getReceiptsUseCase.call(any)).thenAnswer((_) async => Right(receiptFixtures));
+
     when(removeReceiptUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialReceiptsState()];
+    final expect = [InitialReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 

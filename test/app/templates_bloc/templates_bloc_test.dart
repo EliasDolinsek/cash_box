@@ -46,10 +46,11 @@ void main() {
     final template = templateFixtures.first;
     final params = AddTemplateUseCaseParams(template);
 
+    when(getTemplatesUseCase.call(any)).thenAnswer((_) async => Right(templateFixtures));
     when(addTemplateUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialTemplatesState()];
+    final expected = [InitialTemplatesState(), TemplatesAvailableState(templateFixtures)];
     expectLater(bloc.state, emitsInOrder(expected));
 
     final event = AddTemplateEvent(template);
@@ -91,10 +92,12 @@ void main() {
     final template = templateFixtures.first;
     final params = RemoveTemplateUseCaseParams(template.id);
 
+    when(getTemplatesUseCase.call(any)).thenAnswer((_) async => Right(templateFixtures));
+
     when(removeTemplateUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialTemplatesState()];
+    final expected = [InitialTemplatesState(), TemplatesAvailableState(templateFixtures)];
     expectLater(bloc.state, emitsInOrder(expected));
 
     final event = RemoveTemplateEvent(template.id);
@@ -107,10 +110,12 @@ void main() {
     final params = UpdateTemplateUseCaseParams(update.id,
         fields: update.fields, name: update.name);
 
+    when(getTemplatesUseCase.call(any)).thenAnswer((_) async => Right(templateFixtures));
+
     when(updateTemplateUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialTemplatesState()];
+    final expected = [InitialTemplatesState(), TemplatesAvailableState(templateFixtures)];
     expectLater(bloc.state, emitsInOrder(expected));
 
     final event = UpdateTemplateEvent(update.id,

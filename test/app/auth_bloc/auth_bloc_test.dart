@@ -73,24 +73,29 @@ void main() {
     final params =
         SignInWithEmailAndPasswordUseCaseParams(testEmail, testPassword);
 
+    final signInState = SignInState.signedInFirebase;
+    when(getSignInStateUseCase.call(any)).thenAnswer((_) async => Right(signInState));
+
     when(signInWithEmailAndPasswordUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
     final expected = [
-      InitialAuthState(),
+      InitialAuthState(), SignInStateAvailable(signInState)
     ];
 
     expectLater(authBloc.state, emitsInOrder(expected));
 
-    final event = SendResetPasswordEmailEvent(testEmail);
+    final event = SignInWithEmailAndPasswordEvent(testEmail, testPassword);
     authBloc.dispatch(event);
   });
 
   test("SignOutEvent", () async {
+    final signInState = SignInState.signedInFirebase;
     when(signOutUseCase.call(NoParams()))
         .thenAnswer((_) async => Right(EmptyData()));
+    when(getSignInStateUseCase.call(any)).thenAnswer((_) async => Right(signInState));
 
-    final expected = [InitialAuthState()];
+    final expected = [InitialAuthState(), SignInStateAvailable(signInState)];
 
     expectLater(authBloc.state, emitsInOrder(expected));
 

@@ -38,10 +38,12 @@ class BucketsBloc extends Bloc<BucketsEvent, BucketsState> {
     if (event is AddBucketEvent) {
       final params = AddBucketUseCaseParams(event.bucket);
       await addBucketUseCase(params);
+      dispatch(GetBucketsEvent());
     } else if (event is AddReceiptToBucketEvent) {
       final params =
           AddReceiptToBucketUseCaseParams(event.bucketID, event.receiptID);
       await addReceiptToBucketUseCase(params);
+      dispatch(GetBucketsEvent());
     } else if (event is GetBucketEvent) {
       yield await _getBucket(event);
     } else if (event is GetBucketsEvent) {
@@ -49,10 +51,12 @@ class BucketsBloc extends Bloc<BucketsEvent, BucketsState> {
     } else if (event is RemoveBucketEvent) {
       final params = RemoveBucketUseCaseParams(event.bucketID);
       await removeBucketUseCase(params);
+      dispatch(GetBucketsEvent());
     } else if (event is RemoveReceiptFromBucketEvent) {
       final params =
           RemoveReceiptFromBucketUseCaseParams(event.receiptID, event.bucketID);
       await removeReceiptFromBucketUseCase(params);
+      dispatch(GetBucketsEvent());
     } else if (event is UpdateBucketEvent) {
       final params = UpdateBucketUseCaseParams(event.id,
           name: event.name,
@@ -60,6 +64,7 @@ class BucketsBloc extends Bloc<BucketsEvent, BucketsState> {
           receiptIDs: event.receiptIDs);
 
       await updateBucketUseCase(params);
+      dispatch(GetBucketsEvent());
     }
   }
 

@@ -44,10 +44,11 @@ void main() {
     final tag = tagFixtures.first;
     final params = AddTagUseCaseParams(tag);
 
+    when(getTagsUseCase.call(any)).thenAnswer((_) async => Right(tagFixtures));
     when(addTagUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialTagsState()];
+    final expect = [InitialTagsState(), TagsAvailableState(tagFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -84,10 +85,12 @@ void main() {
     final tag = tagFixtures.first;
     final params = RemoveTagUseCaseParams(tag.id);
 
+    when(getTagsUseCase.call(any)).thenAnswer((_) async => Right(tagFixtures));
+
     when(removeTagUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialTagsState()];
+    final expect = [InitialTagsState(), TagsAvailableState(tagFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -102,10 +105,12 @@ void main() {
     final params =
         UpdateTagUseCaseParams(tag.id, color: update.color, name: update.name);
 
+    when(getTagsUseCase.call(any)).thenAnswer((_) async => Right(tagFixtures));
+
     when(updateTagUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialTagsState()];
+    final expect = [InitialTagsState(), TagsAvailableState(tagFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 

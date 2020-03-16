@@ -47,10 +47,12 @@ void main() {
   test("AddContactEvent", () async {
     final contact = contactFixtures.first;
     final params = AddContactParams(contact);
+
+    when(getContactsUseCase.call(any)).thenAnswer((_) async => Right(contactFixtures));
     when(addContactUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialContactsState()];
+    final expected = [InitialContactsState(), ContactsAvailableState(contactFixtures)];
 
     expectLater(contactsBloc.state, emitsInOrder(expected));
 
@@ -91,12 +93,30 @@ void main() {
     final contact = contactFixtures.first;
     final update = Contact(contact.id, fields: fieldFixtures);
 
+    when(getContactsUseCase.call(any)).thenAnswer((_) async => Right(contactFixtures));
+
     final params = UpdateContactUseCaseParams(update.id, update.fields);
     when(updateContactUseCase.call(params)).thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialContactsState()];
+    final expected = [InitialContactsState(), ContactsAvailableState(contactFixtures)];
     expectLater(contactsBloc.state, emitsInOrder(expected));
 
     contactsBloc.dispatch(GetContactsEvent());
+  });
+
+  test("RemoveContactEvent", () async {
+    final contact = contactFixtures.first;
+    final params = RemoveContactUseCaseParams(contact.id);
+
+    when(getContactsUseCase.call(any)).thenAnswer((_) async => Right(contactFixtures));
+    when(removeContactUseCase.call(params))
+        .thenAnswer((_) async => Right(EmptyData()));
+
+    final expected = [InitialContactsState(), ContactsAvailableState(contactFixtures)];
+
+    expectLater(contactsBloc.state, emitsInOrder(expected));
+
+    final event = RemoveContactEvent(contact.id);
+    contactsBloc.dispatch(event);
   });
 }

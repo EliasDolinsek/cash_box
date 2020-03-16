@@ -34,8 +34,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final params =
           SignInWithEmailAndPasswordUseCaseParams(event.email, event.password);
       await signInWithEmailAndPasswordUseCase(params);
+      dispatch(LoadAuthEvent());
     } else if (event is SignOutEvent) {
       await signOutUseCase(NoParams());
+      dispatch(LoadAuthEvent());
     } else if (event is LoadAuthEvent) {
       yield await getSignInState();
     }

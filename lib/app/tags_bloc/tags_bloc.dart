@@ -33,6 +33,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     if (event is AddTagEvent) {
       final params = AddTagUseCaseParams(event.tag);
       await addTagUseCase(params);
+      dispatch(GetTagsEvent());
     } else if (event is GetTagEvent) {
       yield await _getTag(event);
     } else if (event is GetTagsEvent) {
@@ -40,10 +41,12 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     } else if (event is RemoveTagEvent) {
       final params = RemoveTagUseCaseParams(event.tagID);
       await removeTagUseCase(params);
+      dispatch(GetTagsEvent());
     } else if (event is UpdateTagEvent) {
       final params = UpdateTagUseCaseParams(event.id,
           name: event.name, color: event.color);
       await updateTagUseCase(params);
+      dispatch(GetTagsEvent());
     }
   }
 

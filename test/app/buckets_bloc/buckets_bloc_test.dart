@@ -60,10 +60,11 @@ void main() {
     final bucket = bucketFixtures.first;
     final params = AddBucketUseCaseParams(bucket);
 
+    when(getBucketsUseCase.call(any)).thenAnswer((_) async => Right(bucketFixtures));
     when(addBucketUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialBucketsState()];
+    final expected = [InitialBucketsState(), BucketsAvailableState(bucketFixtures)];
     expectLater(bloc.state, emitsInOrder(expected));
 
     final event = AddBucketEvent(bucket);
@@ -74,10 +75,12 @@ void main() {
     final receipt = receiptFixtures.first;
     final bucket = bucketFixtures.first;
 
+    when(getBucketsUseCase.call(any)).thenAnswer((_) async => Right(bucketFixtures));
+
     final params = AddReceiptToBucketUseCaseParams(bucket.id, receipt.id);
     when(addReceiptToBucketUseCase.call(params));
 
-    final expected = [InitialBucketsState()];
+    final expected = [InitialBucketsState(), BucketsAvailableState(bucketFixtures)];
     expectLater(bloc.state, emitsInOrder(expected));
 
     final event = AddBucketEvent(bucket);
@@ -118,8 +121,9 @@ void main() {
 
     when(removeBucketUseCas.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
+    when(getBucketsUseCase.call(any)).thenAnswer((_) async => Right(bucketFixtures));
 
-    final expected = [InitialBucketsState()];
+    final expected = [InitialBucketsState(), BucketsAvailableState(bucketFixtures)];
     expectLater(bloc.state, emitsInOrder(expected));
 
     final event = RemoveBucketEvent(bucket.id);
@@ -138,8 +142,9 @@ void main() {
 
     when(updateBucketUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
+    when(getBucketsUseCase.call(any)).thenAnswer((_) async => Right(bucketFixtures));
 
-    final expected = [InitialBucketsState()];
+    final expected = [InitialBucketsState(), BucketsAvailableState(bucketFixtures)];
     expectLater(bloc.state, emitsInOrder(expected));
 
     final event = UpdateBucketEvent(update.id,

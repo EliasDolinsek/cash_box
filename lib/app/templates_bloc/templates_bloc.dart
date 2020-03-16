@@ -33,6 +33,7 @@ class TemplatesBloc extends Bloc<TemplatesEvent, TemplatesState> {
     if (event is AddTemplateEvent) {
       final params = AddTemplateUseCaseParams(event.template);
       await addTemplateUseCase(params);
+      dispatch(GetTemplatesEvent());
     } else if (event is GetTemplateEvent) {
       yield await _getTemplate(event);
     } else if (event is GetTemplatesEvent) {
@@ -40,10 +41,12 @@ class TemplatesBloc extends Bloc<TemplatesEvent, TemplatesState> {
     } else if (event is RemoveTemplateEvent) {
       final params = RemoveTemplateUseCaseParams(event.templateID);
       await removeTemplateUseCase(params);
+      dispatch(GetTemplatesEvent());
     } else if (event is UpdateTemplateEvent) {
       final params = UpdateTemplateUseCaseParams(event.id,
           name: event.name, fields: event.fields);
       await updateTemplateUseCase(params);
+      dispatch(GetTemplatesEvent());
     }
   }
 

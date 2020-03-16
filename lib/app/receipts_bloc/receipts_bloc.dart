@@ -36,6 +36,7 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
     if (event is AddReceiptEvent) {
       final params = AddReceiptUseCaseParams(event.receipt);
       await addReceiptUseCase(params);
+      dispatch(GetReceiptsEvent());
     } else if (event is GetReceiptEvent) {
       yield await _getReceipt(event);
     } else if (event is GetReceiptsEvent) {
@@ -44,9 +45,11 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
       yield await _getReceiptsInReceiptMonth(event);
     } else if (event is UpdateReceiptEvent) {
       await _updateReceipt(event);
+      dispatch(GetReceiptsEvent());
     } else if(event is RemoveReceiptEvent){
       final params = RemoveReceiptUseCaseParams(event.receiptID);
       await removeReceiptUseCase(params);
+      dispatch(GetReceiptsEvent());
     }
   }
 
