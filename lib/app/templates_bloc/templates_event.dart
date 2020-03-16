@@ -38,7 +38,7 @@ class UpdateTemplateEvent extends TemplatesEvent {
   final String id, name;
   final List<Field> fields;
 
-  UpdateTemplateEvent({this.id, this.name, this.fields});
+  UpdateTemplateEvent(this.id, {this.name, this.fields});
 
   @override
   List get props => [id, name, fields];
