@@ -98,6 +98,7 @@ void main() {
   test("UpdateTagEvent", () async {
     final tag = tagFixtures.first;
     final update = Tag(tag.id, name: "update", color: "update");
+
     final params =
         UpdateTagUseCaseParams(tag.id, color: update.color, name: update.name);
 
