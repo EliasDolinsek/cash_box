@@ -40,7 +40,7 @@ class UpdateReceiptEvent extends ReceiptsEvent {
   final List<Field> fields;
   final List<String> tagIDs;
 
-  UpdateReceiptEvent({this.id, this.type, this.fields, this.tagIDs});
+  UpdateReceiptEvent(this.id, {this.type, this.fields, this.tagIDs});
 
   @override
   List get props => [id, type, fields, tagIDs];
