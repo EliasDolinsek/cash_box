@@ -4,6 +4,7 @@ import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class SignInWithEmailAndPasswordUseCase extends UseCase<EmptyData, SignInWithEmailAndPasswordUseCaseParams> {
 
@@ -17,8 +18,22 @@ class SignInWithEmailAndPasswordUseCase extends UseCase<EmptyData, SignInWithEma
       await firebaseAuth.signInWithEmailAndPassword(email: params.email, password: params.password);
       return Right(EmptyData());
     } catch (e) {
-      final failure = SignInFailure(e.message);
-      return Left(failure);
+      if(e is PlatformException){
+        final failure = SignInFailure(_fromPlatformException(e));
+        return Left(failure);
+      } else {
+        return Left(SignInFailure(SignInFailureType.other));
+      }
+    }
+  }
+
+  SignInFailureType _fromPlatformException(PlatformException e){
+    if(e.code == "ERROR_USER_NOT_FOUND"){
+      return SignInFailureType.user_not_found;
+    } else if(e.code == "ERROR_WRONG_PASSWORD"){
+      return SignInFailureType.wrong_password;
+    } else {
+      return SignInFailureType.other;
     }
   }
 

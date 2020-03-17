@@ -27,10 +27,15 @@ class SendResetPasswordEmailFailure extends Failure {}
 
 class SignInFailure extends Failure {
 
-  final String message;
+  final SignInFailureType type;
 
-  SignInFailure(this.message) : super([message]);
+  SignInFailure(this.type) : super([type]);
+
+  @override
+  List get props => [type];
 }
+
+enum SignInFailureType { user_not_found, wrong_password, other}
 
 class SignOutFailure extends Failure {}
 

@@ -1,6 +1,10 @@
+import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
+import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/injection.dart';
+import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
+import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +18,8 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
 
   bool _hidePassword = true;
   bool _hideConfirmPassword = true;
+
+  String _signInFailureMessage;
 
   String _emailErrorText;
   String _email = "";
@@ -38,6 +44,8 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
           SizedBox(height: 16.0),
           _buildPasswordsTextFields(),
           SizedBox(height: 16.0),
+          _buildSignInFailureText(),
+          SizedBox(height: 8.0),
           _buildSignInBar(),
           Expanded(
             child: Align(
@@ -48,6 +56,14 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
         ],
       ),
     );
+  }
+
+  Widget _buildSignInFailureText() {
+    if (_signInFailureMessage != null && _signInFailureMessage.isNotEmpty) {
+      return Text(_signInFailureMessage, style: TextStyle(color: Colors.red));
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildEmailTextField() {
@@ -62,7 +78,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
       ),
       onChanged: (text) {
         setState(() {
-          _emailErrorText = null;
+          _clearFailures();
           _email = text;
         });
       },
@@ -210,16 +226,48 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
       });
     } else {
       _signInWithEmailAndPassword();
-      setState(() {
-        _passwordErrorText = null;
-        _emailErrorText = null;
-      });
+      setState(_clearFailures);
     }
   }
 
-  void _signInWithEmailAndPassword() {
-    //final event = SignInWithEmailAndPasswordEvent(_email, _password);
-    //sl<AuthBloc>().dispatch(event);
+  Future _signInWithEmailAndPassword() async {
+    final useCase = sl<SignInWithEmailAndPasswordUseCase>();
+    final params = SignInWithEmailAndPasswordUseCaseParams(_email, _password);
+    final result = await useCase(params);
+    result.fold((failure) {
+      if (failure is SignInFailure) {
+        _displaySignInFailure(failure);
+      } else {
+        setState(() =>
+            _signInFailureMessage = _getErrorMessageForSignInFailureType(null));
+      }
+    }, (_) {
+      sl<AuthBloc>().dispatch(LoadAuthStateEvent());
+    });
+  }
+
+  void _clearFailures() {
+    _signInFailureMessage = null;
+    _emailErrorText = null;
+    _passwordErrorText = null;
+    _passwordConformationErrorText = null;
+  }
+
+  void _displaySignInFailure(SignInFailure failure) {
+    final errorMessage = _getErrorMessageForSignInFailureType(failure.type);
+    setState(() => _signInFailureMessage = errorMessage);
+  }
+
+  String _getErrorMessageForSignInFailureType(SignInFailureType type) {
+    final appLocalizations = AppLocalizations.of(context);
+    if (type == SignInFailureType.user_not_found) {
+      return appLocalizations
+          .translate("sign_in_widget_sign_in_user_not_found");
+    } else if (type == SignInFailureType.wrong_password) {
+      return appLocalizations.translate("sign_in_widget_wrong_password");
+    } else {
+      return appLocalizations.translate("sign_in_widget_sign_in_failure");
+    }
   }
 
   void _checkAndSendResetEmail() {
@@ -250,9 +298,9 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     });
   }
 
-  void _showSendingEmailSnackbar(){
+  void _showSendingEmailSnackbar() {
     final text =
-    AppLocalizations.translateOf(context, "sing_in_page_sending_email");
+        AppLocalizations.translateOf(context, "sing_in_page_sending_email");
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(text),
     ));
@@ -260,7 +308,8 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
 
   void _showResetEmailErrorSnackbar() {
     final text =
-        AppLocalizations.translateOf(context, "sing_in_page_reset_email_error").replaceAll("%{email}", _email);
+        AppLocalizations.translateOf(context, "sing_in_page_reset_email_error")
+            .replaceAll("%{email}", _email);
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(text),
     ));

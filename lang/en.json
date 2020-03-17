@@ -16,6 +16,10 @@
   "sing_in_page_reset_email_sent": "Reset E-Mail sent to %{email}",
   "converter_failure_password_too_short": "Password must have at least six characters",
   "converter_failure_password_too_long": "Password is too long",
-  "sing_in_page_reset_email_error": "Couldn't send a E-Mail to %{email}",
-  "sing_in_page_sending_email": "Sending E-Mail ..."
+  "sing_in_page_reset_email_error": "No account %{email} found",
+  "sing_in_page_sending_email": "Sending E-Mail ...",
+  "sign_in_widget_sign_in_user_not_found": "User not found",
+  "sign_in_widget_wrong_password": "Wrong password",
+  "sign_in_widget_sign_in_failure": "Couldn't sign in, try again"
+
 }
