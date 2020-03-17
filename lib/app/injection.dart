@@ -1,4 +1,5 @@
 import 'package:cash_box/domain/account/usecases/get_sign_in_state_use_case.dart';
+import 'package:cash_box/domain/account/usecases/register_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
@@ -25,6 +26,10 @@ Future init() async {
   // SignInWithEmailAndPasswordUseCase
   sl.registerLazySingleton<SignInWithEmailAndPasswordUseCase>(
       () => SignInWithEmailAndPasswordUseCase(sl()));
+
+  // RegisterWithEmailAndPasswordUseCase
+  sl.registerLazySingleton<RegisterWithEmailAndPasswordUseCase>(
+      () => RegisterWithEmailAndPasswordUseCase(sl()));
 
   // GetSignInStateUseCase
   sl.registerLazySingleton<GetSignInStateUseCase>(

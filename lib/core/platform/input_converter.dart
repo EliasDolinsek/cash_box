@@ -18,4 +18,12 @@ class InputConverter {
       return null;
     }
   }
+
+  static String validatePasswordConfirmation(BuildContext context, String password, String passwordConformation) {
+    if(password != passwordConformation){
+      return AppLocalizations.translateOf(context, "converter_failure_passwords_not_matching");
+    }
+
+    return null;
+  }
 }

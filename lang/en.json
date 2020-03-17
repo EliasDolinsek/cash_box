@@ -20,6 +20,7 @@
   "sing_in_page_sending_email": "Sending E-Mail ...",
   "sign_in_widget_sign_in_user_not_found": "User not found",
   "sign_in_widget_wrong_password": "Wrong password",
-  "sign_in_widget_sign_in_failure": "Couldn't sign in, try again"
-
+  "sign_in_widget_sign_in_failure": "Couldn't sign in, try again",
+  "converter_failure_passwords_not_matching": "Passwords must match",
+  "sing_in_page_loading": "Loading ..."
 }

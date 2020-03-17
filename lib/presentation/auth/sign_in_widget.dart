@@ -3,9 +3,11 @@ import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
+import 'package:cash_box/domain/account/usecases/register_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignInInputWidget extends StatefulWidget {
@@ -127,7 +129,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
           hintText: AppLocalizations.translateOf(
               context, "sign_in_page_confirm_password_hint"),
           suffixIcon: _buildShowPasswordIconButton(_hideConfirmPassword),
-          errorText: _passwordErrorText),
+          errorText: _passwordConformationErrorText),
       onChanged: (text) {
         setState(() => _passwordConformation = text);
       },
@@ -166,9 +168,50 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
       onPressed: () {
         if (_signInType == SignInType.sign_in) {
           _checkAndSignInWithEmailAndPassword();
+        } else {
+          _checkAndRegister();
         }
       },
     );
+  }
+
+  void _checkAndRegister() {
+    final emailError = InputConverter.validateEmail(context, _email);
+    final passwordError = InputConverter.validatePassword(context, _password);
+    final passwordConfirmationError =
+        InputConverter.validatePasswordConfirmation(
+            context, _password, _passwordConformation);
+
+    if (emailError != null ||
+        passwordError != null ||
+        passwordConfirmationError != null) {
+      setState(() {
+        _emailErrorText = emailError;
+        _passwordErrorText = passwordError;
+        _passwordConformationErrorText = passwordConfirmationError;
+      });
+    } else {
+      setState(() => _clearFailures());
+      _register();
+    }
+  }
+
+  void _register() async {
+    final useCase = sl<RegisterWithEmailAndPasswordUseCase>();
+    final params = RegisterWithEmailAndPasswordUseCaseParams(_email, _password);
+
+    _showLoadingSnackbar();
+    final result = await useCase(params);
+
+    result.fold((failure) => _displayRegisterFailure, (_) {
+      sl<AuthBloc>().dispatch(LoadAuthStateEvent());
+    });
+  }
+
+  void _displayRegisterFailure() {
+    final text =
+        AppLocalizations.translateOf(context, "sign_in_page_register_failure");
+    setState(() => _signInFailureMessage = text);
   }
 
   String _getSignInRegisterText() {
@@ -233,7 +276,10 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
   Future _signInWithEmailAndPassword() async {
     final useCase = sl<SignInWithEmailAndPasswordUseCase>();
     final params = SignInWithEmailAndPasswordUseCaseParams(_email, _password);
+
+    _showLoadingSnackbar();
     final result = await useCase(params);
+
     result.fold((failure) {
       if (failure is SignInFailure) {
         _displaySignInFailure(failure);
@@ -296,6 +342,14 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     }, (_) {
       _showResetEmailSuccessfulSentSnackbar();
     });
+  }
+
+  void _showLoadingSnackbar() {
+    final text =
+        AppLocalizations.translateOf(context, "sing_in_page_loading");
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+    ));
   }
 
   void _showSendingEmailSnackbar() {
