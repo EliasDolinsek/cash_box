@@ -20,10 +20,14 @@ class SignInStateAvailable extends AuthState {
 
 class AuthErrorState extends AuthState {
 
-  final String errorMessage;
+  final AuthErrorType type;
 
-  AuthErrorState(this.errorMessage);
+  AuthErrorState(this.type);
 
   @override
-  List get props => [errorMessage];
+  List get props => [type];
 }
+
+class LoadingAuthState extends AuthState {}
+
+enum AuthErrorType { firebaseError, other }

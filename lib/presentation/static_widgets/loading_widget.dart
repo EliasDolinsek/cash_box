@@ -8,6 +8,7 @@ class LoadingWidget extends StatelessWidget {
         child: Column(
           children: <Widget>[
             CircularProgressIndicator(),
+            SizedBox(height: 16.0),
             Text("Loading")
           ],
         ),

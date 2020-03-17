@@ -20,22 +20,18 @@ Future init() async {
 
   // SendResetPasswordEmailUseCase
   sl.registerLazySingleton<SendResetPasswordEmailUseCase>(
-          () => SendResetPasswordEmailUseCase(sl()));
+      () => SendResetPasswordEmailUseCase(sl()));
 
   // SignInWithEmailAndPasswordUseCase
   sl.registerLazySingleton<SignInWithEmailAndPasswordUseCase>(
-          () => SignInWithEmailAndPasswordUseCase(sl()));
+      () => SignInWithEmailAndPasswordUseCase(sl()));
 
   // GetSignInStateUseCase
   sl.registerLazySingleton<GetSignInStateUseCase>(
-          () => GetSignInStateUseCase(sl()));
+      () => GetSignInStateUseCase(sl()));
 
   // SignOutUseCase
   sl.registerLazySingleton<SignOutUseCase>(() => SignOutUseCase(sl()));
 
-  sl.registerSingleton<AuthBloc>(AuthBloc(
-      sendResetPasswordEmailUseCase: sl(),
-      signInWithEmailAndPasswordUseCase: sl(),
-      getSignInStateUseCase: sl(),
-      signOutUseCase: sl()));
+  sl.registerSingleton<AuthBloc>(AuthBloc(getSignInStateUseCase: sl()));
 }

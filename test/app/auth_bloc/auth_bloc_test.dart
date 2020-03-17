@@ -114,6 +114,6 @@ void main() {
     ];
 
     expectLater(authBloc.state, emitsInOrder(expected));
-    authBloc.dispatch(LoadAuthEvent());
+    authBloc.dispatch(LoadAuthStateEvent());
   });
 }

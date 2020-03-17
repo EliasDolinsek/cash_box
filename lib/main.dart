@@ -17,7 +17,6 @@ void main() async {
 class CashBoxApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final authBloc = sl<AuthBloc>();
     return MaterialApp(
       title: "CashBox",
       supportedLocales: [
@@ -38,24 +37,33 @@ class CashBoxApp extends StatelessWidget {
 
         return supportedLocales.first;
       },
-      home: StreamBuilder(
-        stream: authBloc.state,
-        builder: (_, AsyncSnapshot<AuthState> snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data;
-            if (data is InitialAuthState) {
-              authBloc.dispatch(LoadAuthEvent());
-              return LoadingWidget();
-            } else if (data is SignInStateAvailable) {
-              return _buildWidgetForSignInState(data.signInState);
-            } else {
-              return Expanded(child: LoadingWidget());
-            }
-          }
-          sl<AuthBloc>().dispatch(LoadAuthEvent());
-          return Text("OK");
-        },
+      theme: ThemeData(
+        primarySwatch: Colors.amber,
+        accentColor: Colors.tealAccent
       ),
+      home: _buildHome(),
+    );
+  }
+
+  Widget _buildHome(){
+    final authBloc = sl<AuthBloc>();
+    return StreamBuilder(
+      stream: authBloc.state,
+      builder: (_, AsyncSnapshot<AuthState> snapshot) {
+        if (snapshot.hasData) {
+          final data = snapshot.data;
+          if (data is InitialAuthState) {
+            authBloc.dispatch(LoadAuthStateEvent());
+            return LoadingWidget();
+          } else if (data is SignInStateAvailable) {
+            return _buildWidgetForSignInState(data.signInState);
+          } else {
+            return Expanded(child: LoadingWidget());
+          }
+        } else {
+          return LoadingWidget();
+        }
+      },
     );
   }
 

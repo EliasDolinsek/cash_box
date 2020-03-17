@@ -1,3 +1,21 @@
 {
-  "test_string": "This is a test"
+  "test_string": "This is a test",
+  "sing_in_page_email_hint": "Enter your E-Mail",
+  "sign_in_page_email": "E-Mail",
+  "sign_in_page_password_hint": "Enter your password",
+  "sign_in_page_password": "Password",
+  "sign_in_page_confirm_password_hint": "Enter your password again",
+  "sign_in_page_confirm_password": "Confirm password",
+  "sign_in_page_btn_sign_in": "SIGN IN",
+  "sign_in_page_btn_register": "REGISTER",
+  "sign_in_page_btn_already_have_account": "I ALREADY HAVE AN ACCOUNT",
+  "sign_in_page_btn_create_account": "CREATE ACCOUNT",
+  "sign_in_page_btn_forgot_password": "FORGOT PASSWORD",
+  "converter_failure_invalid_email": "Invalid E-Mail",
+  "sing_in_page_enter_email": "Enter E-Mail",
+  "sing_in_page_reset_email_sent": "Reset E-Mail sent to %{email}",
+  "converter_failure_password_too_short": "Password must have at least six characters",
+  "converter_failure_password_too_long": "Password is too long",
+  "sing_in_page_reset_email_error": "Couldn't send a E-Mail to %{email}",
+  "sing_in_page_sending_email": "Sending E-Mail ..."
 }
