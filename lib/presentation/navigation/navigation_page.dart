@@ -1,13 +1,12 @@
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_event.dart';
-import 'package:cash_box/app/auth_bloc/auth_state.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cash_box/presentation/settings/settings_widget.dart';
 import 'package:flutter/material.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -38,7 +37,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   color: getColorForTitleIndex(0),
                 ),
                 title: Text(
-                  "Overview",
+                  AppLocalizations.translateOf(context, "navigation_overview"),
                   style: TextStyle(
                     color: getColorForTitleIndex(0),
                   ),
@@ -54,7 +53,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   color: getColorForTitleIndex(1),
                 ),
                 title: Text(
-                  "Search",
+                  AppLocalizations.translateOf(context, "navigation_search"),
                   style: TextStyle(
                     color: getColorForTitleIndex(1),
                   ),
@@ -70,7 +69,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   color: getColorForTitleIndex(2),
                 ),
                 title: Text(
-                  "Statistics",
+                  AppLocalizations.translateOf(context, "navigation_statistics"),
                   style: TextStyle(
                     color: getColorForTitleIndex(2),
                   ),
@@ -88,7 +87,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   color: getColorForTitleIndex(3),
                 ),
                 title: Text(
-                  "Settings",
+                  AppLocalizations.translateOf(context, "navigation_settings"),
                   style: TextStyle(
                     color: getColorForTitleIndex(3),
                   ),
@@ -103,7 +102,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   Icons.exit_to_app,
                   color: Colors.black,
                 ),
-                title: Text("Sign Out"),
+                title: Text(AppLocalizations.translateOf(context, "navigation_sign_out")),
                 onTap: () {
                   _signOut(context);
                   Navigator.pop(context);
@@ -127,7 +126,7 @@ class _NavigationPageState extends State<NavigationPage> {
             _getUserID().then((userID) {
               authBloc.dispatch(GetAccountEvent(userID));
             });
-            return _buildUseChipWithText("Loading ...");
+            return _buildUseChipWithText(AppLocalizations.translateOf(context, "navigation_loading"));
           } else if (data is AccountAvailableState) {
             return _buildUseChipWithText(data.account.email);
           } else {
@@ -150,7 +149,11 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 
   Widget _getBody() {
-    return Text("Site $_selectedIndex");
+    if(_selectedIndex == 3){
+      return SettingsWidget();
+    } else {
+      return Text("Site $_selectedIndex");
+    }
   }
 
   Color getColorForTitleIndex(int titleIndex) {

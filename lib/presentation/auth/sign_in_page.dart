@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/auth/sign_in_widget.dart';

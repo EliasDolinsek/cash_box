@@ -31,7 +31,7 @@ class CashBoxApp extends StatelessWidget {
       ],
       localeResolutionCallback: (locale, supportedLocales) {
         for (var supportedLocal in supportedLocales) {
-          if (supportedLocal.languageCode == locale.languageCode){
+          if (supportedLocal.languageCode == locale.languageCode) {
             return supportedLocal;
           }
         }
@@ -40,13 +40,12 @@ class CashBoxApp extends StatelessWidget {
       },
       theme: ThemeData(
         primarySwatch: Colors.amber,
-        accentColor: Colors.tealAccent
       ),
       home: _buildHome(),
     );
   }
 
-  Widget _buildHome(){
+  Widget _buildHome() {
     final authBloc = sl<AuthBloc>();
     return StreamBuilder(
       stream: authBloc.state,

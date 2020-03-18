@@ -1,8 +1,11 @@
+import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
+import 'package:cash_box/domain/account/enteties/account.dart';
+import 'package:cash_box/domain/account/enteties/subscription.dart';
 import 'package:cash_box/domain/account/usecases/register_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
@@ -15,10 +18,13 @@ class SignInInputWidget extends StatefulWidget {
 }
 
 class _SignInInputWidgetState extends State<SignInInputWidget> {
-
   SignInType _signInType = SignInType.sign_in;
+  AccountType _accountType = AccountType.private;
 
   String _signInFailureMessage;
+
+  String _nameErrorText;
+  String _name;
 
   String _emailErrorText;
   String _email = "";
@@ -38,16 +44,74 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        _buildNameInput(),
         _buildEmailTextField(),
         SizedBox(height: 16.0),
         _buildPasswordsTextFields(),
+        _buildAccountTypeInput(),
         SizedBox(height: 16.0),
         _buildSignInFailureText(),
         SizedBox(height: 8.0),
         _buildSignInBar(),
         SizedBox(height: 16.0),
-        _buildSwitchSignInTypeButton()
+        _buildSwitchSignInTypeButton(),
       ],
+    );
+  }
+
+  Widget _buildAccountTypeInput() {
+    if (_signInType == SignInType.register) {
+      return Column(
+        children: <Widget>[SizedBox(height: 16.0), _buildAccountTypeSwitch()],
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _buildAccountTypeSwitch() {
+    return CheckboxListTile(
+      value: _accountType == AccountType.business,
+      onChanged: (value) {
+        setState(() {
+          if(value){
+            _accountType = AccountType.business;
+          } else {
+            _accountType = AccountType.private;
+          }
+        });
+      },
+      title: Text("Create busniess account"),
+      subtitle: Text("Create a bussiness account if this will not be for private use only"),
+    );
+  }
+
+  Widget _buildNameInput() {
+    if (_signInType == SignInType.register) {
+      return Column(
+        children: <Widget>[_buildNameTextField(), SizedBox(height: 16.0)],
+      );
+    } else {
+      return Column();
+    }
+  }
+
+  Widget _buildNameTextField() {
+    return TextField(
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: AppLocalizations.translateOf(context, "sign_in_page_name"),
+        hintText:
+            AppLocalizations.translateOf(context, "sing_in_page_name_hint"),
+        errorText: _nameErrorText,
+      ),
+      onChanged: (text) {
+        setState(() {
+          _clearFailures();
+          _name = text;
+        });
+      },
     );
   }
 
@@ -140,13 +204,16 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     return MaterialButton(
         child: Text(AppLocalizations.translateOf(
             context, "sign_in_page_btn_forgot_password")),
-        onPressed: _signInType == SignInType.sign_in ? _checkAndSendResetEmail : null);
+        onPressed:
+            _signInType == SignInType.sign_in ? _checkAndSendResetEmail : null);
   }
 
   Widget _buildSignInCreateAccountButton() {
     return MaterialButton(
       color: Theme.of(context).primaryColor,
-      child: Text(_getSignInRegisterText(),),
+      child: Text(
+        _getSignInRegisterText(),
+      ),
       onPressed: () {
         if (_signInType == SignInType.sign_in) {
           _checkAndSignInWithEmailAndPassword();
@@ -158,6 +225,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
   }
 
   void _checkAndRegister() {
+    final nameError = InputConverter.validateName(context, _name);
     final emailError = InputConverter.validateEmail(context, _email);
     final passwordError = InputConverter.validatePassword(context, _password);
     final passwordConfirmationError =
@@ -166,8 +234,10 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
 
     if (emailError != null ||
         passwordError != null ||
-        passwordConfirmationError != null) {
+        passwordConfirmationError != null ||
+        nameError != null) {
       setState(() {
+        _nameErrorText = nameError;
         _emailErrorText = emailError;
         _passwordErrorText = passwordError;
         _passwordConformationErrorText = passwordConfirmationError;
@@ -185,9 +255,43 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     _showLoadingSnackbar();
     final result = await useCase(params);
 
-    result.fold((failure) => _displayRegisterFailure(), (_) {
+    result.fold((failure) => _displayRegisterFailure(), (userID) {
+      _createAccount(userID);
       sl<AuthBloc>().dispatch(LoadAuthStateEvent());
     });
+  }
+
+  void _createAccount(String userID) {
+    final accountsBloc = sl<AccountsBloc>();
+    final account = _getAccountFromEnteredDetails(userID);
+    final event = CreateAccountEvent(account);
+
+    accountsBloc.dispatch(event);
+  }
+
+  Account _getAccountFromEnteredDetails(String userID) {
+    return Account(
+      userID: userID,
+      signInSource: SignInSource.firebase,
+      accountType: _accountType,
+      email: _email,
+      appPassword: "",
+      name: _name,
+      subscriptionInfo: SubscriptionInfo(
+        subscriptionType: _getSubscriptionTypeFromAccountType(),
+        purchaseDate: DateTime.now(),
+      ),
+    );
+  }
+
+  SubscriptionType _getSubscriptionTypeFromAccountType() {
+    if (_accountType == AccountType.private) {
+      return SubscriptionType.personal_free;
+    } else if (_accountType == AccountType.business) {
+      return SubscriptionType.business_free;
+    } else {
+      return null;
+    }
   }
 
   void _displayRegisterFailure() {
@@ -264,6 +368,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
   }
 
   void _clearFailures() {
+    _nameErrorText = null;
     _signInFailureMessage = null;
     _emailErrorText = null;
     _passwordErrorText = null;
@@ -315,8 +420,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
   }
 
   void _showLoadingSnackbar() {
-    final text =
-        AppLocalizations.translateOf(context, "sing_in_page_loading");
+    final text = AppLocalizations.translateOf(context, "sing_in_page_loading");
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(text),
     ));

@@ -26,4 +26,12 @@ class InputConverter {
 
     return null;
   }
+
+  static String validateName(BuildContext context, String name) {
+    if(name == null || name.isEmpty){
+      return AppLocalizations.translateOf(context, "converter_failure_enter_name");
+    } else {
+      return null;
+    }
+  }
 }

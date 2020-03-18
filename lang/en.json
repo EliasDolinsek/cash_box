@@ -22,8 +22,17 @@
   "sign_in_widget_wrong_password": "Wrong password",
   "sign_in_widget_sign_in_failure": "Couldn't sign in, try again",
   "converter_failure_passwords_not_matching": "Passwords must match",
-  "sing_in_page_loading": "Loading ...",
+  "sing_in_page_loading": "Loading",
   "sign_in_page_register_failure": "Couldn't create account, check your inputs",
   "sign_in_page_btn_home": "HOME",
-  "navigation_page_signing_out": "Signing out ..."
+  "navigation_page_signing_out": "Signing out ...",
+  "sign_in_page_name": "Name",
+  "sing_in_page_name_hint": "Enter your name",
+  "converter_failure_enter_name": "Enter your name",
+  "navigation_overview": "Overview",
+  "navigation_search": "Search",
+  "navigation_statistics": "Statistics",
+  "navigation_settings": "Settings",
+  "navigation_sign_out": "Sign out",
+  "navigation_loading": "Loading ..."
 }
