@@ -22,5 +22,7 @@
   "sign_in_widget_wrong_password": "Wrong password",
   "sign_in_widget_sign_in_failure": "Couldn't sign in, try again",
   "converter_failure_passwords_not_matching": "Passwords must match",
-  "sing_in_page_loading": "Loading ..."
+  "sing_in_page_loading": "Loading ...",
+  "sign_in_page_register_failure": "Couldn't create account, check your inputs",
+  "sign_in_page_btn_home": "HOME"
 }

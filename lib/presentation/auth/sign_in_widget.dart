@@ -7,7 +7,6 @@ import 'package:cash_box/domain/account/usecases/register_with_email_and_passwor
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignInInputWidget extends StatefulWidget {
@@ -16,10 +15,8 @@ class SignInInputWidget extends StatefulWidget {
 }
 
 class _SignInInputWidgetState extends State<SignInInputWidget> {
-  SignInType _signInType = SignInType.sign_in;
 
-  bool _hidePassword = true;
-  bool _hideConfirmPassword = true;
+  SignInType _signInType = SignInType.sign_in;
 
   String _signInFailureMessage;
 
@@ -38,25 +35,19 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
   }
 
   Widget _buildMobile() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: <Widget>[
-          _buildEmailTextField(),
-          SizedBox(height: 16.0),
-          _buildPasswordsTextFields(),
-          SizedBox(height: 16.0),
-          _buildSignInFailureText(),
-          SizedBox(height: 8.0),
-          _buildSignInBar(),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: _buildSwitchSignInTypeButton(),
-            ),
-          )
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        _buildEmailTextField(),
+        SizedBox(height: 16.0),
+        _buildPasswordsTextFields(),
+        SizedBox(height: 16.0),
+        _buildSignInFailureText(),
+        SizedBox(height: 8.0),
+        _buildSignInBar(),
+        SizedBox(height: 16.0),
+        _buildSwitchSignInTypeButton()
+      ],
     );
   }
 
@@ -110,12 +101,11 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
               AppLocalizations.translateOf(context, "sign_in_page_password"),
           hintText: AppLocalizations.translateOf(
               context, "sign_in_page_password_hint"),
-          suffixIcon: _buildShowPasswordIconButton(_hidePassword),
           errorText: _passwordErrorText),
       onChanged: (text) {
         setState(() => _password = text);
       },
-      obscureText: _hidePassword,
+      obscureText: true,
     );
   }
 
@@ -128,43 +118,35 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
               context, "sign_in_page_confirm_password"),
           hintText: AppLocalizations.translateOf(
               context, "sign_in_page_confirm_password_hint"),
-          suffixIcon: _buildShowPasswordIconButton(_hideConfirmPassword),
           errorText: _passwordConformationErrorText),
       onChanged: (text) {
         setState(() => _passwordConformation = text);
       },
-      obscureText: _hideConfirmPassword,
+      obscureText: true,
     );
   }
 
   Widget _buildSignInBar() {
-    if (_signInType == SignInType.sign_in) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          _buildForgotPasswordButton(),
-          _buildSignInCreateAccountButton(),
-        ],
-      );
-    } else {
-      return Align(
-        alignment: Alignment.centerRight,
-        child: _buildSignInCreateAccountButton(),
-      );
-    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        _buildForgotPasswordButton(),
+        _buildSignInCreateAccountButton(),
+      ],
+    );
   }
 
   Widget _buildForgotPasswordButton() {
     return MaterialButton(
         child: Text(AppLocalizations.translateOf(
             context, "sign_in_page_btn_forgot_password")),
-        onPressed: _checkAndSendResetEmail);
+        onPressed: _signInType == SignInType.sign_in ? _checkAndSendResetEmail : null);
   }
 
   Widget _buildSignInCreateAccountButton() {
     return MaterialButton(
       color: Theme.of(context).primaryColor,
-      child: Text(_getSignInRegisterText()),
+      child: Text(_getSignInRegisterText(),),
       onPressed: () {
         if (_signInType == SignInType.sign_in) {
           _checkAndSignInWithEmailAndPassword();
@@ -203,7 +185,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     _showLoadingSnackbar();
     final result = await useCase(params);
 
-    result.fold((failure) => _displayRegisterFailure, (_) {
+    result.fold((failure) => _displayRegisterFailure(), (_) {
       sl<AuthBloc>().dispatch(LoadAuthStateEvent());
     });
   }
@@ -221,17 +203,6 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     } else {
       return appLocalizations.translate("sign_in_page_btn_register");
     }
-  }
-
-  Widget _buildShowPasswordIconButton(bool variable) {
-    return IconButton(
-      icon: Icon(Icons.remove_red_eye),
-      onPressed: () {
-        setState(() {
-          variable = !variable;
-        });
-      },
-    );
   }
 
   Widget _buildSwitchSignInTypeButton() {
@@ -321,7 +292,6 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
       _showEnterEmailError();
     } else {
       final error = InputConverter.validateEmail(context, _email);
-      print(error);
       if (error == null) {
         _sendResetEmailAnClear(_email);
       } else {
