@@ -3,7 +3,9 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
+import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/settings/re_sign_in_dialog.dart';
 import 'package:flutter/material.dart';
 
 class NameEmailSettingsWidget extends StatefulWidget {
@@ -13,9 +15,8 @@ class NameEmailSettingsWidget extends StatefulWidget {
 }
 
 class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
-
   bool _setup = false;
-  String _nameError, _emailError;
+  String _nameError, _emailError, _errorText;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -29,7 +30,7 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
         if (snaphsot.hasData) {
           final data = snaphsot.data;
           if (data is AccountAvailableState) {
-            if(!_setup){
+            if (!_setup) {
               _setDataFromAccountAvailableState(data);
               _setup = true;
             }
@@ -71,6 +72,7 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        _buildErrorText(),
         _buildNameField(),
         SizedBox(height: 16.0),
         _buildEmailField(),
@@ -80,9 +82,28 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
     );
   }
 
+  Widget _buildErrorText() {
+    if (_errorText != null) {
+      return Column(
+        children: <Widget>[
+          Text(
+            _errorText,
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+          SizedBox(height: 16.0),
+        ],
+      );
+    } else {
+      return Container();
+    }
+  }
+
   Widget _buildUpdateButton() {
     return MaterialButton(
-      child: Text(AppLocalizations.translateOf(context, "name_email_settings_widget_btn_update_details")),
+      child: Text(AppLocalizations.translateOf(
+          context, "name_email_settings_widget_btn_update_details")),
       onPressed: _checkAndUpdateDetails,
     );
   }
@@ -92,8 +113,10 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
       controller: _nameController,
       decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: AppLocalizations.translateOf(context, "name_email_settings_widget_name"),
-          hintText: AppLocalizations.translateOf(context, "name_email_settings_widget_name_hint"),
+          labelText: AppLocalizations.translateOf(
+              context, "name_email_settings_widget_name"),
+          hintText: AppLocalizations.translateOf(
+              context, "name_email_settings_widget_name_hint"),
           errorText: _nameError),
     );
   }
@@ -103,13 +126,15 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
       controller: _emailController,
       decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: AppLocalizations.translateOf(context, "name_email_settings_widget_email"),
-          hintText: AppLocalizations.translateOf(context, "name_email_settings_widget_email_hint"),
+          labelText: AppLocalizations.translateOf(
+              context, "name_email_settings_widget_email"),
+          hintText: AppLocalizations.translateOf(
+              context, "name_email_settings_widget_email_hint"),
           errorText: _emailError),
     );
   }
 
-  void _checkAndUpdateDetails() {
+  void _checkAndUpdateDetails() async {
     final nameError =
         InputConverter.validateName(context, _nameController.text);
     final emailError =
@@ -121,30 +146,49 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
         _emailError = emailError;
       });
     } else {
-      _clearErrors();
-      _updateDetails();
-      _updateDetails();
+      if (await _showReSignInDialog()) {
+        _clearErrors();
+        _updateDetails();
+      }
     }
+  }
+
+  Future<bool> _showReSignInDialog() async {
+    return await showDialog(context: context, builder: (_) => ReSignInDialog());
   }
 
   void _updateDetails() async {
     final userID = await _getUserID();
-    final event = UpdateAccountEvent(
-      userID,
-      name: _nameController.text,
-      email: _emailController.text,
-    );
+    final params = UpdateAccountUseCaseParams(userID,
+        name: _nameController.text, email: _emailController.text);
 
-    final accountsBloc = sl<AccountsBloc>();
+    _showUpdatingDetailsSnackbar();
+    final useCase = sl<UpdateAccountUseCase>();
+    final result = await useCase(params);
 
-    accountsBloc.dispatch(event);
-    accountsBloc.dispatch(GetAccountEvent(userID));
+    result.fold((_) {
+      setState(() {
+        _errorText = AppLocalizations.translateOf(
+            context, "name_email_settings_widget_error_updating");
+      });
+    }, (_) => _showUpdatedDetailsSnackbar());
   }
 
   void _clearErrors() {
     setState(() {
+      _errorText = null;
       _nameError = null;
       _emailError = null;
     });
+  }
+
+  void _showUpdatingDetailsSnackbar(){
+    final text = AppLocalizations.translateOf(context, "name_email_settings_widget_updating");
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  void _showUpdatedDetailsSnackbar(){
+    final text = AppLocalizations.translateOf(context, "name_email_settings_widget_updated_details");
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 }
