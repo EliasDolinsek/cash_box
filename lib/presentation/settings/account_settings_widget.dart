@@ -1,5 +1,7 @@
+import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
+import 'package:cash_box/presentation/settings/password_settings_widget.dart';
 import 'package:flutter/material.dart';
 
 class AccountSettingsWidget extends StatefulWidget {
@@ -23,6 +25,8 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
             SizedBox(height: 16.0),
             NameEmailSettingsWidget(),
             SizedBox(height: 16.0),
+            PasswordSettingsWidget(),
+            SizedBox(height: 16.0,),
             _buildSubscriptionTitle(),
             SizedBox(height: 16.0),
             _buildDataStorageLocationTile(),
@@ -65,7 +69,8 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
   Widget _buildUpdateButton() {
     return MaterialButton(
       child: Text("UPDATE"),
-      onPressed: () {},
+      onPressed: (){},
     );
   }
+
 }

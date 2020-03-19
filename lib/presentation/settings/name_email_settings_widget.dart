@@ -17,8 +17,8 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
   bool _setup = false;
   String _nameError, _emailError;
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

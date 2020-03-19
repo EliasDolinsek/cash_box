@@ -11,6 +11,7 @@ import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_c
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
+import 'package:cash_box/domain/account/usecases/update_password_use_case.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -52,6 +53,10 @@ Future init() async {
   // SignOutUseCase
   sl.registerLazySingleton<SignOutUseCase>(() => SignOutUseCase(sl()));
 
+  // UpdateUserPasswordUseCase
+  sl.registerLazySingleton<UpdateUserPasswordUseCase>(() => UpdateUserPasswordUseCase(sl()));
+
+  // AuthBloc
   sl.registerSingleton<AuthBloc>(AuthBloc(getSignInStateUseCase: sl()));
 
   /*--Accounts-Bloc--*/
