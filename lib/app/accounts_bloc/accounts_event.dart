@@ -36,12 +36,8 @@ class UpdateAccountEvent extends AccountsEvent {
   final String email, appPassword, name;
   final SubscriptionInfo subscriptionInfo;
 
-  UpdateAccountEvent(
-      {this.userID,
-      this.email,
-      this.appPassword,
-      this.name,
-      this.subscriptionInfo});
+  UpdateAccountEvent(this.userID,
+      {this.email, this.appPassword, this.name, this.subscriptionInfo});
 
   @override
   List get props => [userID, email, appPassword, name, subscriptionInfo];

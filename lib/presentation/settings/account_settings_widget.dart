@@ -1,3 +1,5 @@
+import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
 import 'package:flutter/material.dart';
 
 class AccountSettingsWidget extends StatefulWidget {
@@ -6,39 +8,64 @@ class AccountSettingsWidget extends StatefulWidget {
 }
 
 class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
+
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return Card(
       elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Account"),
-            _buildNameField(),
+            Text(AppLocalizations.translateOf(context, "account_settings_widget_account"),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
             SizedBox(height: 16.0),
-            _buildEmailField(),
+            NameEmailSettingsWidget(),
+            SizedBox(height: 16.0),
+            _buildSubscriptionTitle(),
+            SizedBox(height: 16.0),
+            _buildDataStorageLocationTile(),
+            SizedBox(height: 16.0),
+            _buildUpdateButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNameField() {
-    return TextField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        hintText: "TODO"
+  Widget _buildSubscriptionTitle() {
+    return ListTile(
+      title: Text("Subscription"),
+      subtitle: Text("Business Pro"),
+      leading: CircleAvatar(
+        child: Icon(Icons.payment),
+      ),
+      trailing: MaterialButton(
+        onPressed: () {},
+        child: Text("MORE"),
       ),
     );
   }
 
-  Widget _buildEmailField() {
-    return TextField(
-      decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: "TODO"
+  Widget _buildDataStorageLocationTile() {
+    return ListTile(
+      title: Text("Data storage lcoation"),
+      subtitle: Text("Location where all app data get saved"),
+      leading: CircleAvatar(
+        child: Icon(Icons.storage),
       ),
+      trailing: MaterialButton(
+        onPressed: () {},
+        child: Text("MORE"),
+      ),
+    );
+  }
+
+  Widget _buildUpdateButton() {
+    return MaterialButton(
+      child: Text("UPDATE"),
+      onPressed: () {},
     );
   }
 }

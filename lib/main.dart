@@ -11,6 +11,7 @@ import 'app/injection.dart';
 import 'localizations/app_localizations.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await injection.init();
   runApp(CashBoxApp());
 }

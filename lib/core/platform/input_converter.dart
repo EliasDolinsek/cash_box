@@ -1,11 +1,11 @@
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 
 class InputConverter {
 
   static String validateEmail(BuildContext context, String email){
-    final regex = RegExp("^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$");
-    if(regex.hasMatch(email)) return null;
+    if(EmailValidator.validate(email)) return null;
     return AppLocalizations.translateOf(context, "converter_failure_invalid_email");
   }
 

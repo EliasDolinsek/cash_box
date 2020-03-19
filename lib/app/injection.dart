@@ -72,7 +72,7 @@ Future init() async {
   sl.registerLazySingleton(() => GetAccountUseCase(sl()));
 
   // UpdateAccountUseCase
-  sl.registerLazySingleton(() => UpdateAccountUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateAccountUseCase(sl(), firebaseAuth: sl()));
 
   // AccountsBloc
   sl.registerSingleton<AccountsBloc>(

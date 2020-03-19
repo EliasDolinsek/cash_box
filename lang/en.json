@@ -34,5 +34,11 @@
   "navigation_statistics": "Statistics",
   "navigation_settings": "Settings",
   "navigation_sign_out": "Sign out",
-  "navigation_loading": "Loading ..."
+  "navigation_loading": "Loading ...",
+  "account_settings_widget_account": "Account",
+  "name_email_settings_widget_btn_update_details": "UPDATE DETAILS",
+  "name_email_settings_widget_name": "Name",
+  "name_email_settings_widget_name_hint": "Enter your name",
+  "name_email_settings_widget_email": "Email",
+  "name_email_settings_widget_email_hint": "Enter your E-Mail"
 }

@@ -7,21 +7,40 @@ import 'package:cash_box/domain/account/usecases/get_account_use_case.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UpdateAccountUseCase
     extends UseCase<EmptyData, UpdateAccountUseCaseParams> {
+
+  final FirebaseAuth firebaseAuth;
   final AccountsRepository repository;
 
-  UpdateAccountUseCase(this.repository);
+  UpdateAccountUseCase(this.repository, {this.firebaseAuth});
 
   @override
   Future<Either<Failure, EmptyData>> call(
       UpdateAccountUseCaseParams params) async {
+
     final accountEither = await _getAccountFromUserID(params.userID);
-    return accountEither.fold((l) => Left(l), (account) {
+
+    return accountEither.fold((l) => Left(l), (account) async {
       Account updatedAccount = _getUpdate(account, params);
+
+      if(params.email != null && params.email.isNotEmpty){
+        if(firebaseAuth == null){
+          print("firebaseAuth is in UpdateAccountUseCase null!");
+        } else {
+          _updateFirebaseUserEmail(params.email);
+        }
+      }
+
       return repository.updateAccount(params.userID, updatedAccount);
     });
+  }
+
+  Future _updateFirebaseUserEmail(String update) async {
+    final currentUser = await firebaseAuth.currentUser();
+    await currentUser.updateEmail(update);
   }
 
   Account _getUpdate(Account original, UpdateAccountUseCaseParams params) {
