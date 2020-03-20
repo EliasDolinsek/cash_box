@@ -1,7 +1,7 @@
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-class CategorySettingsWidget extends StatelessWidget {
+class ContactsSettingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -13,7 +13,7 @@ class CategorySettingsWidget extends StatelessWidget {
           children: <Widget>[
             Text(
               AppLocalizations.translateOf(
-                  context, "category_settings_widget_categories"),
+                  context, "contacts_settings_widget_categories"),
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 20,
@@ -33,8 +33,8 @@ class CategorySettingsWidget extends StatelessWidget {
       leading: CircleAvatar(
         child: Icon(Icons.category),
       ),
-      title: Text(localizations.translate("category_settings_widget_edit_categories")),
-      subtitle: Text(localizations.translate("category_settings_widget_edit_categories_hint")),
+      title: Text(localizations.translate("contacts_settings_widget_edit_categories")),
+      subtitle: Text(localizations.translate("contacts_settings_widget_edit_categories_hint")),
       trailing: MaterialButton(
         child: Text(AppLocalizations.translateOf(context, "btn_more")),
         onPressed: () {},

@@ -1,4 +1,4 @@
-import 'package:cash_box/presentation/settings/categories/category_settings_widget.dart';
+import 'package:cash_box/presentation/settings/contacts/contacts_settings_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'account_settings_widget.dart';
@@ -14,7 +14,7 @@ class SettingsWidget extends StatelessWidget {
           children: <Widget>[
             AccountSettingsWidget(),
             SizedBox(height: 8.0),
-            CategorySettingsWidget()
+            ContactsSettingsWidget()
           ],
         ),
       ),
