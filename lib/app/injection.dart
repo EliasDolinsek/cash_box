@@ -1,6 +1,14 @@
 import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
+import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
+import 'package:cash_box/data/core/datasources/contacts/contacts_local_mobile_data_source.dart';
+import 'package:cash_box/data/core/datasources/contacts/implementation/contacts_local_mobile_data_source_moor_impl.dart';
+import 'package:cash_box/data/core/datasources/contacts/implementation/contacts_remote_firebase_data_source_default_impl.dart';
+import 'package:cash_box/data/core/datasources/fields/fields_local_mobile_data_source.dart';
+import 'package:cash_box/data/core/datasources/fields/implementation/fields_local_mobile_data_source_moor_impl.dart';
+import 'package:cash_box/data/core/datasources/moor_databases/moor_app_database.dart';
+import 'package:cash_box/data/core/repositories/contacts_repository_default_impl.dart';
 import 'package:cash_box/domain/account/repositories/accounts_repository.dart';
 import 'package:cash_box/domain/account/usecases/create_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/delete_account_use_case.dart';
@@ -13,9 +21,15 @@ import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_password_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/add_contact_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/get_contact_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/remove_contact_use_case.dart';
+import 'package:cash_box/domain/core/usecases/contacts/update_contact_use_case.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:moor_flutter/moor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_bloc/auth_bloc.dart';
@@ -24,63 +38,82 @@ final sl = GetIt.instance;
 
 Future init() async {
   //
-  // Accounts
+  // Moor database
   //
 
-  /*--Firebase--*/
-  // Firebase auth
-  sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+  sl.registerSingleton<QueryExecutor>(
+    FlutterQueryExecutor.inDatabaseFolder(path: "data.sqlit"),
+  );
 
-  // Firestore
+  sl.registerSingleton(MoorAppDatabase(sl()));
+
+  //
+  // Config
+  //
+
+  sl.registerLazySingleton<Config>(() => ConfigDefaultImpl(sl()));
+
+  //
+  // Shared Preferences
+  //
+
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+
+  //
+  // Firebase
+  //
+
+  sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<Firestore>(Firestore.instance);
 
-  /*--Auth--*/
+  //
+  // Auth, Accounts
+  //
 
-  // SendResetPasswordEmailUseCase
+  // Auth Usecases
+
   sl.registerLazySingleton<SendResetPasswordEmailUseCase>(
       () => SendResetPasswordEmailUseCase(sl()));
 
-  // SignInWithEmailAndPasswordUseCase
   sl.registerLazySingleton<SignInWithEmailAndPasswordUseCase>(
       () => SignInWithEmailAndPasswordUseCase(sl()));
 
-  // RegisterWithEmailAndPasswordUseCase
   sl.registerLazySingleton<RegisterWithEmailAndPasswordUseCase>(
       () => RegisterWithEmailAndPasswordUseCase(sl()));
 
-  // GetSignInStateUseCase
   sl.registerLazySingleton<GetSignInStateUseCase>(
       () => GetSignInStateUseCase(sl()));
 
-  // SignOutUseCase
   sl.registerLazySingleton<SignOutUseCase>(() => SignOutUseCase(sl()));
 
-  // UpdateUserPasswordUseCase
-  sl.registerLazySingleton<UpdateUserPasswordUseCase>(() => UpdateUserPasswordUseCase(sl()));
+  sl.registerLazySingleton<UpdateUserPasswordUseCase>(
+      () => UpdateUserPasswordUseCase(sl()));
 
-  // AuthBloc
-  sl.registerSingleton<AuthBloc>(AuthBloc(getSignInStateUseCase: sl()));
-  /*--Accounts-Bloc--*/
+  // Account UseCases
 
-  // Accounts Repository
-  sl.registerLazySingleton<AccountsRepository>(() => AccountsRepositoryDefaultFirebaseImpl(sl()));
-
-  // GetUserIdUserCase
   sl.registerLazySingleton(() => GetUserIdUserCase(sl()));
 
-  // CreateAccountUseCase
   sl.registerLazySingleton(() => CreateAccountUseCase(sl()));
 
-  // DeleteAccountUseCase
   sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
 
-  // GetAccountUseCase
   sl.registerLazySingleton(() => GetAccountUseCase(sl()));
 
-  // UpdateAccountUseCase
-  sl.registerLazySingleton(() => UpdateAccountUseCase(sl(), firebaseAuth: sl()));
+  sl.registerLazySingleton(
+      () => UpdateAccountUseCase(sl(), firebaseAuth: sl()));
 
-  // AccountsBloc
+  // Repositories
+
+  sl.registerLazySingleton<AccountsRepository>(
+      () => AccountsRepositoryDefaultFirebaseImpl(sl()));
+
+  // Bloc
+
+  sl.registerSingleton<AuthBloc>(
+    AuthBloc(getSignInStateUseCase: sl()),
+  );
+
   sl.registerSingleton<AccountsBloc>(
     AccountsBloc(
         createAccountUseCase: sl(),
@@ -89,10 +122,52 @@ Future init() async {
         updateAccountUseCase: sl()),
   );
 
-  // Shared Preferences
-  final sharedPreferences = await SharedPreferences.getInstance();
-  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+  //
+  // Fields
+  //
 
-  // Config
-  sl.registerLazySingleton<Config>(() => ConfigDefaultImpl(sl()));
+  sl.registerLazySingleton<FieldsLocalMobileDataSource>(
+      () => FieldsLocalMobileDataSourceMoorImpl(sl()));
+
+  //
+  // Contacts
+  //
+
+  // DataSources
+  sl.registerLazySingleton<ContactsLocalMobileDataSource>(
+      () => ContactsLocalMobileDataSourceMoorImpl(sl(), sl()));
+
+  final userID = (await sl<FirebaseAuth>().currentUser())?.uid;
+  sl.registerLazySingleton(
+      () => ContactsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
+
+  // Repositories
+  sl.registerLazySingleton(
+    () => ContactsRepositoryDefaultImpl(
+      config: sl(),
+      localMobileDataSource: sl(),
+      remoteFirebaseDataSource: sl(),
+    ),
+  );
+
+  // UseCases
+  sl.registerLazySingleton(() => AddContactUseCase(sl()));
+
+  sl.registerLazySingleton(() => GetContactUseCase(sl()));
+
+  sl.registerLazySingleton(() => GetContactsUseCase(sl()));
+
+  sl.registerLazySingleton(() => RemoveContactUseCase(sl()));
+
+  sl.registerLazySingleton(() => UpdateContactUseCase(sl()));
+
+  //BLoCs
+  sl.registerLazySingleton(
+    () => ContactsBloc(
+        addContactUseCase: sl(),
+        getContactUseCase: sl(),
+        getContactsUseCase: sl(),
+        removeContactUseCase: sl(),
+        updateContactUseCase: sl()),
+  );
 }

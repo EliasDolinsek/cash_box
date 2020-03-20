@@ -39,10 +39,11 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     } else if (event is GetContactsEvent) {
       yield await _getContacts();
     } else if (event is UpdateContactEvent) {
-      final params = UpdateContactUseCaseParams(event.contactID, event.fields);
+      final params = UpdateContactUseCaseParams(event.contactID,
+          name: event.name, fields: event.fields);
       await updateContactUseCase(params);
       dispatch(GetContactsEvent());
-    } else if(event is RemoveContactEvent){
+    } else if (event is RemoveContactEvent) {
       final params = RemoveContactUseCaseParams(event.contactID);
       await removeContactUseCase(params);
       dispatch(GetContactsEvent());

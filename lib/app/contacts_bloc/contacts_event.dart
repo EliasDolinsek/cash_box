@@ -38,7 +38,8 @@ class RemoveContactEvent extends ContactsEvent {
 class UpdateContactEvent extends ContactsEvent {
 
   final String contactID;
+  final String name;
   final List<Field> fields;
 
-  UpdateContactEvent(this.contactID, this.fields);
+  UpdateContactEvent(this.contactID, {this.name, this.fields});
 }

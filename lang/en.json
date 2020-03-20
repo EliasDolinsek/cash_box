@@ -70,5 +70,6 @@
   "dialog_btn_close": "CLOSE",
   "contacts_settings_widget_categories": "Contacts",
   "contacts_settings_widget_edit_categories": "Edit contacts",
-  "contacts_settings_widget_edit_categories_hint": "Add, remove and update contacts"
+  "contacts_settings_widget_edit_categories_hint": "Add, remove and update contacts",
+  "contacts_settings_page_title": "Contacts"
 }
