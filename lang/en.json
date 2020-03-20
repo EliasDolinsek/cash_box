@@ -57,7 +57,7 @@
   "subscription_type_personal_free": "Personal Free",
   "subscription_type_business_pro": "Business Pro",
   "subscription_type_personal_pro": "Personal Pro",
-  "account_settings_widget_btn_more": "MORE",
+  "btn_more": "MORE",
   "account_settings_widget_data_storage_location": "Data storage location",
   "data_storage_location_local_mobile": "Local",
   "data_storage_location_remote_firebase": "Server",
@@ -67,5 +67,8 @@
   "data_storage_location_selection_dialog_local_hint": "On this device only",
   "data_storage_location_selection_dialog_online_hint": "Synced between all your devices",
   "data_storage_location_selection_dialog_title": "Select data storage location",
-  "dialog_btn_close": "CLOSE"
+  "dialog_btn_close": "CLOSE",
+  "category_settings_widget_categories": "Categories",
+  "category_settings_widget_edit_categories": "Edit categories",
+  "category_settings_widget_edit_categories_hint": "Add, remove and update categories"
 }

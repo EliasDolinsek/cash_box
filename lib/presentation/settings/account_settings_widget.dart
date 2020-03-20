@@ -20,9 +20,13 @@ class AccountSettingsWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-                AppLocalizations.translateOf(
-                    context, "account_settings_widget_account"),
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+              AppLocalizations.translateOf(
+                  context, "account_settings_widget_account"),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
             SizedBox(height: 16.0),
             NameEmailSettingsWidget(),
             SizedBox(height: 16.0),
@@ -82,8 +86,7 @@ class _SubscriptionTileState extends State<SubscriptionTile> {
       trailing: MaterialButton(
         onPressed: () {},
         child: Text(
-          AppLocalizations.translateOf(
-              context, "account_settings_widget_btn_more"),
+          AppLocalizations.translateOf(context, "btn_more"),
         ),
       ),
     );
@@ -125,8 +128,7 @@ class _DataStorageLocationTileState extends State<DataStorageLocationTile> {
       trailing: MaterialButton(
         onPressed: _showDataStorageLocationSelectionDialog,
         child: Text(
-          AppLocalizations.translateOf(
-              context, "account_settings_widget_btn_more"),
+          AppLocalizations.translateOf(context, "btn_more"),
         ),
       ),
     );
