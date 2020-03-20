@@ -77,5 +77,6 @@
   "field_type_file": "File",
   "field_type_amount": "Amount",
   "field_type_date": "Date",
-  "field_type_image": "Image"
+  "field_type_image": "Image",
+  "no_contacts": "No contacts"
 }

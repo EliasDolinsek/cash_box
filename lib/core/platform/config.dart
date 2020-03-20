@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
 
@@ -21,7 +22,7 @@ class ConfigDefaultImpl implements Config {
 
   @override
   Future<DataStorageLocation> get dataStorageLocation async {
-    if(Platform.isAndroid || Platform.isIOS){
+    if(!kIsWeb && (Platform.isAndroid || Platform.isIOS)){
       final locationAsString = sharedPreferences.getString(dataStorageLocationKey);
       if(locationAsString == null || locationAsString.isEmpty) return DataStorageLocation.LOCAL_MOBILE;
       return dataStorageLocationFromString(locationAsString);

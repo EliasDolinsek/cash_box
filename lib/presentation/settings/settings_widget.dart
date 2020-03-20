@@ -8,14 +8,16 @@ class SettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(8.0),
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 600),
-        child: Column(
-          children: <Widget>[
-            AccountSettingsWidget(),
-            SizedBox(height: 8.0),
-            ContactsSettingsWidget()
-          ],
+      child: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 600),
+          child: Column(
+            children: <Widget>[
+              AccountSettingsWidget(),
+              SizedBox(height: 8.0),
+              ContactsSettingsWidget()
+            ],
+          ),
         ),
       ),
     );

@@ -69,12 +69,40 @@ class ContactsSettingsWidget extends StatefulWidget {
 class _ContactsSettingsWidgetState extends State<ContactsSettingsWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: widget.contacts.length,
-      itemBuilder: (context, index) {
-        return ContactListItem(widget.contacts[index]);
-      },
-      separatorBuilder: (context, index) => Divider(),
+    if (widget.contacts.isEmpty) return _buildNoContacts();
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 800),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth > 600) {
+              return Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 1,
+                  child: _buildLoaded(),
+                ),
+              );
+            } else {
+              return SingleChildScrollView(child: _buildLoaded());
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoContacts(){
+    return Center(
+      child: Text(
+        AppLocalizations.translateOf(context, "no_contacts"),
+      ),
+    );
+  }
+
+  Widget _buildLoaded() {
+    return Column(
+      children: widget.contacts.map((c) => ContactListItem(c)).toList(),
     );
   }
 }
