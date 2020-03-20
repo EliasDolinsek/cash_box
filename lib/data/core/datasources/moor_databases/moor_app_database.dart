@@ -20,6 +20,8 @@ class BucketsMoor extends Table {
 class ContactsMoor extends Table {
   TextColumn get id => text()();
 
+  TextColumn get name => text().withDefault(Constant(""))();
+
   TextColumn get fieldIDs => text().withDefault(Constant(""))();
 
   @override

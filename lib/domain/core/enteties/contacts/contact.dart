@@ -9,13 +9,15 @@ part 'contact.g.dart';
 
 @JsonSerializable(nullable: false)
 class Contact extends UniqueComponent {
+
+  final String name;
   final List<Field> fields;
 
-  Contact(String id, {@required this.fields}) : super(id, params: [fields]);
+  Contact(String id, {@required this.name, @required this.fields}) : super(id, params: [name, fields]);
 
-  factory Contact.newContact({@required List<Field> fields}){
+  factory Contact.newContact({@required String name, @required List<Field> fields}){
     final id = Uuid().v4();
-    return Contact(id, fields: fields);
+    return Contact(id, name: name, fields: fields);
   }
 
   factory Contact.fromJson(Map<String, dynamic> json) => _$ContactFromJson(json);
