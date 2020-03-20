@@ -34,14 +34,6 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
       await deleteAccountUseCase(params);
     } else if (event is GetAccountEvent) {
       yield await _getAccount(event);
-    } else if (event is UpdateAccountEvent) {
-      final params = UpdateAccountUseCaseParams(event.userID,
-          name: event.name,
-          subscriptionInfo: event.subscriptionInfo,
-          appPassword: event.appPassword,
-          email: event.email);
-
-      await updateAccountUseCase(params);
     }
   }
 

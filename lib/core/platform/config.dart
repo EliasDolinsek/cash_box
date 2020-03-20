@@ -23,7 +23,7 @@ class ConfigDefaultImpl implements Config {
   Future<DataStorageLocation> get dataStorageLocation async {
     if(Platform.isAndroid || Platform.isIOS){
       final locationAsString = sharedPreferences.getString(dataStorageLocationKey);
-      if(locationAsString == null ||locationAsString.isEmpty) throw new Exception("No data storage location set");
+      if(locationAsString == null || locationAsString.isEmpty) return DataStorageLocation.LOCAL_MOBILE;
       return dataStorageLocationFromString(locationAsString);
     } else {
       return DataStorageLocation.REMOTE_FIREBASE;

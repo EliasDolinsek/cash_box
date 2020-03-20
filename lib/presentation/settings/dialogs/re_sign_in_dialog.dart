@@ -43,12 +43,12 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
   List<Widget> _buildActions() {
     return [
       MaterialButton(
-          child: Text(AppLocalizations.translateOf(context, "re_sign_in_dialog_btn_cancel")),
+          child: Text(AppLocalizations.translateOf(context, "dialog_btn_cancel")),
           onPressed: () {
             Navigator.pop(context, false);
           }),
       MaterialButton(
-        child: Text(AppLocalizations.translateOf(context, "re_sign_in_dialog_btn_confirm")),
+        child: Text(AppLocalizations.translateOf(context, "dialog_btn_confirm")),
         onPressed: _email != null ? _checkAndReSignIn : null,
       ),
     ];

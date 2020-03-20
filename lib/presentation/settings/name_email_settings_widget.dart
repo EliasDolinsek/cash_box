@@ -5,7 +5,7 @@ import 'package:cash_box/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/settings/re_sign_in_dialog.dart';
+import 'package:cash_box/presentation/settings/dialogs/re_sign_in_dialog.dart';
 import 'package:flutter/material.dart';
 
 class NameEmailSettingsWidget extends StatefulWidget {
