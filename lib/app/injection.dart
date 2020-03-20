@@ -3,6 +3,7 @@ import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
 import 'package:cash_box/data/core/datasources/contacts/contacts_local_mobile_data_source.dart';
+import 'package:cash_box/data/core/datasources/contacts/contacts_remote_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/contacts/implementation/contacts_local_mobile_data_source_moor_impl.dart';
 import 'package:cash_box/data/core/datasources/contacts/implementation/contacts_remote_firebase_data_source_default_impl.dart';
 import 'package:cash_box/data/core/datasources/fields/fields_local_mobile_data_source.dart';
@@ -21,6 +22,7 @@ import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_password_use_case.dart';
+import 'package:cash_box/domain/core/repositories/contacts_repository.dart';
 import 'package:cash_box/domain/core/usecases/contacts/add_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dart';
@@ -138,11 +140,11 @@ Future init() async {
       () => ContactsLocalMobileDataSourceMoorImpl(sl(), sl()));
 
   final userID = (await sl<FirebaseAuth>().currentUser())?.uid;
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<ContactsRemoteFirebaseDataSource>(
       () => ContactsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
 
   // Repositories
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<ContactsRepository>(
     () => ContactsRepositoryDefaultImpl(
       config: sl(),
       localMobileDataSource: sl(),

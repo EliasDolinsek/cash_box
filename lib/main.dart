@@ -1,6 +1,7 @@
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
+import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -42,7 +43,11 @@ class CashBoxApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: _buildHome(),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => _buildHome(),
+        "/contactsSettings": (context) => ContactsSettingsPage(),
+      },
     );
   }
 

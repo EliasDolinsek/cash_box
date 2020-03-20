@@ -71,5 +71,11 @@
   "contacts_settings_widget_categories": "Contacts",
   "contacts_settings_widget_edit_categories": "Edit contacts",
   "contacts_settings_widget_edit_categories_hint": "Add, remove and update contacts",
-  "contacts_settings_page_title": "Contacts"
+  "contacts_settings_page_title": "Contacts",
+  "contact_settings_page_no_fields": "No fields",
+  "field_type_text": "Text",
+  "field_type_file": "File",
+  "field_type_amount": "Amount",
+  "field_type_date": "Date",
+  "field_type_image": "Image"
 }

@@ -37,7 +37,9 @@ class ContactsSettingsWidget extends StatelessWidget {
       subtitle: Text(localizations.translate("contacts_settings_widget_edit_categories_hint")),
       trailing: MaterialButton(
         child: Text(AppLocalizations.translateOf(context, "btn_more")),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed("/contactsSettings");
+        },
       ),
     );
   }

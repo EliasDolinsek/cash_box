@@ -34,8 +34,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       final params = AddContactParams(event.contact);
       await addContactUseCase(params);
       dispatch(GetContactsEvent());
-    } else if (event is GetContactEvent) {
-      yield await _getContact(event);
     } else if (event is GetContactsEvent) {
       yield await _getContacts();
     } else if (event is UpdateContactEvent) {
@@ -48,15 +46,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       await removeContactUseCase(params);
       dispatch(GetContactsEvent());
     }
-  }
-
-  Future<ContactsState> _getContact(GetContactEvent event) async {
-    final params = GetContactUseCaseParams(event.contactID);
-    final contactEither = await getContactUseCase(params);
-    return contactEither.fold((l) => ContactsErrorState(l.toString()),
-        (contact) {
-      return ContactAvailableState(contact);
-    });
   }
 
   Future<ContactsState> _getContacts() async {

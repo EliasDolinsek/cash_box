@@ -13,15 +13,6 @@ class AddContactEvent extends ContactsEvent {
   List get props => [contact];
 }
 
-class GetContactEvent extends ContactsEvent {
-  final String contactID;
-
-  GetContactEvent(this.contactID);
-
-  @override
-  List get props => [contactID];
-}
-
 class GetContactsEvent extends ContactsEvent {}
 
 class RemoveContactEvent extends ContactsEvent {
