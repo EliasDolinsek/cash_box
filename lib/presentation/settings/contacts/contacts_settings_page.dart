@@ -2,7 +2,6 @@ import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
-import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -70,25 +69,27 @@ class _ContactsSettingsWidgetState extends State<ContactsSettingsWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.contacts.isEmpty) return _buildNoContacts();
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 800),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            if (constraints.maxWidth > 600) {
-              return Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 1,
-                  child: _buildLoaded(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 600) {
+          return Container(
+            constraints: BoxConstraints(maxWidth: 800),
+            child: SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 1,
+                    child: _buildLoaded(),
+                  ),
                 ),
-              );
-            } else {
-              return SingleChildScrollView(child: _buildLoaded());
-            }
-          },
-        ),
-      ),
+              ),
+            ),
+          );
+        } else {
+          return SingleChildScrollView(child: _buildLoaded());
+        }
+      },
     );
   }
 
@@ -119,6 +120,9 @@ class ContactListItem extends StatelessWidget {
       subtitle: Text(
         _contactFieldsInfoAsString(context),
       ),
+      onTap: (){
+        Navigator.of(context).pushNamed("/contactsSettings/contactDetails", arguments: contact);
+      },
     );
   }
 
