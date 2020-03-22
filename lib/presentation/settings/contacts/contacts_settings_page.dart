@@ -2,6 +2,7 @@ import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
+import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,10 @@ class ContactsSettingsPage extends StatelessWidget {
   }
 
   void _openAddContactPage() {
-    throw UnimplementedError();
+    final field1 = Field.newField(type: FieldType.date, description: "Description", value: DateTime.now());
+    final field2 = Field.newField(type: FieldType.text, description: "Description", value: "Test");
+    sl<ContactsBloc>().dispatch(AddContactEvent(Contact.newContact(name: "", fields: [field1, field2])));
+    //TODO implement
   }
 
   Widget _buildLoading() {
@@ -116,7 +120,7 @@ class ContactListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(contact.name),
+      title: Text(_getContactNameText(context)),
       subtitle: Text(
         _contactFieldsInfoAsString(context),
       ),
@@ -124,6 +128,15 @@ class ContactListItem extends StatelessWidget {
         Navigator.of(context).pushNamed("/contactsSettings/contactDetails", arguments: contact);
       },
     );
+  }
+
+
+  String _getContactNameText(BuildContext context){
+    if(contact.name.isEmpty){
+      return AppLocalizations.translateOf(context, "unnamed");
+    } else {
+      return contact.name;
+    }
   }
 
   String _contactFieldsInfoAsString(BuildContext context) {

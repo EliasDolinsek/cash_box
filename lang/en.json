@@ -80,5 +80,11 @@
   "field_type_image": "Image",
   "no_contacts": "No contacts",
   "main_failure_no_route": "No route",
-  "failure_widget_failure": "Failure"
+  "failure_widget_failure": "Failure",
+  "unnamed": "Unnamed",
+  "field_input_value": "Value",
+  "field_input_description": "Description",
+  "field_card_click_description_to_edit": "Click description to edit",
+  "btn_add_field": "ADD FIELD",
+  "btn_select_date": "SELECT DATE"
 }
