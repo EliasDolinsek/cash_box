@@ -1,22 +1,26 @@
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 
 class FieldCard extends StatefulWidget {
   final Field field;
   final bool typeEditable, descriptionEditable, deletable;
 
-  final Function(Field field) onFieldChanged;
+  final Function(Field update) onFieldChanged;
+  final Function onDelete;
 
   const FieldCard(this.field,
       {Key key,
       this.typeEditable = true,
       this.descriptionEditable = true,
       this.deletable = true,
-      this.onFieldChanged})
+      this.onFieldChanged,
+      this.onDelete})
       : super(key: key);
 
   @override
@@ -36,12 +40,23 @@ class _FieldCardState extends State<FieldCard> {
     _type = widget.field.type;
     _description = widget.field.description;
     _value = widget.field.value;
+    _initValue();
 
     _descriptionController.text = _description;
     _descriptionController.addListener(() {
       _description = _descriptionController.text;
       widget.onFieldChanged(_getFieldFromInputs());
     });
+  }
+
+  void _initValue() {
+    if (_type == FieldType.date) {
+      if (_value is Timestamp) {
+        _value = _value.toDate();
+      }
+    } else if (_type == FieldType.text && _value == null) {
+      _value = "";
+    }
   }
 
   Field _getFieldFromInputs() {
@@ -65,14 +80,33 @@ class _FieldCardState extends State<FieldCard> {
             SizedBox(height: 8.0),
             _buildFieldTypeSelectionChipsIfNessesscary(),
             SizedBox(height: 8.0),
-            MaterialButton(
-              child: Text("APPLY"),
-              onPressed: () {},
-            )
+            _checkAndBuildDeleteButton()
           ],
         ),
       ),
     );
+  }
+
+  Widget _checkAndBuildDeleteButton() {
+    if (widget.deletable) {
+      return MaterialButton(
+        child: Text(
+          AppLocalizations.translateOf(context, "btn_delete"),
+          style: TextStyle(color: Colors.red),
+        ),
+        onPressed: _showDeleteButton,
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  void _showDeleteButton() async {
+    final result =
+        await showDialog(context: context, builder: (_) => DeleteDialog());
+    if(result != null && result){
+      widget.onDelete();
+    }
   }
 
   Widget _buildFieldTypeSelectionChipsIfNessesscary() {
@@ -116,8 +150,8 @@ class _FieldCardState extends State<FieldCard> {
     );
   }
 
-  void _resetValue(){
-    switch(_type){
+  void _resetValue() {
+    switch (_type) {
       case FieldType.amount:
         _value = 0;
         break;
@@ -180,22 +214,27 @@ class _FieldCardState extends State<FieldCard> {
 
   Widget _buildValueInput() {
     switch (_type) {
-      case FieldType.amount: return Text("NOT SUPPORTED YET");
-      case FieldType.date: return _buildValueDateInput();
-      case FieldType.image: return Text("NOT SUPPORTED YET");
+      case FieldType.amount:
+        return Text("NOT SUPPORTED YET");
+      case FieldType.date:
+        return _buildValueDateInput();
+      case FieldType.image:
+        return Text("NOT SUPPORTED YET");
       case FieldType.text:
         return _buildValueTextInput();
-      case FieldType.file: return Text("NOT SUPPORTED YET");
+      case FieldType.file:
+        return Text("NOT SUPPORTED YET");
     }
   }
 
   Widget _buildValueTextInput() {
     return TextField(
+      controller: TextEditingController(text: _value),
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         hintText: AppLocalizations.translateOf(context, "field_input_value"),
       ),
-      onChanged: (text){
+      onChanged: (text) {
         _value = text;
         widget.onFieldChanged(_getFieldFromInputs());
       },
@@ -203,16 +242,21 @@ class _FieldCardState extends State<FieldCard> {
   }
 
   Widget _buildValueDateInput() {
+    final textChange = AppLocalizations.translateOf(context, "txt_change");
     return MaterialButton(
-      child: Text(_value.toDate().toIso8601String()),
+      child: Text(_dateFromValueAsReadableString() + " - " + textChange),
       onPressed: () async {
         final date = await _getDateTimeFromDatePicker();
-        if(date != null){
+        if (date != null) {
           _value = date;
           widget.onFieldChanged(_getFieldFromInputs());
         }
       },
     );
+  }
+
+  String _dateFromValueAsReadableString() {
+    return DateFormat("EEEE dd.MM.yyyy").format(_value);
   }
 
   Future<DateTime> _getDateTimeFromDatePicker() async {

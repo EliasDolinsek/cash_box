@@ -87,7 +87,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   List<Widget> _getFieldsAsFieldCardWidgetList() {
-    return widget.contact.fields.map((field) {
+    return _fields.map((field) {
       return FieldCard(
         field,
         key: ValueKey(field),
@@ -95,6 +95,11 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
           final index = _fields.indexWhere((element) => element.id == update.id);
           _fields.removeAt(index);
           _fields.insert(index, update);
+        },
+        onDelete: (){
+          setState(() {
+            _fields.remove(field);
+          });
         },
       );
     }).toList();
