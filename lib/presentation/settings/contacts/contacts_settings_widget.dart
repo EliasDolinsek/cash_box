@@ -20,7 +20,11 @@ class ContactsSettingsWidget extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.0),
-            _buildEditCategoryListTile(context)
+            _buildEditCategoryListTile(context),
+            SizedBox(height: 16.0),
+            _buildImportCategoriesListTile(context),
+            SizedBox(height: 16.0),
+            _buildExportCategoriesListTile(context)
           ],
         ),
       ),
@@ -39,6 +43,40 @@ class ContactsSettingsWidget extends StatelessWidget {
         child: Text(AppLocalizations.translateOf(context, "btn_more")),
         onPressed: () {
           Navigator.of(context).pushNamed("/contactsSettings");
+        },
+      ),
+    );
+  }
+
+  Widget _buildImportCategoriesListTile(BuildContext context){
+    final localizations = AppLocalizations.of(context);
+    return ListTile(
+      leading: CircleAvatar(
+        child: Icon(Icons.cloud_download),
+      ),
+      title: Text(localizations.translate("contacts_settings_widget_import_categories")),
+      subtitle: Text(localizations.translate("contacts_settings_widget_import_categories_hint")),
+      trailing: MaterialButton(
+        child: Text(AppLocalizations.translateOf(context, "btn_more")),
+        onPressed: () {
+          print("TODO"); //TODO
+        },
+      ),
+    );
+  }
+
+  Widget _buildExportCategoriesListTile(BuildContext context){
+    final localizations = AppLocalizations.of(context);
+    return ListTile(
+      leading: CircleAvatar(
+        child: Icon(Icons.cloud_upload),
+      ),
+      title: Text(localizations.translate("contacts_settings_widget_export_categories")),
+      subtitle: Text(localizations.translate("contacts_settings_widget_export_categories_hint")),
+      trailing: MaterialButton(
+        child: Text(AppLocalizations.translateOf(context, "btn_more")),
+        onPressed: () {
+          print("TODO"); //TODO
         },
       ),
     );

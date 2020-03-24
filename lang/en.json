@@ -89,5 +89,11 @@
   "btn_select_date": "SELECT DATE",
   "btn_delete": "DELETE",
   "txt_change": "CHANGE",
-  "txt_confirm_deletion": "Confirm deletion"
+  "txt_confirm_deletion": "Confirm deletion",
+  "txt_new_contact": "New contact",
+  "txt_adding_new_contact": "Adding new contact ...",
+  "contacts_settings_widget_import_categories": "Import categories",
+  "contacts_settings_widget_import_categories_hint": "Import categories from Google or your device",
+  "contacts_settings_widget_export_categories": "Export categories",
+  "contacts_settings_widget_export_categories_hint": "Export categories to csv"
 }

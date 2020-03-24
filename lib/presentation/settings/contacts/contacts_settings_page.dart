@@ -2,7 +2,6 @@ import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
-import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +17,13 @@ class ContactsSettingsPage extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: _openAddContactPage,
+      floatingActionButton: Builder(
+        builder: (context) {
+          return FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () => _openAddContactPage(context),
+          );
+        },
       ),
       body: StreamBuilder(
         stream: contactsBloc.state,
@@ -44,11 +47,20 @@ class ContactsSettingsPage extends StatelessWidget {
     );
   }
 
-  void _openAddContactPage() {
-    final field1 = Field.newField(type: FieldType.date, description: "Description", value: DateTime.now());
-    final field2 = Field.newField(type: FieldType.text, description: "Description", value: "Test");
-    sl<ContactsBloc>().dispatch(AddContactEvent(Contact.newContact(name: "", fields: [field1, field2])));
-    //TODO implement
+  void _openAddContactPage(BuildContext context) {
+    final text = AppLocalizations.translateOf(context, "txt_new_contact");
+    final contact = Contact.newContact(name: text, fields: []);
+
+    final event = AddContactEvent(contact);
+    sl<ContactsBloc>().dispatch(event);
+
+    _showAddingNewContactSnackbar(context);
+  }
+
+  void _showAddingNewContactSnackbar(BuildContext context) {
+    final text =
+        AppLocalizations.translateOf(context, "txt_adding_new_contact");
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   Widget _buildLoading() {
@@ -97,7 +109,7 @@ class _ContactsSettingsWidgetState extends State<ContactsSettingsWidget> {
     );
   }
 
-  Widget _buildNoContacts(){
+  Widget _buildNoContacts() {
     return Center(
       child: Text(
         AppLocalizations.translateOf(context, "no_contacts"),
@@ -106,8 +118,9 @@ class _ContactsSettingsWidgetState extends State<ContactsSettingsWidget> {
   }
 
   Widget _buildLoaded() {
+    final contacts = widget.contacts.reversed;
     return Column(
-      children: widget.contacts.map((c) => ContactListItem(c)).toList(),
+      children: contacts.map((c) => ContactListItem(c)).toList(),
     );
   }
 }
@@ -124,15 +137,15 @@ class ContactListItem extends StatelessWidget {
       subtitle: Text(
         _contactFieldsInfoAsString(context),
       ),
-      onTap: (){
-        Navigator.of(context).pushNamed("/contactsSettings/contactDetails", arguments: contact);
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed("/contactsSettings/contactDetails", arguments: contact);
       },
     );
   }
 
-
-  String _getContactNameText(BuildContext context){
-    if(contact.name.isEmpty){
+  String _getContactNameText(BuildContext context) {
+    if (contact.name.isEmpty) {
       return AppLocalizations.translateOf(context, "unnamed");
     } else {
       return contact.name;
