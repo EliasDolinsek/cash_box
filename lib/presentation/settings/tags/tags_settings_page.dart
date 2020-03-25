@@ -6,6 +6,7 @@ import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:flutter/material.dart';
 
 class TagsSettingsPage extends StatelessWidget {
@@ -52,7 +53,7 @@ class TagsSettingsPage extends StatelessWidget {
 
   void _addNewTag(BuildContext context) {
     final text = AppLocalizations.translateOf(context, "txt_new_tag");
-    final color = Theme.of(context).primaryColor.value.toString();
+    final color = Tag.colorAsString(Theme.of(context).primaryColor);
     final tag = Tag.newTag(name: text, color: color);
 
     final event = AddTagEvent(tag);
@@ -133,13 +134,16 @@ class TagListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(tag.color + " - " + tag.colorAsColor.toString());
     return ListTile(
-        leading: CircleAvatar(
-          backgroundColor: tag.colorAsColor,
-        ),
-        title: Text(tag.name),
-        trailing: _buildDeleteButton(context));
+      leading: CircleAvatar(
+        backgroundColor: tag.colorAsColor,
+      ),
+      title: Text(tag.name),
+      trailing: _buildDeleteButton(context),
+      onTap: (){
+        Navigator.of(context).pushNamed("/tagsSettings/tagDetails", arguments: tag);
+      },
+    );
   }
 
   Widget _buildDeleteButton(BuildContext context) {
@@ -148,17 +152,24 @@ class TagListItem extends StatelessWidget {
         Icons.delete,
         color: Colors.red,
       ),
-      onPressed: () => _deleteTag(context),
+      onPressed: () => _checkAndDelete(context),
     );
   }
 
-  void _deleteTag(BuildContext context){
+  void _checkAndDelete(BuildContext context) async {
+    final result = await showDialog(context: context, builder: (_) => DeleteDialog());
+    if(result != null && result){
+      _deleteTag(context);
+    }
+  }
+
+  void _deleteTag(BuildContext context) {
     final event = RemoveTagEvent(tag.id);
     sl<TagsBloc>().dispatch(event);
     _showDeletingTagSnackBar(context);
   }
 
-  void _showDeletingTagSnackBar(BuildContext context){
+  void _showDeletingTagSnackBar(BuildContext context) {
     final text = AppLocalizations.translateOf(context, "txt_deleting_tag");
     Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }

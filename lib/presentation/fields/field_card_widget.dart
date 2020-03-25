@@ -67,7 +67,7 @@ class _FieldCardState extends State<FieldCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      elevation: 4,
       child: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(

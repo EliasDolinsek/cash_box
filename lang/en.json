@@ -103,5 +103,8 @@
   "txt_new_tag": "New tag",
   "txt_adding_new_tag": "Adding new tag ...",
   "no_tags": "No tags",
-  "txt_deleting_tag": "Deleting tag ..."
+  "txt_deleting_tag": "Deleting tag ...",
+  "txt_color": "Color",
+  "txt_select_color": "Select color",
+  "btn_ok": "OK"
 }

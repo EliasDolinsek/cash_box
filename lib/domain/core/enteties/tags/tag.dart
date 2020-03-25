@@ -21,10 +21,11 @@ class Tag extends UniqueComponent {
   }
 
   Color get colorAsColor {
-    String parsedString =color.replaceAll("#", "");
-    int colorAsInt = int.parse(parsedString);
+    int colorAsInt = int.parse(color, radix: 16);
     return Color(colorAsInt);
   }
+
+  static String colorAsString(Color color) => color.value.toRadixString(16);
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
 

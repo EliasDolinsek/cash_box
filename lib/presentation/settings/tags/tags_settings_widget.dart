@@ -5,7 +5,7 @@ class TagsSettingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      elevation: 4,
       child: Padding(
         padding: EdgeInsets.all(16),
         child: Column(

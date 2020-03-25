@@ -156,7 +156,7 @@ class ContactListItem extends StatelessWidget {
       return localizations.translate("contact_settings_page_no_fields");
     } else {
       return contact.fields.map((f) {
-        return getFieldTypeAsString(f.type, localizations);
+        return f.description;
       }).join(" · ");
     }
   }
