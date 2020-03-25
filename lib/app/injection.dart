@@ -1,5 +1,7 @@
 import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
+import 'package:cash_box/app/receipts_bloc/bloc.dart';
+import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
 import 'package:cash_box/data/core/datasources/contacts/contacts_local_mobile_data_source.dart';
@@ -9,7 +11,17 @@ import 'package:cash_box/data/core/datasources/contacts/implementation/contacts_
 import 'package:cash_box/data/core/datasources/fields/fields_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/fields/implementation/fields_local_mobile_data_source_moor_impl.dart';
 import 'package:cash_box/data/core/datasources/moor_databases/moor_app_database.dart';
+import 'package:cash_box/data/core/datasources/receipts/implementation/receipts_local_mobile_data_source_moor_impl.dart';
+import 'package:cash_box/data/core/datasources/receipts/implementation/receipts_remote_firebase_data_source_default_impl.dart';
+import 'package:cash_box/data/core/datasources/receipts/receipts_local_mobile_data_source.dart';
+import 'package:cash_box/data/core/datasources/receipts/receipts_remote_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/tags/implementation/tags_local_mobile_data_source_moor_impl.dart';
+import 'package:cash_box/data/core/datasources/tags/implementation/tags_remote_firebase_data_source_default_impl.dart';
+import 'package:cash_box/data/core/datasources/tags/tags_local_mobile_data_source.dart';
+import 'package:cash_box/data/core/datasources/tags/tags_remote_firebase_data_source.dart';
 import 'package:cash_box/data/core/repositories/contacts_repository_default_impl.dart';
+import 'package:cash_box/data/core/repositories/receipts_repository_default_impl.dart';
+import 'package:cash_box/data/core/repositories/tags_repository_default_impl.dart';
 import 'package:cash_box/domain/account/repositories/accounts_repository.dart';
 import 'package:cash_box/domain/account/usecases/create_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/delete_account_use_case.dart';
@@ -23,11 +35,24 @@ import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_password_use_case.dart';
 import 'package:cash_box/domain/core/repositories/contacts_repository.dart';
+import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
+import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:cash_box/domain/core/usecases/contacts/add_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/remove_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/update_contact_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_receipts_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/remove_receipt_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/update_receipt_use_case.dart';
+import 'package:cash_box/domain/core/usecases/tags/add_tag_use_case.dart';
+import 'package:cash_box/domain/core/usecases/tags/get_tag_use_case.dart';
+import 'package:cash_box/domain/core/usecases/tags/get_tags_use_case.dart';
+import 'package:cash_box/domain/core/usecases/tags/remove_tag_use_case.dart';
+import 'package:cash_box/domain/core/usecases/tags/update_tag_use_case.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -68,6 +93,8 @@ Future init() async {
 
   sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   sl.registerSingleton<Firestore>(Firestore.instance);
+
+  final userID = (await sl<FirebaseAuth>().currentUser())?.uid;
 
   //
   // Auth, Accounts
@@ -139,7 +166,6 @@ Future init() async {
   sl.registerLazySingleton<ContactsLocalMobileDataSource>(
       () => ContactsLocalMobileDataSourceMoorImpl(sl(), sl()));
 
-  final userID = (await sl<FirebaseAuth>().currentUser())?.uid;
   sl.registerLazySingleton<ContactsRemoteFirebaseDataSource>(
       () => ContactsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
 
@@ -171,5 +197,76 @@ Future init() async {
         getContactsUseCase: sl(),
         removeContactUseCase: sl(),
         updateContactUseCase: sl()),
+  );
+
+  //
+  // Receipts
+  //
+
+  // DataSources
+  sl.registerLazySingleton<ReceiptsLocalMobileDataSource>(
+      () => ReceiptsLocalMobileDataSourceMoorImpl(sl(), sl()));
+
+  sl.registerLazySingleton<ReceiptsRemoteFirebaseDataSource>(
+      () => ReceiptsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
+
+  // Repositories
+  sl.registerLazySingleton<ReceiptsRepository>(() => ReceiptsRepositoryDefaultImpl(
+      config: sl(),
+      receiptsLocalMobileDataSource: sl(),
+      receiptsRemoteFirebaseDataSource: sl()));
+
+  // UseCases
+  sl.registerLazySingleton(() => AddReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceiptsUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceiptsInReceiptMonthUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateReceiptUseCase(sl()));
+
+  // BLoC
+  sl.registerLazySingleton(
+    () => ReceiptsBloc(
+        addReceiptUseCase: sl(),
+        getReceiptUseCase: sl(),
+        getReceiptsUseCase: sl(),
+        getReceiptsInReceiptMonthUseCase: sl(),
+        updateReceiptUseCase: sl(),
+        removeReceiptUseCase: sl()),
+  );
+
+  //
+  // Tags
+  //
+
+  // DataSources
+  sl.registerLazySingleton<TagsLocalMobileDataSource>(
+      () => TagsLocalMobileDataSourceMoorImpl(sl()));
+  sl.registerLazySingleton<TagsRemoteFirebaseDataSource>(
+      () => TagsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
+
+  // Repository
+  sl.registerLazySingleton<TagsRepository>(
+    () => TagsRepositoryDefaultImpl(
+        config: sl(),
+        localMobileDataSource: sl(),
+        remoteFirebaseDataSource: sl()),
+  );
+
+  // UseCases
+  sl.registerLazySingleton(() => AddTagUseCase(sl()));
+  sl.registerLazySingleton(() => GetTagUseCase(sl()));
+  sl.registerLazySingleton(() => GetTagsUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveTagUseCase(sl(), sl()));
+  sl.registerLazySingleton(() => UpdateTagUseCase(sl()));
+
+  // BLoCs
+  sl.registerLazySingleton(
+    () => TagsBloc(
+        addTagUseCase: sl(),
+        getTagUseCase: sl(),
+        getTagsUseCase: sl(),
+        removeTagUseCase: sl(),
+        updateTagUseCase: sl()),
   );
 }

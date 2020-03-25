@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cash_box/domain/core/enteties/unique_component.dart';
 import 'package:meta/meta.dart';
@@ -17,6 +18,12 @@ class Tag extends UniqueComponent {
     final id = Uuid().v4();
 
     return Tag(id, name: name, color: color);
+  }
+
+  Color get colorAsColor {
+    String parsedString =color.replaceAll("#", "");
+    int colorAsInt = int.parse(parsedString);
+    return Color(colorAsInt);
   }
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);

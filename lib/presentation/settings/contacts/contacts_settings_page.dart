@@ -21,7 +21,7 @@ class ContactsSettingsPage extends StatelessWidget {
         builder: (context) {
           return FloatingActionButton(
             child: Icon(Icons.add),
-            onPressed: () => _openAddContactPage(context),
+            onPressed: () => _addNewContact(context),
           );
         },
       ),
@@ -47,7 +47,7 @@ class ContactsSettingsPage extends StatelessWidget {
     );
   }
 
-  void _openAddContactPage(BuildContext context) {
+  void _addNewContact(BuildContext context) {
     final text = AppLocalizations.translateOf(context, "txt_new_contact");
     final contact = Contact.newContact(name: text, fields: []);
 
@@ -64,10 +64,8 @@ class ContactsSettingsPage extends StatelessWidget {
   }
 
   Widget _buildLoading() {
-    return Expanded(
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+    return Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

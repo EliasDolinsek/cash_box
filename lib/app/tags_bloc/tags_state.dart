@@ -30,14 +30,3 @@ class TagsErrorState extends TagsState {
   @override
   List get props => [errorMessage];
 }
-
-class TagAvailableState extends TagsState {
-
-  final Tag tag;
-
-  TagAvailableState(this.tag);
-
-  @override
-  List get props => [tag];
-
-}

@@ -9,7 +9,7 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
   final Firestore firestore;
   final String userID;
 
-  ReceiptsCollection _receiptsCollection;
+  ReceiptsCollection _receiptsCollection = ReceiptsCollection(null, null, false);
 
   ReceiptsRemoteFirebaseDataSourceDefaultImpl(this.firestore, this.userID);
 

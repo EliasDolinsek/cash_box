@@ -95,5 +95,13 @@
   "contacts_settings_widget_import_categories": "Import categories",
   "contacts_settings_widget_import_categories_hint": "Import categories from Google or your device",
   "contacts_settings_widget_export_categories": "Export categories",
-  "contacts_settings_widget_export_categories_hint": "Export categories to csv"
+  "contacts_settings_widget_export_categories_hint": "Export categories to csv",
+  "tags_settings_widget_tags": "Tags",
+  "tags_settings_widget_edit_tags": "Edit tags",
+  "tags_settings_widget_edit_tags_hint": "Add, remove and update tags",
+  "tags_settings_page_title": "Tags",
+  "txt_new_tag": "New tag",
+  "txt_adding_new_tag": "Adding new tag ...",
+  "no_tags": "No tags",
+  "txt_deleting_tag": "Deleting tag ..."
 }

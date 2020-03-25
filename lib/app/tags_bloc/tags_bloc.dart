@@ -34,8 +34,6 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
       final params = AddTagUseCaseParams(event.tag);
       await addTagUseCase(params);
       dispatch(GetTagsEvent());
-    } else if (event is GetTagEvent) {
-      yield await _getTag(event);
     } else if (event is GetTagsEvent) {
       yield await _getTags();
     } else if (event is RemoveTagEvent) {
@@ -48,14 +46,6 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
       await updateTagUseCase(params);
       dispatch(GetTagsEvent());
     }
-  }
-
-  Future<TagsState> _getTag(GetTagEvent event) async {
-    final params = GetTagUseCaseParams(event.tagID);
-    final tagEither = await getTagUseCase(params);
-    return tagEither.fold((l) => TagsErrorState(l.toString()), (tag) {
-      return TagAvailableState(tag);
-    });
   }
 
   Future<TagsState> _getTags() async {

@@ -13,15 +13,6 @@ class AddTagEvent extends TagsEvent {
   List get props => [tag];
 }
 
-class GetTagEvent extends TagsEvent {
-  final String tagID;
-
-  GetTagEvent(this.tagID);
-
-  @override
-  List get props => [tagID];
-}
-
 class GetTagsEvent extends TagsEvent {}
 
 class RemoveTagEvent extends TagsEvent {

@@ -3,6 +3,7 @@ import 'package:cash_box/presentation/auth/sign_in_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
+import 'package:cash_box/presentation/settings/tags/tags_settings_page.dart';
 import 'package:cash_box/presentation/static_widgets/failure_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class CashBoxApp extends StatelessWidget {
       routes: {
         "/": (context) => _buildHome(),
         "/contactsSettings": (context) => ContactsSettingsPage(),
+        "/tagsSettings": (context) => TagsSettingsPage()
       },
       onGenerateRoute: (RouteSettings settings){
         if(settings.name == "/contactsSettings/contactDetails"){

@@ -39,7 +39,7 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository {
   }
 
   @override
-  Future<DataSource> get dataSource async {
+  Future<ReceiptsDataSource> get dataSource async {
     final dataStorageLocation = await config.dataStorageLocation;
     switch (dataStorageLocation) {
       case DataStorageLocation.LOCAL_MOBILE:
@@ -92,7 +92,15 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository {
   }
 
   @override
-  Future<Either<Failure, List<Receipt>>> getReceiptsInReceiptMonth(ReceiptMonth receiptMonth) {
-
+  Future<Either<Failure, List<Receipt>>> getReceiptsInReceiptMonth(ReceiptMonth receiptMonth) async {
+    try {
+      final dataSource = await this.dataSource;
+      final result = await dataSource.getReceiptsInReceiptMonth(receiptMonth);
+      return Right(result);
+    } on DataStorageLocationException {
+      return Left(DataStorageLocationFailure());
+    } on Exception {
+      return Left(RepositoryFailure());
+    }
   }
 }
