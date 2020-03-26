@@ -23,7 +23,7 @@ class SignInPage extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: EdgeInsets.all(16.0),
           child: Center(
             child: _buildLogoImage(),
           ),

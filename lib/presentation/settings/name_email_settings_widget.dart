@@ -6,6 +6,7 @@ import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/re_sign_in_dialog.dart';
+import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class NameEmailSettingsWidget extends StatefulWidget {
@@ -37,11 +38,11 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
             return _buildLoaded();
           } else {
             _getAccountEvent(accountsBloc);
-            return _buildLoading();
+            return LoadingWidget();
           }
         } else {
           _getAccountEvent(accountsBloc);
-          return _buildLoading();
+          return LoadingWidget();
         }
       },
     );
@@ -62,10 +63,6 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
     final useCase = sl<GetUserIdUserCase>();
     final result = await useCase(NoParams());
     return result.fold((l) => null, (r) => r);
-  }
-
-  Widget _buildLoading() {
-    return Center(child: CircularProgressIndicator());
   }
 
   Widget _buildLoaded() {

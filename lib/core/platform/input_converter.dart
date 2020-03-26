@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 class InputConverter {
 
   static String validateEmail(BuildContext context, String email){
+    print(EmailValidator.validate(email));
     if(EmailValidator.validate(email)) return null;
     return AppLocalizations.translateOf(context, "converter_failure_invalid_email");
   }

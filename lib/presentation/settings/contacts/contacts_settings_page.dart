@@ -2,6 +2,7 @@ import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class ContactsSettingsPage extends StatelessWidget {
@@ -36,10 +37,10 @@ class ContactsSettingsPage extends StatelessWidget {
               return Text("ERROR");
             } else {
               contactsBloc.dispatch(GetContactsEvent());
-              return _buildLoading();
+              return LoadingWidget();
             }
           } else {
-            return _buildLoading();
+            return LoadingWidget();
           }
         },
       ),
@@ -60,12 +61,6 @@ class ContactsSettingsPage extends StatelessWidget {
     final text =
         AppLocalizations.translateOf(context, "txt_adding_new_contact");
     Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
-  }
-
-  Widget _buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/data_storage_location_selection_dialog.dart';
 import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
 import 'package:cash_box/presentation/settings/password_settings_widget.dart';
+import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class AccountSettingsWidget extends StatelessWidget {
@@ -61,10 +62,10 @@ class _SubscriptionTileState extends State<SubscriptionTile> {
           if (data is AccountAvailableState) {
             return _buildLoaded(data.account);
           } else {
-            return _buildLoading();
+            return LoadingWidget();
           }
         } else {
-          return _buildLoading();
+          return LoadingWidget();
         }
       },
     );
@@ -90,12 +91,6 @@ class _SubscriptionTileState extends State<SubscriptionTile> {
         ),
       ),
     );
-  }
-
-  Widget _buildLoading() {
-    final text = AppLocalizations.translateOf(
-        context, "account_settings_widget_loading");
-    return Text(text);
   }
 }
 

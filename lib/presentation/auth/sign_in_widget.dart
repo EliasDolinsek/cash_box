@@ -225,6 +225,8 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
   }
 
   void _checkAndRegister() {
+    _email = _email.trim();
+
     final nameError = InputConverter.validateName(context, _name);
     final emailError = InputConverter.validateEmail(context, _email);
     final passwordError = InputConverter.validatePassword(context, _password);

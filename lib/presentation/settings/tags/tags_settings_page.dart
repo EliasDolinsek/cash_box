@@ -7,6 +7,7 @@ import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
+import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsSettingsPage extends StatelessWidget {
@@ -41,10 +42,10 @@ class TagsSettingsPage extends StatelessWidget {
               return Text("ERROR");
             } else {
               tagsBloc.dispatch(GetTagsEvent());
-              return _buildLoading();
+              return LoadingWidget();
             }
           } else {
-            return _buildLoading();
+            return LoadingWidget();
           }
         },
       ),
@@ -65,12 +66,6 @@ class TagsSettingsPage extends StatelessWidget {
   void _showAddingNewTagSnackbar(BuildContext context) {
     final text = AppLocalizations.translateOf(context, "txt_adding_new_tag");
     Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
-  }
-
-  Widget _buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReSignInDialog extends StatefulWidget {
@@ -66,11 +67,11 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
             return _buildLoaded(data.account);
           } else {
             _callGetAccountEvent(accountsBloc);
-            return _buildLoading();
+            return LoadingWidget();
           }
         } else {
           _callGetAccountEvent(accountsBloc);
-          return _buildLoading();
+          return LoadingWidget();
         }
       },
     );
@@ -114,10 +115,6 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
     final useCase = sl<GetUserIdUserCase>();
     final result = await useCase(NoParams());
     return result.fold((l) => null, (userID) => userID);
-  }
-
-  Widget _buildLoading() {
-    return Center(child: CircularProgressIndicator());
   }
 
   void _checkAndReSignIn() {
