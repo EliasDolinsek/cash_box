@@ -1,44 +1,35 @@
-import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
-import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
+import 'package:cash_box/app/templates_bloc/bloc.dart';
+import 'package:cash_box/app/templates_bloc/templates_event.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:flutter/material.dart';
 
-class ContactDetailsPage extends StatefulWidget {
-  final Contact contact;
+class ReceiptTemplateDetailsPage extends StatefulWidget {
+  final Template template;
 
-  const ContactDetailsPage(this.contact, {Key key}) : super(key: key);
+  const ReceiptTemplateDetailsPage(this.template, {Key key}) : super(key: key);
 
   @override
-  _ContactDetailsPageState createState() => _ContactDetailsPageState();
+  _ReceiptTemplateDetailsPageState createState() =>
+      _ReceiptTemplateDetailsPageState();
 }
 
-class _ContactDetailsPageState extends State<ContactDetailsPage> {
+class _ReceiptTemplateDetailsPageState
+    extends State<ReceiptTemplateDetailsPage> {
 
   bool _delete = false;
   String _name;
-  List _fields;
+  List<Field> _fields;
 
   @override
   void initState() {
     super.initState();
-    _name = widget.contact.name;
-    _fields = widget.contact.fields;
-  }
-
-  @override
-  void dispose() {
-   if(!_delete) _updateContact();
-    super.dispose();
-  }
-
-  void _updateContact() {
-    final event = UpdateContactEvent(
-        widget.contact.id, name: _name, fields: _fields);
-    sl<ContactsBloc>().dispatch(event);
+    _name = widget.template.name;
+    _fields = widget.template.fields;
   }
 
   @override
@@ -47,7 +38,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
       appBar: AppBar(
         title: Text(_getAppBarTitle()),
         backgroundColor: Colors.white,
-        actions: <Widget>[_buildDeleteButton(context)],
+        actions: <Widget>[_buildDeleteButton()],
       ),
       body: _buildListView(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -84,20 +75,6 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     );
   }
 
-  Widget _buildNameFieldCardWidget() {
-    final field =
-    Field.newField(type: FieldType.text, description: "Name", value: _name);
-    return FieldCard(
-      field,
-      deletable: false,
-      descriptionEditable: false,
-      typeEditable: false,
-      onFieldChanged: (Field field) {
-        _name = field.value;
-      },
-    );
-  }
-
   List<Widget> _getFieldsAsFieldCardWidgetList() {
     return _fields.map((field) {
       return FieldCard(
@@ -119,35 +96,48 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   String _getAppBarTitle() {
-    if (widget.contact.name.isEmpty) {
+    if (widget.template.name.isEmpty) {
       return AppLocalizations.translateOf(context, "unnamed");
     } else {
-      return widget.contact.name;
+      return widget.template.name;
     }
   }
 
-  Widget _buildDeleteButton(BuildContext context) {
+  Widget _buildNameFieldCardWidget() {
+    final field =
+    Field.newField(type: FieldType.text, description: "Name", value: _name);
+    return FieldCard(
+      field,
+      deletable: false,
+      descriptionEditable: false,
+      typeEditable: false,
+      onFieldChanged: (Field field) {
+        _name = field.value;
+      },
+    );
+  }
+
+  Widget _buildDeleteButton() {
     return IconButton(
       icon: Icon(
         Icons.delete,
         color: Colors.red,
       ),
-      onPressed: _showDeleteConfirmationDialog,
+      onPressed: _checkAndDeleteTemplate,
     );
   }
 
-  void _showDeleteConfirmationDialog() async {
-    final result = await showDialog(context: context, builder: (_) => DeleteDialog());
-    if(result != null && result){
-      _removeContact(context);
+  void _checkAndDeleteTemplate() async {
+    final result =
+        await showDialog(context: context, builder: (_) => DeleteDialog());
+    if (result != null && result) {
+      _deleteTemplate();
+      Navigator.of(context).pop();
     }
   }
 
-  void _removeContact(BuildContext context) {
-    final event = RemoveContactEvent(widget.contact.id);
-    sl<ContactsBloc>().dispatch(event);
-
-    _delete = true;
-    Navigator.pop(context);
+  void _deleteTemplate() {
+    final event = RemoveTemplateEvent(widget.template.id);
+    sl<TemplatesBloc>().dispatch(event);
   }
 }

@@ -139,38 +139,9 @@ class TagListItem extends StatelessWidget {
         backgroundColor: tag.colorAsColor,
       ),
       title: Text(tag.name),
-      trailing: _buildDeleteButton(context),
       onTap: (){
         Navigator.of(context).pushNamed("/tagsSettings/tagDetails", arguments: tag);
       },
     );
-  }
-
-  Widget _buildDeleteButton(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Icons.delete,
-        color: Colors.red,
-      ),
-      onPressed: () => _checkAndDelete(context),
-    );
-  }
-
-  void _checkAndDelete(BuildContext context) async {
-    final result = await showDialog(context: context, builder: (_) => DeleteDialog());
-    if(result != null && result){
-      _deleteTag(context);
-    }
-  }
-
-  void _deleteTag(BuildContext context) {
-    final event = RemoveTagEvent(tag.id);
-    sl<TagsBloc>().dispatch(event);
-    _showDeletingTagSnackBar(context);
-  }
-
-  void _showDeletingTagSnackBar(BuildContext context) {
-    final text = AppLocalizations.translateOf(context, "txt_deleting_tag");
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 }

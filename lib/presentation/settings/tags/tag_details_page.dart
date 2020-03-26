@@ -47,7 +47,7 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.tag.name),
+        title: Text(_getAppBarTitle()),
         backgroundColor: Colors.white,
         actions: <Widget>[
           _buildDeleteButton(),
@@ -60,6 +60,14 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
         ],
       ),
     );
+  }
+
+  String _getAppBarTitle() {
+    if (widget.tag.name.isEmpty) {
+      return AppLocalizations.translateOf(context, "unnamed");
+    } else {
+      return widget.tag.name;
+    }
   }
 
   Widget _buildNameFieldCard() {

@@ -21,12 +21,12 @@ class ReceiptTemplatesSettingsWidget extends StatelessWidget {
       ),
       body: StreamBuilder(
         stream: templatesBloc.state,
-        builder: (_, AsyncSnapshot<TemplatesState> snapshot){
+        builder: (_, AsyncSnapshot<TemplatesState> snapshot) {
           final data = snapshot.data;
-          if(snapshot.hasData){
-            if(data is TemplatesAvailableState){
+          if (snapshot.hasData) {
+            if (data is TemplatesAvailableState) {
               return TemplatesAvailableSettingsWidget(data.templates);
-            } else if(data is TemplatesErrorState){
+            } else if (data is TemplatesErrorState) {
               templatesBloc.dispatch(GetTemplatesEvent());
               return Text("ERROR");
             } else {
@@ -57,14 +57,14 @@ class ReceiptTemplatesSettingsWidget extends StatelessWidget {
 }
 
 class TemplatesAvailableSettingsWidget extends StatelessWidget {
-
   final List<Template> templates;
 
-  const TemplatesAvailableSettingsWidget(this.templates, {Key key}) : super(key: key);
+  const TemplatesAvailableSettingsWidget(this.templates, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if(templates.isEmpty) return _buildNoTemplates(context);
+    if (templates.isEmpty) return _buildNoTemplates(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
@@ -106,7 +106,6 @@ class TemplatesAvailableSettingsWidget extends StatelessWidget {
 }
 
 class TemplateListItem extends StatelessWidget {
-
   final Template template;
 
   const TemplateListItem(this.template, {Key key}) : super(key: key);
@@ -116,6 +115,12 @@ class TemplateListItem extends StatelessWidget {
     return ListTile(
       title: Text(_getTemplateNameText(context)),
       subtitle: Text(_templateFieldsInfoAsString(context)),
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          "/receiptTemplatesSettings/templateDetails",
+          arguments: template,
+        );
+      },
     );
   }
 
