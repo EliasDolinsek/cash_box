@@ -8,16 +8,16 @@ import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-class TagsDetailsPage extends StatefulWidget {
+class TagDetailsPage extends StatefulWidget {
   final Tag tag;
 
-  const TagsDetailsPage(this.tag, {Key key}) : super(key: key);
+  const TagDetailsPage(this.tag, {Key key}) : super(key: key);
 
   @override
-  _TagsDetailsPageState createState() => _TagsDetailsPageState();
+  _TagDetailsPageState createState() => _TagDetailsPageState();
 }
 
-class _TagsDetailsPageState extends State<TagsDetailsPage> {
+class _TagDetailsPageState extends State<TagDetailsPage> {
   bool _delete = false;
   String _name;
   Color _color;

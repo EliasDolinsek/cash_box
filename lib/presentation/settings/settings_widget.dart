@@ -1,4 +1,5 @@
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_widget.dart';
+import 'package:cash_box/presentation/settings/receipts/receipts_settings_widget.dart';
 import 'package:cash_box/presentation/settings/tags/tags_settings_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,9 @@ class SettingsWidget extends StatelessWidget {
               SizedBox(height: 8.0),
               ContactsSettingsWidget(),
               SizedBox(height: 8.0),
-              TagsSettingsWidget()
+              TagsSettingsWidget(),
+              SizedBox(height: 8.0),
+              ReceiptsSettingsWidgets()
             ],
           ),
         ),

@@ -3,7 +3,8 @@ import 'package:cash_box/presentation/auth/sign_in_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
-import 'package:cash_box/presentation/settings/tags/tags_details_page.dart';
+import 'package:cash_box/presentation/settings/receipts/receipt_templates_settings_page.dart';
+import 'package:cash_box/presentation/settings/tags/tag_details_page.dart';
 import 'package:cash_box/presentation/settings/tags/tags_settings_page.dart';
 import 'package:cash_box/presentation/static_widgets/failure_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
@@ -51,17 +52,20 @@ class CashBoxApp extends StatelessWidget {
       routes: {
         "/": (context) => _buildHome(),
         "/contactsSettings": (context) => ContactsSettingsPage(),
-        "/tagsSettings": (context) => TagsSettingsPage()
+        "/tagsSettings": (context) => TagsSettingsPage(),
+        "/receiptTemplatesSettings": (context) =>
+            ReceiptTemplatesSettingsWidget()
       },
-      onGenerateRoute: (RouteSettings settings){
-        if(settings.name == "/contactsSettings/contactDetails"){
+      onGenerateRoute: (RouteSettings settings) {
+        if (settings.name == "/contactsSettings/contactDetails") {
           final contact = settings.arguments;
           return MaterialPageRoute(builder: (_) => ContactDetailsPage(contact));
-        } else if(settings.name == "/tagsSettings/tagDetails") {
+        } else if (settings.name == "/tagsSettings/tagDetails") {
           final tag = settings.arguments;
-          return MaterialPageRoute(builder: (_) => TagsDetailsPage(tag));
+          return MaterialPageRoute(builder: (_) => TagDetailsPage(tag));
         } else {
-          return MaterialPageRoute(builder: (_) => FailurePage("main_failure_no_route"));
+          return MaterialPageRoute(
+              builder: (_) => FailurePage("main_failure_no_route"));
         }
       },
     );

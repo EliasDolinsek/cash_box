@@ -106,5 +106,12 @@
   "txt_deleting_tag": "Deleting tag ...",
   "txt_color": "Color",
   "txt_select_color": "Select color",
-  "btn_ok": "OK"
+  "btn_ok": "OK",
+  "receipts_settings_widget_tags": "Receipts",
+  "receipt_settings_widget_edit_templates": "Edit templates",
+  "receipt_settings_widget_edit_templates_hint": "Add, remove and update templates",
+  "txt_receipt_templates": "Receipt templates",
+  "txt_no_fields": "No fields",
+  "txt_no_templates": "No templates",
+  "txt_new_template": "New template"
 }

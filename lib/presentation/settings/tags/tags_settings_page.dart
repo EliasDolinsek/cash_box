@@ -35,7 +35,7 @@ class TagsSettingsPage extends StatelessWidget {
           if (snapshot.hasData) {
             final data = snapshot.data;
             if (data is TagsAvailableState) {
-              return TagsSettingsWidget(data.tags);
+              return TagsAvailableSettingsWidget(data.tags);
             } else if (data is TagsErrorState) {
               tagsBloc.dispatch(GetTagsEvent());
               return Text("ERROR");
@@ -74,16 +74,16 @@ class TagsSettingsPage extends StatelessWidget {
   }
 }
 
-class TagsSettingsWidget extends StatefulWidget {
+class TagsAvailableSettingsWidget extends StatefulWidget {
   final List<Tag> tags;
 
-  const TagsSettingsWidget(this.tags, {Key key}) : super(key: key);
+  const TagsAvailableSettingsWidget(this.tags, {Key key}) : super(key: key);
 
   @override
-  _TagsSettingsWidgetState createState() => _TagsSettingsWidgetState();
+  _TagsAvailableSettingsWidgetState createState() => _TagsAvailableSettingsWidgetState();
 }
 
-class _TagsSettingsWidgetState extends State<TagsSettingsWidget> {
+class _TagsAvailableSettingsWidgetState extends State<TagsAvailableSettingsWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.tags.isEmpty) return _buildNoTags();
