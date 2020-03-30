@@ -2,6 +2,7 @@ import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/domain/account/enteties/subscription.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 String getSubscriptionTypeAsString(SubscriptionType type, AppLocalizations localizations){
   switch(type){
@@ -30,4 +31,8 @@ String getFieldTypeAsString(FieldType type, AppLocalizations localizations){
     case FieldType.image: return localizations.translate("field_type_image");
     default: throw Exception("Couldn't resolve string for FieldType $type");
   }
+}
+
+String getMonthAsReadableReceiptMonth(DateTime dateTime){
+  return DateFormat("MMMM yyyy").format(dateTime);
 }

@@ -6,6 +6,7 @@ import 'package:cash_box/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/widgets/receipt_month_selection_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'navigation_config.dart' as config;
@@ -16,13 +17,15 @@ class WebNavigationPage extends StatefulWidget {
 }
 
 class _WebNavigationPageState extends State<WebNavigationPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("CashBox"),
         backgroundColor: Colors.white,
+        actions: <Widget>[
+          ReceiptMonthSelectionWidget(),
+        ],
       ),
       body: Container(
         child: config.page,
@@ -36,12 +39,14 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
               ListTile(
                 leading: Icon(
                   Icons.home,
-                  color: config.getColorForNavigationPage("overviewWidget", context),
+                  color: config.getColorForNavigationPage(
+                      "overviewWidget", context),
                 ),
                 title: Text(
                   AppLocalizations.translateOf(context, "navigation_overview"),
                   style: TextStyle(
-                    color: config.getColorForNavigationPage("overviewWidget", context),
+                    color: config.getColorForNavigationPage(
+                        "overviewWidget", context),
                   ),
                 ),
                 onTap: () {
@@ -52,12 +57,14 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
               ListTile(
                 leading: Icon(
                   Icons.search,
-                  color: config.getColorForNavigationPage("searchWidget", context),
+                  color:
+                      config.getColorForNavigationPage("searchWidget", context),
                 ),
                 title: Text(
                   AppLocalizations.translateOf(context, "navigation_search"),
                   style: TextStyle(
-                    color: config.getColorForNavigationPage("searchWidget", context),
+                    color: config.getColorForNavigationPage(
+                        "searchWidget", context),
                   ),
                 ),
                 onTap: () {
@@ -68,12 +75,15 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
               ListTile(
                 leading: Icon(
                   Icons.trending_up,
-                  color: config.getColorForNavigationPage("statisticsWidget", context),
+                  color: config.getColorForNavigationPage(
+                      "statisticsWidget", context),
                 ),
                 title: Text(
-                  AppLocalizations.translateOf(context, "navigation_statistics"),
+                  AppLocalizations.translateOf(
+                      context, "navigation_statistics"),
                   style: TextStyle(
-                    color: config.getColorForNavigationPage("statisticsWidget", context),
+                    color: config.getColorForNavigationPage(
+                        "statisticsWidget", context),
                   ),
                 ),
                 onTap: () {
@@ -86,12 +96,14 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
               ListTile(
                 leading: Icon(
                   Icons.settings,
-                  color: config.getColorForNavigationPage("settingsWidget", context),
+                  color: config.getColorForNavigationPage(
+                      "settingsWidget", context),
                 ),
                 title: Text(
                   AppLocalizations.translateOf(context, "navigation_settings"),
                   style: TextStyle(
-                    color: config.getColorForNavigationPage("settingsWidget", context),
+                    color: config.getColorForNavigationPage(
+                        "settingsWidget", context),
                   ),
                 ),
                 onTap: () {
@@ -104,7 +116,8 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
                   Icons.exit_to_app,
                   color: Colors.black,
                 ),
-                title: Text(AppLocalizations.translateOf(context, "navigation_sign_out")),
+                title: Text(AppLocalizations.translateOf(
+                    context, "navigation_sign_out")),
                 onTap: () {
                   _signOut(context);
                   Navigator.pop(context);
@@ -128,7 +141,8 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
             _getUserID().then((userID) {
               authBloc.dispatch(GetAccountEvent(userID));
             });
-            return _buildUseChipWithText(AppLocalizations.translateOf(context, "navigation_loading"));
+            return _buildUseChipWithText(
+                AppLocalizations.translateOf(context, "navigation_loading"));
           } else if (data is AccountAvailableState) {
             return _buildUseChipWithText(data.account.email);
           } else {
@@ -158,8 +172,9 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
     });
   }
 
-  void _showSigningOutSnackbar(BuildContext scaffoldContext){
-    final text = AppLocalizations.translateOf(context, "navigation_page_signing_out");
+  void _showSigningOutSnackbar(BuildContext scaffoldContext) {
+    final text =
+        AppLocalizations.translateOf(context, "navigation_page_signing_out");
     Scaffold.of(scaffoldContext).showSnackBar(SnackBar(content: Text(text)));
   }
 }

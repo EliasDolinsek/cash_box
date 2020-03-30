@@ -1,4 +1,5 @@
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/widgets/receipt_month_selection_widget.dart';
 import 'navigation_config.dart' as config;
 import 'package:flutter/material.dart';
 
@@ -8,13 +9,15 @@ class MobileNavigationPage extends StatefulWidget {
 }
 
 class _MobileNavigationPageState extends State<MobileNavigationPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("CashBox"),
         backgroundColor: Colors.white,
+        actions: <Widget>[
+          ReceiptMonthSelectionWidget(),
+        ],
       ),
       body: config.page,
       bottomNavigationBar: BottomNavigationBar(
@@ -39,7 +42,6 @@ class _MobileNavigationPageState extends State<MobileNavigationPage> {
             icon: Icon(Icons.trending_up),
             title: Text(
               AppLocalizations.translateOf(context, "navigation_statistics"),
-
             ),
           ),
           BottomNavigationBarItem(
@@ -53,7 +55,7 @@ class _MobileNavigationPageState extends State<MobileNavigationPage> {
     );
   }
 
-  void _onTap(int index){
+  void _onTap(int index) {
     setState(() {
       config.pageByIndex = index;
     });

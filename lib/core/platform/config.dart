@@ -18,7 +18,11 @@ class ConfigDefaultImpl implements Config {
 
   final SharedPreferences sharedPreferences;
 
-  ConfigDefaultImpl(this.sharedPreferences);
+  DateTime _receiptMonth;
+
+  ConfigDefaultImpl(this.sharedPreferences){
+    _receiptMonth = DateTime.now();
+  }
 
   @override
   Future<DataStorageLocation> get dataStorageLocation async {

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
@@ -11,12 +13,14 @@ import './bloc.dart';
 import 'package:meta/meta.dart';
 
 class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
+
   final AddReceiptUseCase addReceiptUseCase;
   final GetReceiptUseCase getReceiptUseCase;
   final GetReceiptsUseCase getReceiptsUseCase;
   final GetReceiptsInReceiptMonthUseCase getReceiptsInReceiptMonthUseCase;
   final UpdateReceiptUseCase updateReceiptUseCase;
   final RemoveReceiptUseCase removeReceiptUseCase;
+  final ReceiptMonthBloc receiptMonthBloc;
 
   ReceiptsBloc(
       {@required this.addReceiptUseCase,
@@ -24,7 +28,8 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
       @required this.getReceiptsUseCase,
       @required this.getReceiptsInReceiptMonthUseCase,
       @required this.updateReceiptUseCase,
-      @required this.removeReceiptUseCase});
+      @required this.removeReceiptUseCase,
+      @required this.receiptMonthBloc});
 
   @override
   ReceiptsState get initialState => InitialReceiptsState();
@@ -42,6 +47,7 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
     } else if (event is GetReceiptsEvent) {
       yield await _getReceipts();
     } else if (event is GetReceiptsInReceiptMonthEvent) {
+      _setReceiptMonth(event.receiptMonth);
       yield await _getReceiptsInReceiptMonth(event);
     } else if (event is UpdateReceiptEvent) {
       await _updateReceipt(event);
@@ -79,5 +85,10 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
         (receipts) {
       return ReceiptsInReceiptMonthAvailableState(event.receiptMonth, receipts);
     });
+  }
+
+  void _setReceiptMonth(ReceiptMonth month) {
+    final event = SetReceiptMonthEvent(month.month);
+    receiptMonthBloc.dispatch(event);
   }
 }

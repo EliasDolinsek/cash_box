@@ -1,5 +1,6 @@
 import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
+import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
@@ -238,6 +239,8 @@ Future init() async {
   sl.registerLazySingleton(() => UpdateReceiptUseCase(sl()));
 
   // BLoC
+  final initialReceiptMonth = DateTime.now();
+  sl.registerLazySingleton(() => ReceiptMonthBloc(initialReceiptMonth));
   sl.registerLazySingleton(
     () => ReceiptsBloc(
         addReceiptUseCase: sl(),
