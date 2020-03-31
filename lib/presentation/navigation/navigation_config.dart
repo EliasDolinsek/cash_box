@@ -1,8 +1,9 @@
+import 'package:cash_box/presentation/overview/overview_widget.dart';
 import 'package:cash_box/presentation/settings/settings_widget.dart';
 import 'package:flutter/material.dart';
 
 final pages = {
-  "overviewWidget":Text("OVERVIEW"),
+  "overviewWidget":OverviewWidget(),
   "searchWidget":Text("SEARCH"),
   "statisticsWidget":Text("STATISTICS"),
   "settingsWidget":SettingsWidget()

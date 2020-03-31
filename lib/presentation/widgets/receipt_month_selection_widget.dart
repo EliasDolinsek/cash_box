@@ -47,6 +47,13 @@ class _ReceiptMonthSelectionWidgetState
         text,
         style: TextStyle(color: Colors.white),
       ),
+      avatar: CircleAvatar(
+        backgroundColor: Theme.of(context).primaryColorDark,
+        child: Icon(
+          Icons.arrow_drop_down,
+          color: Colors.white,
+        ),
+      ),
       backgroundColor: Theme.of(context).primaryColorDark,
       onPressed: () {
         _showReceiptMonthSelectionDialog(data.month);

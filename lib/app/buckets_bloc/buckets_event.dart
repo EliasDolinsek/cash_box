@@ -21,15 +21,6 @@ class AddReceiptToBucketEvent extends BucketsEvent {
   List get props => [bucketID, receiptID];
 }
 
-class GetBucketEvent extends BucketsEvent {
-  final String bucketID;
-
-  GetBucketEvent(this.bucketID);
-
-  @override
-  List get props => [bucketID];
-}
-
 class GetBucketsEvent extends BucketsEvent {}
 
 class RemoveBucketEvent extends BucketsEvent {

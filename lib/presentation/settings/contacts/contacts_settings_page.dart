@@ -137,7 +137,7 @@ class ContactListItem extends StatelessWidget {
   }
 
   String _getContactNameText(BuildContext context) {
-    if (contact.name.isEmpty) {
+    if (contact?.name != null && contact.name.isEmpty) {
       return AppLocalizations.translateOf(context, "unnamed");
     } else {
       return contact.name;

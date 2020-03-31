@@ -1,4 +1,5 @@
 import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
+import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
@@ -6,6 +7,10 @@ import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
+import 'package:cash_box/data/core/datasources/buckets/buckets_local_mobile_data_source.dart';
+import 'package:cash_box/data/core/datasources/buckets/buckets_remote_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/buckets/implementation/buckets_local_mobile_data_source_moor_impl.dart';
+import 'package:cash_box/data/core/datasources/buckets/implementation/buckets_remote_firebase_data_source_default_impl.dart';
 import 'package:cash_box/data/core/datasources/contacts/contacts_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/contacts/contacts_remote_firebase_data_source.dart';
 import 'package:cash_box/data/core/datasources/contacts/implementation/contacts_local_mobile_data_source_moor_impl.dart';
@@ -25,6 +30,7 @@ import 'package:cash_box/data/core/datasources/templates/implementation/template
 import 'package:cash_box/data/core/datasources/templates/implementation/templates_remote_firebase_data_source_default_impl.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_remote_firebase_data_source.dart';
+import 'package:cash_box/data/core/repositories/buckets_repository_default_impl.dart';
 import 'package:cash_box/data/core/repositories/contacts_repository_default_impl.dart';
 import 'package:cash_box/data/core/repositories/receipts_repository_default_impl.dart';
 import 'package:cash_box/data/core/repositories/tags_repository_default_impl.dart';
@@ -41,10 +47,18 @@ import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_password_use_case.dart';
+import 'package:cash_box/domain/core/repositories/buckets_repository.dart';
 import 'package:cash_box/domain/core/repositories/contacts_repository.dart';
 import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:cash_box/domain/core/repositories/templates_repository.dart';
+import 'package:cash_box/domain/core/usecases/buckets/add_bucket_use_case.dart';
+import 'package:cash_box/domain/core/usecases/buckets/add_receipt_to_bucket_use_case.dart';
+import 'package:cash_box/domain/core/usecases/buckets/get_bucket_use_case.dart';
+import 'package:cash_box/domain/core/usecases/buckets/get_buckets_use_case.dart';
+import 'package:cash_box/domain/core/usecases/buckets/remove_bucket_use_case.dart';
+import 'package:cash_box/domain/core/usecases/buckets/remove_receipt_from_bucket_use_case.dart';
+import 'package:cash_box/domain/core/usecases/buckets/update_bucket_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/add_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dart';
@@ -320,5 +334,44 @@ Future init() async {
         getTemplatesUseCase: sl(),
         removeTemplateUseCase: sl(),
         updateTemplateUseCase: sl()),
+  );
+
+  //
+  // Buckets
+  //
+
+  // DataSources
+  sl.registerLazySingleton<BucketsLocalMobileDataSource>(() => BucketsLocalMobileDataSourceMoorImpl(sl()));
+
+  sl.registerLazySingleton<BucketsRemoteFirebaseDataSource>(
+      () => BucketsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
+
+  // Repositories
+  sl.registerLazySingleton<BucketsRepository>(
+    () => BucketsRepositoryDefaultImpl(
+      bucketsLocalMobileDataSource: sl(),
+      bucketsRemoteFirebaseDataSource: sl(),
+      config: sl(),
+    ),
+  );
+
+  // UseCases
+  sl.registerLazySingleton(() => AddBucketUseCase(sl()));
+  sl.registerLazySingleton(() => AddReceiptToBucketUseCase(sl()));
+  sl.registerLazySingleton(() => GetBucketUseCase(sl()));
+  sl.registerLazySingleton(() => GetBucketsUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveBucketUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveReceiptFromBucketUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateBucketUseCase(sl()));
+
+  // BLoC
+  sl.registerLazySingleton(
+    () => BucketsBloc(
+        addBucketUseCase: sl(),
+        addReceiptToBucketUseCase: sl(),
+        getBucketsUseCase: sl(),
+        removeBucketUseCase: sl(),
+        removeReceiptFromBucketUseCase: sl(),
+        updateBucketUseCase: sl()),
   );
 }

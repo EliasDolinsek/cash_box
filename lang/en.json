@@ -114,5 +114,7 @@
   "txt_no_fields": "No fields",
   "txt_no_templates": "No templates",
   "txt_new_template": "New template",
-  "txt_loading": "Loading"
+  "txt_loading": "Loading",
+  "txt_no_buckets": "No buckets",
+  "txt_no_description": "No description"
 }
