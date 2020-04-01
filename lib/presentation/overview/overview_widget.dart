@@ -54,11 +54,22 @@ class BucketsOverviewListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: 800
+        ),
+        child: _buildContent(),
+      ),
+    );
+  }
+
+  Widget _buildContent(){
     return ListView.separated(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(4.0),
       itemCount: buckets.length,
       itemBuilder: (_, index) => BucketCardWidget(buckets[index]),
-      separatorBuilder: (_, __) => SizedBox(height: 8.0),
+      separatorBuilder: (_, __) => SizedBox(height: 0.0),
     );
   }
 }
@@ -73,7 +84,7 @@ class BucketCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 3,
       child: ListTile(
         title: Text(_getTitle(context)),
         subtitle: Text(_getSubtitle(context)),

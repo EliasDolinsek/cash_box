@@ -116,5 +116,6 @@
   "txt_new_template": "New template",
   "txt_loading": "Loading",
   "txt_no_buckets": "No buckets",
-  "txt_no_description": "No description"
+  "txt_no_description": "No description",
+  "btn_add_receipt": "ADD RECEIPT"
 }

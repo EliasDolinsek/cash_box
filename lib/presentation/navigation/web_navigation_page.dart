@@ -24,6 +24,8 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
         title: Text("CashBox"),
         backgroundColor: Colors.white,
         actions: <Widget>[
+          _buildAddReceiptChip(),
+          SizedBox(width: 8.0),
           ReceiptMonthSelectionWidget(),
         ],
       ),
@@ -176,5 +178,17 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
     final text =
         AppLocalizations.translateOf(context, "navigation_page_signing_out");
     Scaffold.of(scaffoldContext).showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  Widget _buildAddReceiptChip() {
+    return ActionChip(
+      label: Text(
+        AppLocalizations.translateOf(context, "btn_add_receipt"),
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      onPressed: () => Navigator.of(context).pushNamed("/addReceipt"),
+    );
   }
 }

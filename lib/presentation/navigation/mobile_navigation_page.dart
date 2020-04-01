@@ -20,6 +20,12 @@ class _MobileNavigationPageState extends State<MobileNavigationPage> {
         ],
       ),
       body: config.page,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.of(context).pushNamed("/addReceipt"),
+        icon: Icon(Icons.add),
+        label: Text(AppLocalizations.translateOf(context, "btn_add_receipt")),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: config.indexOfPage,
         selectedItemColor: config.getSelectedColor(context),
