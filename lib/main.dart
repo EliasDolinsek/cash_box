@@ -3,6 +3,7 @@ import 'package:cash_box/presentation/auth/sign_in_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/navigation/web_navigation_page.dart';
 import 'package:cash_box/presentation/receipts/add_receipt_page.dart';
+import 'package:cash_box/presentation/receipts/add_receipt_template_selection_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
 import 'package:cash_box/presentation/settings/receipts/receipt_template_details_page.dart';
@@ -58,7 +59,7 @@ class CashBoxApp extends StatelessWidget {
         "/tagsSettings": (context) => TagsSettingsPage(),
         "/receiptTemplatesSettings": (context) =>
             ReceiptTemplatesSettingsWidget(),
-        "/addReceipt": (context) => AddReceiptPage()
+        "/addReceipt": (context) => AddReceiptTemplateSelectionPage()
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {

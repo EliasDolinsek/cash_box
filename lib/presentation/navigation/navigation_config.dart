@@ -9,7 +9,7 @@ final pages = {
   "settingsWidget":SettingsWidget()
 };
 
-String selectedPage = "settingsWidget";
+String selectedPage = "overviewWidget";
 
 Widget get page {
   return pages[selectedPage];
