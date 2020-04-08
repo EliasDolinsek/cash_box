@@ -33,6 +33,15 @@ class _ReceiptTemplateDetailsPageState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    if(!_delete){
+      final event = UpdateTemplateEvent(widget.template.id, name: _name, fields: _fields);
+      sl<TemplatesBloc>().dispatch(event);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

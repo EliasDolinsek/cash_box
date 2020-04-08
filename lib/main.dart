@@ -1,8 +1,9 @@
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
+import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/navigation/web_navigation_page.dart';
-import 'package:cash_box/presentation/receipts/add_receipt_page.dart';
+import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
 import 'package:cash_box/presentation/receipts/add_receipt_template_selection_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
@@ -71,6 +72,9 @@ class CashBoxApp extends StatelessWidget {
         } else if(settings.name == "/receiptTemplatesSettings/templateDetails") {
           final template = settings.arguments;
           return MaterialPageRoute(builder: (_) => ReceiptTemplateDetailsPage(template));
+        } else if(settings.name == "/addReceipt/detailsInput") {
+          final fields = (settings.arguments as List).cast<Field>();
+          return MaterialPageRoute(builder: (_) => AddReceiptPage(fields: fields));
         } else {
           return MaterialPageRoute(
               builder: (_) => FailurePage("main_failure_no_route"));

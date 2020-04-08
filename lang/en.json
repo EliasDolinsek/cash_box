@@ -120,5 +120,6 @@
   "btn_add_receipt": "ADD RECEIPT",
   "txt_select_template": "Select template",
   "btn_edit_templates": "EDIT TEMPLATES",
-  "btn_skip": "SKIP"
+  "btn_skip": "SKIP",
+  "txt_new_receipt": "New receipt"
 }

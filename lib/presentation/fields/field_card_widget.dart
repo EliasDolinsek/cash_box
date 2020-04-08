@@ -2,6 +2,7 @@ import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
+import 'package:cash_box/presentation/widgets/content_card_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -66,24 +67,15 @@ class _FieldCardState extends State<FieldCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildTitleTypeBar(),
-            SizedBox(height: 8.0),
-            _buildValueInput(),
-            SizedBox(height: 8.0),
-            _buildFieldTypeSelectionChipsIfNessesscary(),
-            SizedBox(height: 8.0),
-            _checkAndBuildDeleteButton()
-          ],
-        ),
-      ),
+    return TitledListContentCardWidget(
+      title: _buildTitleTypeBar(),
+      items: <Widget>[
+        _buildValueInput(),
+        SizedBox(height: 8.0),
+        _buildFieldTypeSelectionChipsIfNessesscary(),
+        SizedBox(height: 8.0),
+        _checkAndBuildDeleteButton()
+      ],
     );
   }
 

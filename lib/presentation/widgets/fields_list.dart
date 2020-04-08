@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class AddReceiptPage extends StatelessWidget {
+class ResponsiveContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text("Test");
+    return Container();
   }
 }
