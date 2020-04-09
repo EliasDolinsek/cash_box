@@ -14,6 +14,7 @@ import 'package:cash_box/presentation/settings/tags/tag_details_page.dart';
 import 'package:cash_box/presentation/settings/tags/tags_settings_page.dart';
 import 'package:cash_box/presentation/static_widgets/failure_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/tags/tags_selection_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/auth_bloc/auth_bloc.dart';
@@ -63,7 +64,6 @@ class CashBoxApp extends StatelessWidget {
             ReceiptTemplatesSettingsWidget(),
         "/addReceipt": (context) => AddReceiptTemplateSelectionPage(),
         "/bucketSelection": (context) => BucketSelectionPage(),
-        "/tagsSelection": (context) => TagsSelectionPage()
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {
@@ -72,12 +72,25 @@ class CashBoxApp extends StatelessWidget {
         } else if (settings.name == "/tagsSettings/tagDetails") {
           final tag = settings.arguments;
           return MaterialPageRoute(builder: (_) => TagDetailsPage(tag));
-        } else if(settings.name == "/receiptTemplatesSettings/templateDetails") {
+        } else if (settings.name ==
+            "/receiptTemplatesSettings/templateDetails") {
           final template = settings.arguments;
-          return MaterialPageRoute(builder: (_) => ReceiptTemplateDetailsPage(template));
-        } else if(settings.name == "/addReceipt/detailsInput") {
+          return MaterialPageRoute(
+              builder: (_) => ReceiptTemplateDetailsPage(template));
+        } else if (settings.name == "/addReceipt/detailsInput") {
           final fields = (settings.arguments as List).cast<Field>();
-          return MaterialPageRoute(builder: (_) => AddReceiptPage(fields: fields));
+          return MaterialPageRoute(
+              builder: (_) => AddReceiptPage(fields: fields));
+        } else if (settings.name == "/tagsSelection") {
+          final Map params = settings.arguments;
+          final initialSelectedTagIds = params["initialSelectedTags"];
+          final onChanged = params["onChanged"];
+          return MaterialPageRoute(
+            builder: (_) => TagsSelectionPage(
+              selectedTags: initialSelectedTagIds,
+              onChanged: onChanged,
+            ),
+          );
         } else {
           return MaterialPageRoute(
               builder: (_) => FailurePage("main_failure_no_route"));

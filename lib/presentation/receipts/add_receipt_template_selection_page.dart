@@ -35,11 +35,7 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
           final data = snapshot.data;
           if (data is TemplatesAvailableState) {
             final templates = data.templates;
-            return SingleChildScrollView(
-              child: ResponsiveCardWidget(
-                child: _buildTemplatesList(context, templates),
-              ),
-            );
+            return _buildLoaded(context, templates);
           } else if (data is TemplatesErrorState) {
             templatesBloc.dispatch(GetTemplatesEvent());
             return ErrorWidget(data.errorMessage);
@@ -72,6 +68,18 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
     );
   }
 
+  Widget _buildLoaded(BuildContext context, List<Template> templates) {
+    if (templates.isNotEmpty) {
+      return SingleChildScrollView(child: _buildTemplatesList(context, templates));
+    } else {
+      return Center(
+        child: Text(
+          AppLocalizations.translateOf(context, "txt_no_templates"),
+        ),
+      );
+    }
+  }
+
   Widget _buildTemplatesList(BuildContext context, List<Template> templates) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -79,10 +87,12 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
         return TemplateListItem(
           template,
           onTap: () {
-            Navigator.of(context).pushNamed("/addReceipt/detailsInput", arguments: template.fields);
+            Navigator.of(context).pushNamed("/addReceipt/detailsInput",
+                arguments: template.fields);
           },
         );
       }).toList(),
     );
   }
+
 }

@@ -63,7 +63,7 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
         SizedBox(height: 8.0),
         MaterialButton(
           child: Text(AppLocalizations.translateOf(context, "btn_edit_tags")),
-          onPressed: () {},
+          onPressed: () => _showTagsSelectionPage(),
         ),
       ],
     );
@@ -91,9 +91,12 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
   }
 
   Widget _buildChipForTag(Tag tag, Function onDelete) {
-    return Chip(
-      label: Text(tag.name),
-      backgroundColor: tag.colorAsColor,
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: Chip(
+        label: Text(tag.name),
+        backgroundColor: tag.colorAsColor,
+      ),
     );
   }
 
@@ -107,5 +110,15 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
 
   void _loadTags() {
     sl<TagsBloc>().dispatch(GetTagsEvent());
+  }
+
+  void _showTagsSelectionPage() async {
+    Navigator.of(context).pushNamed("/tagsSelection", arguments: {
+      "onChanged": (selectedTags) {
+        print(selectedTags);
+        setState(() => tagIds = selectedTags);
+      },
+      "initialSelectedTags": tagIds
+    });
   }
 }
