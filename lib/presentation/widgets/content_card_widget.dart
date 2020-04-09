@@ -59,6 +59,12 @@ class TitledListContentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListContentCardWidget(items: [title]..addAll(items));
+    return ListContentCardWidget(
+        items: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: title,
+      )
+    ]..addAll(items));
   }
 }

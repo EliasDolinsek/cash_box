@@ -1,3 +1,5 @@
+import 'package:cash_box/app/injection.dart';
+import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
@@ -6,6 +8,7 @@ import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/widgets/content_card_widget.dart';
 import 'package:cash_box/presentation/widgets/receipts/receipt_type_selection_widget.dart';
 import 'package:cash_box/presentation/widgets/responsive_widget.dart';
+import 'package:cash_box/presentation/widgets/tags/tags_selection_widget.dart';
 import 'package:flutter/material.dart';
 
 class AddReceiptPage extends StatelessWidget {
@@ -48,6 +51,8 @@ class ReceiptDetailsPage extends StatefulWidget {
 }
 
 class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
+
+  List<String> tagIds;
   ReceiptType receiptType;
   DateTime creationDate;
 
@@ -56,6 +61,7 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
     super.initState();
     receiptType = widget.receipt.type;
     creationDate = widget.receipt.creationDate;
+    tagIds = widget.receipt.tagIDs;
   }
 
   @override
@@ -84,13 +90,35 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
 
   Widget get _defaultReceiptFields {
     return TitledListContentCardWidget(
-      title: Text("Receipt details"),
+      title: Text(
+        AppLocalizations.translateOf(context, "txt_receipt_details"),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+      ),
       items: [
         _receiptTypeSelection,
         SizedBox(height: 8.0),
         ReceiptCreationDateSelection(
           initialDateTime: creationDate,
           onUpdate: (update) => creationDate = update,
+        ),
+        SizedBox(height: 8.0),
+        _tagSelection
+      ],
+    );
+  }
+
+  Widget get _tagSelection {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          AppLocalizations.translateOf(context, "txt_tags"),
+          style: _titleStyle,
+        ),
+        SizedBox(height: 16.0),
+        TagsSelectionWidget(
+          initialTagIds: tagIds,
+          onChange: (updatedTagIds) => tagIds = updatedTagIds,
         )
       ],
     );
@@ -102,7 +130,7 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
       children: <Widget>[
         Text(
           AppLocalizations.translateOf(context, "txt_type"),
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: _titleStyle,
         ),
         ReceiptTypeSelectionWidget(
           initialReceiptType: widget.receipt.type,
@@ -112,6 +140,10 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
         ),
       ],
     );
+  }
+
+  TextStyle get _titleStyle {
+    return TextStyle(fontWeight: FontWeight.bold);
   }
 }
 

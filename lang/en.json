@@ -125,5 +125,9 @@
   "txt_income": "Income",
   "txt_outcome": "Outcome",
   "txt_date": "Date",
-  "txt_type": "Type"
+  "txt_type": "Type",
+  "txt_tags": "Tags",
+  "txt_receipt_details": "Receipt details",
+  "btn_edit_tags": "EDIT TAGS",
+  "txt_tags_selection": "Tags selection"
 }

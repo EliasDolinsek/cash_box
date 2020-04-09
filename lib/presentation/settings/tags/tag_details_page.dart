@@ -100,7 +100,7 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
           ),
           title: Text(localizations.translate("txt_color")),
           trailing: MaterialButton(
-            child: Text(localizations.translate("txt_change")),
+            child: Text(localizations.translate("btn_change")),
             onPressed: _showPickColorDialog,
           ),
         ),
