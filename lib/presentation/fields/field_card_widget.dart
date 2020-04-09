@@ -6,7 +6,7 @@ import 'package:cash_box/presentation/widgets/content_card_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
+import 'package:cash_box/core/platform/input_converter.dart';
 
 class FieldCard extends StatefulWidget {
   final Field field;
@@ -234,9 +234,9 @@ class _FieldCardState extends State<FieldCard> {
   }
 
   Widget _buildValueDateInput() {
-    final textChange = AppLocalizations.translateOf(context, "txt_change");
+    final textChange = AppLocalizations.translateOf(context, "btn_change");
     return MaterialButton(
-      child: Text(_dateFromValueAsReadableString() + " - " + textChange),
+      child: Text(InputConverter.dateFromValueAsReadableString(_value) + " - " + textChange),
       onPressed: () async {
         final date = await _getDateTimeFromDatePicker();
         if (date != null) {
@@ -247,9 +247,6 @@ class _FieldCardState extends State<FieldCard> {
     );
   }
 
-  String _dateFromValueAsReadableString() {
-    return DateFormat("EEEE dd.MM.yyyy").format(_value);
-  }
 
   Future<DateTime> _getDateTimeFromDatePicker() async {
     final initalDate =

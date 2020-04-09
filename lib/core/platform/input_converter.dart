@@ -1,8 +1,13 @@
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class InputConverter {
+
+  static String dateFromValueAsReadableString(DateTime value) {
+    return DateFormat("EEEE dd.MM.yyyy").format(value);
+  }
 
   static String validateEmail(BuildContext context, String email){
     print(EmailValidator.validate(email));

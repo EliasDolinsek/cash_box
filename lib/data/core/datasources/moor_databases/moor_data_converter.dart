@@ -159,10 +159,6 @@ ReceiptType receiptTypeFromString(String type) {
     return ReceiptType.income;
   } else if (type == ReceiptType.outcome.toString()) {
     return ReceiptType.outcome;
-  } else if (type == ReceiptType.bank_statement.toString()) {
-    return ReceiptType.bank_statement;
-  } else if (type == ReceiptType.investment.toString()) {
-    return ReceiptType.investment;
   } else {
     throw new Exception("Couldn't resolve ReceiptType from String $type");
   }

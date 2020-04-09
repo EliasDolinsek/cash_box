@@ -1,6 +1,7 @@
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
+import 'package:cash_box/presentation/buckets_selection_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/navigation/web_navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
@@ -60,7 +61,8 @@ class CashBoxApp extends StatelessWidget {
         "/tagsSettings": (context) => TagsSettingsPage(),
         "/receiptTemplatesSettings": (context) =>
             ReceiptTemplatesSettingsWidget(),
-        "/addReceipt": (context) => AddReceiptTemplateSelectionPage()
+        "/addReceipt": (context) => AddReceiptTemplateSelectionPage(),
+        "/bucketSelection": (context) => BucketSelectionPage()
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {

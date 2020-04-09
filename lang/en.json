@@ -88,7 +88,7 @@
   "btn_add_field": "ADD FIELD",
   "btn_select_date": "SELECT DATE",
   "btn_delete": "DELETE",
-  "txt_change": "CHANGE",
+  "btn_change": "CHANGE",
   "txt_confirm_deletion": "Confirm deletion",
   "txt_new_contact": "New contact",
   "txt_adding_new_contact": "Adding new contact ...",
@@ -121,5 +121,9 @@
   "txt_select_template": "Select template",
   "btn_edit_templates": "EDIT TEMPLATES",
   "btn_skip": "SKIP",
-  "txt_new_receipt": "New receipt"
+  "txt_new_receipt": "New receipt",
+  "txt_income": "Income",
+  "txt_outcome": "Outcome",
+  "txt_date": "Date",
+  "txt_type": "Type"
 }

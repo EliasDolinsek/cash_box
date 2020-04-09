@@ -49,7 +49,5 @@ T _$enumDecode<T>(
 
 const _$ReceiptTypeEnumMap = {
   ReceiptType.income: 'income',
-  ReceiptType.outcome: 'outcome',
-  ReceiptType.investment: 'investment',
-  ReceiptType.bank_statement: 'bank_statement',
+  ReceiptType.outcome: 'outcome'
 };

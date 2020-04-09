@@ -3,6 +3,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/buckets/buckets_card_widget.dart';
 import 'package:flutter/material.dart';
 
 class OverviewWidget extends StatefulWidget {
@@ -68,54 +69,8 @@ class BucketsOverviewListWidget extends StatelessWidget {
     return ListView.separated(
       padding: EdgeInsets.all(4.0),
       itemCount: buckets.length,
-      itemBuilder: (_, index) => BucketCardWidget(buckets[index]),
+      itemBuilder: (_, index) => BucketListItemCardWidget(buckets[index]),
       separatorBuilder: (_, __) => SizedBox(height: 0.0),
     );
-  }
-}
-
-
-class BucketCardWidget extends StatelessWidget {
-
-  final Bucket bucket;
-
-  const BucketCardWidget(this.bucket, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      child: ListTile(
-        title: Text(_getTitle(context)),
-        subtitle: Text(_getSubtitle(context)),
-        leading: CircleAvatar(
-          child: Text(_getLeadingText()),
-        ),
-      ),
-    );
-  }
-
-  String _getTitle(BuildContext context){
-    if(bucket.name == null || bucket.name.isEmpty){
-      return AppLocalizations.translateOf(context, "unnamed");
-    } else {
-      return bucket.name;
-    }
-  }
-
-  String _getSubtitle(BuildContext context){
-    if(bucket.description == null || bucket.description.isEmpty){
-      return AppLocalizations.translateOf(context, "txt_no_description");
-    } else {
-      return bucket.name;
-    }
-  }
-
-  String _getLeadingText(){
-    if(bucket.name == null || bucket.name.isEmpty){
-      return "?";
-    } else {
-      return bucket.name.substring(0,2);
-    }
   }
 }

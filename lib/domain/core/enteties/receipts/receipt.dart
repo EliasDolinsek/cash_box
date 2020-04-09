@@ -54,4 +54,4 @@ class Receipt extends UniqueComponent {
   }
 }
 
-enum ReceiptType { income, outcome, investment, bank_statement }
+enum ReceiptType { income, outcome }
