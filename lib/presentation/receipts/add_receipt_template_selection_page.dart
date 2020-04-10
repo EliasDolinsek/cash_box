@@ -3,7 +3,6 @@ import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:cash_box/presentation/widgets/template_list_item.dart';
 import 'package:flutter/material.dart';
 
@@ -87,7 +86,7 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
         return TemplateListItem(
           template,
           onTap: () {
-            Navigator.of(context).pushNamed("/addReceipt/detailsInput",
+            Navigator.of(context).pushReplacementNamed("/addReceipt/detailsInput",
                 arguments: template.fields);
           },
         );

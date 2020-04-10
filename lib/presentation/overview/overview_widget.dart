@@ -3,7 +3,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/buckets/buckets_card_widget.dart';
+import 'package:cash_box/presentation/buckets/widgets/buckets_card_widget.dart';
 import 'package:flutter/material.dart';
 
 class OverviewWidget extends StatefulWidget {

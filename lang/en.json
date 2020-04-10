@@ -129,5 +129,10 @@
   "txt_tags": "Tags",
   "txt_receipt_details": "Receipt details",
   "btn_edit_tags": "EDIT TAGS",
-  "txt_tags_selection": "Tags selection"
+  "txt_tags_selection": "Tags selection",
+  "txt_could_not_load_bucket": "Couldn't load buckets",
+  "txt_bucket": "Bucket",
+  "btn_select_bucket": "SELECT BUCKET",
+  "txt_bucket_selection": "Bucket selection",
+  "btn_select_none": "SELECT NONE"
 }

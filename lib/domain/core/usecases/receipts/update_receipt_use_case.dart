@@ -29,7 +29,7 @@ class UpdateReceiptUseCase
       UpdateReceiptUseCaseParams params) {
     return Receipt(params.id, type: params.type ?? receipt.type,
         fields: params.fields ?? receipt.fields,
-        creationDate: receipt.creationDate,
+        creationDate: params.creationDate ?? receipt.creationDate,
         tagIDs: params.tagIDs ?? receipt.tagIDs);
   }
 
@@ -47,6 +47,7 @@ class UpdateReceiptUseCaseParams {
   final ReceiptType type;
   final List<Field> fields;
   final List<String> tagIDs;
+  final DateTime creationDate;
 
-  UpdateReceiptUseCaseParams(this.id, {this.type, this.fields, this.tagIDs});
+  UpdateReceiptUseCaseParams(this.id, {this.type, this.fields, this.tagIDs, this.creationDate});
 }

@@ -14,15 +14,6 @@ class AddReceiptEvent extends ReceiptsEvent {
   List get props => [receipt];
 }
 
-class GetReceiptEvent extends ReceiptsEvent {
-  final String receiptID;
-
-  GetReceiptEvent(this.receiptID);
-
-  @override
-  List get props => [receiptID];
-}
-
 class GetReceiptsInReceiptMonthEvent extends ReceiptsEvent {
   final ReceiptMonth receiptMonth;
 
@@ -35,12 +26,14 @@ class GetReceiptsInReceiptMonthEvent extends ReceiptsEvent {
 class GetReceiptsEvent extends ReceiptsEvent {}
 
 class UpdateReceiptEvent extends ReceiptsEvent {
+
   final String id;
   final ReceiptType type;
   final List<Field> fields;
   final List<String> tagIDs;
+  final DateTime creationDate;
 
-  UpdateReceiptEvent(this.id, {this.type, this.fields, this.tagIDs});
+  UpdateReceiptEvent(this.id, {this.type, this.fields, this.tagIDs, this.creationDate});
 
   @override
   List get props => [id, type, fields, tagIDs];

@@ -13,9 +13,7 @@ import './bloc.dart';
 import 'package:meta/meta.dart';
 
 class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
-
   final AddReceiptUseCase addReceiptUseCase;
-  final GetReceiptUseCase getReceiptUseCase;
   final GetReceiptsUseCase getReceiptsUseCase;
   final GetReceiptsInReceiptMonthUseCase getReceiptsInReceiptMonthUseCase;
   final UpdateReceiptUseCase updateReceiptUseCase;
@@ -24,7 +22,6 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
 
   ReceiptsBloc(
       {@required this.addReceiptUseCase,
-      @required this.getReceiptUseCase,
       @required this.getReceiptsUseCase,
       @required this.getReceiptsInReceiptMonthUseCase,
       @required this.updateReceiptUseCase,
@@ -42,8 +39,6 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
       final params = AddReceiptUseCaseParams(event.receipt);
       await addReceiptUseCase(params);
       dispatch(GetReceiptsEvent());
-    } else if (event is GetReceiptEvent) {
-      yield await _getReceipt(event);
     } else if (event is GetReceiptsEvent) {
       yield await _getReceipts();
     } else if (event is GetReceiptsInReceiptMonthEvent) {
@@ -52,7 +47,7 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
     } else if (event is UpdateReceiptEvent) {
       await _updateReceipt(event);
       dispatch(GetReceiptsEvent());
-    } else if(event is RemoveReceiptEvent){
+    } else if (event is RemoveReceiptEvent) {
       final params = RemoveReceiptUseCaseParams(event.receiptID);
       await removeReceiptUseCase(params);
       dispatch(GetReceiptsEvent());
@@ -60,15 +55,13 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
   }
 
   Future _updateReceipt(UpdateReceiptEvent event) async {
-    final params = UpdateReceiptUseCaseParams(event.id, type: event.type, fields: event.fields, tagIDs: event.tagIDs);
-    await updateReceiptUseCase(params);
-  }
+    final params = UpdateReceiptUseCaseParams(event.id,
+        type: event.type,
+        fields: event.fields,
+        tagIDs: event.tagIDs,
+        creationDate: event.creationDate);
 
-  Future<ReceiptsState> _getReceipt(GetReceiptEvent event) async {
-    final params = GetReceiptUseCaseParams(event.receiptID);
-    final receiptEither = await getReceiptUseCase(params);
-    return receiptEither.fold((l) => ReceiptsErrorState(l.toString()),
-        (receipt) => ReceiptAvailableState(receipt));
+    await updateReceiptUseCase(params);
   }
 
   Future<ReceiptsState> _getReceipts() async {

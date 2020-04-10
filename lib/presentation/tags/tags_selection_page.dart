@@ -3,6 +3,7 @@ import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsSelectionPage extends StatelessWidget {
@@ -47,10 +48,12 @@ class TagsSelectionPage extends StatelessWidget {
 
   Widget _buildLoaded(BuildContext context, List<Tag> tags) {
     if (tags.isNotEmpty) {
-      return _TagsSelectionWidget(
-        tags: tags,
-        initialSelectedTags: selectedTags,
-        onChanged: onChanged
+      return ResponsiveCardWidget(
+        child: _TagsSelectionWidget(
+          tags: tags,
+          initialSelectedTags: selectedTags,
+          onChanged: onChanged
+        ),
       );
     } else {
       return Center(

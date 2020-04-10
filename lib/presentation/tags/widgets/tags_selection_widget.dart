@@ -3,6 +3,7 @@ import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
+import 'package:cash_box/presentation/static_widgets/loading_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsSelectionWidget extends StatefulWidget {
@@ -39,10 +40,10 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
             return _buildError(state.errorMessage);
           } else {
             _loadTags();
-            return _buildLoading();
+            return LoadingTextWidget();
           }
         } else {
-          return _buildLoading();
+          return LoadingTextWidget();
         }
       },
     );
@@ -52,25 +53,21 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
     final usableTags =
         allTags.where((element) => tagIds.contains(element.id)).toList();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Builder(builder: (_) {
           if (usableTags.isNotEmpty) {
             return _buildTags(usableTags);
           } else {
-            return _buildNoTags();
+            return Container();
           }
         }),
-        SizedBox(height: 8.0),
         MaterialButton(
           child: Text(AppLocalizations.translateOf(context, "btn_edit_tags")),
           onPressed: () => _showTagsSelectionPage(),
         ),
       ],
     );
-  }
-
-  Widget _buildNoTags() {
-    return Text(AppLocalizations.translateOf(context, "no_tags"));
   }
 
   Widget _buildTags(List<Tag> tags) {
@@ -84,10 +81,6 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
 
   Widget _buildError(String errorMessage) {
     return Center(child: Text(errorMessage));
-  }
-
-  Widget _buildLoading() {
-    return Text(AppLocalizations.translateOf(context, "txt_loading"));
   }
 
   Widget _buildChipForTag(Tag tag, Function onDelete) {
@@ -115,8 +108,8 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
   void _showTagsSelectionPage() async {
     Navigator.of(context).pushNamed("/tagsSelection", arguments: {
       "onChanged": (selectedTags) {
-        print(selectedTags);
         setState(() => tagIds = selectedTags);
+        widget.onChange(tagIds);
       },
       "initialSelectedTags": tagIds
     });

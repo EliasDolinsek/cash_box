@@ -258,11 +258,11 @@ Future init() async {
   sl.registerLazySingleton(
     () => ReceiptsBloc(
         addReceiptUseCase: sl(),
-        getReceiptUseCase: sl(),
         getReceiptsUseCase: sl(),
         getReceiptsInReceiptMonthUseCase: sl(),
         updateReceiptUseCase: sl(),
-        removeReceiptUseCase: sl()),
+        removeReceiptUseCase: sl(),
+        receiptMonthBloc: sl()),
   );
 
   //
@@ -341,7 +341,8 @@ Future init() async {
   //
 
   // DataSources
-  sl.registerLazySingleton<BucketsLocalMobileDataSource>(() => BucketsLocalMobileDataSourceMoorImpl(sl()));
+  sl.registerLazySingleton<BucketsLocalMobileDataSource>(
+      () => BucketsLocalMobileDataSourceMoorImpl(sl()));
 
   sl.registerLazySingleton<BucketsRemoteFirebaseDataSource>(
       () => BucketsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));

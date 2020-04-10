@@ -1,7 +1,7 @@
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
-import 'package:cash_box/presentation/buckets_selection_page.dart';
+import 'package:cash_box/presentation/buckets/buckets_selection_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/navigation/web_navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
@@ -63,7 +63,6 @@ class CashBoxApp extends StatelessWidget {
         "/receiptTemplatesSettings": (context) =>
             ReceiptTemplatesSettingsWidget(),
         "/addReceipt": (context) => AddReceiptTemplateSelectionPage(),
-        "/bucketSelection": (context) => BucketSelectionPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {
@@ -88,6 +87,16 @@ class CashBoxApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (_) => TagsSelectionPage(
               selectedTags: initialSelectedTagIds,
+              onChanged: onChanged,
+            ),
+          );
+        } else if (settings.name == "/bucketSelection") {
+          final Map params = settings.arguments;
+          final initialSelectedBucketId = params["initialSelectedBucketId"];
+          final onChanged = params["onChanged"];
+          return MaterialPageRoute(
+            builder: (_) => BucketSelectionPage(
+              initialSelectedBucketId: initialSelectedBucketId,
               onChanged: onChanged,
             ),
           );
