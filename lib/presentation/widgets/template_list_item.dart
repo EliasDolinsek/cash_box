@@ -32,7 +32,11 @@ class TemplateListItem extends StatelessWidget {
       return localizations.translate("txt_no_fields");
     } else {
       return template.fields.map((f) {
-        return f.description;
+        if(f.description.trim().isEmpty){
+          return AppLocalizations.translateOf(context, "unnamed");
+        } else {
+          return f.description;
+        }
       }).join(" · ");
     }
   }
