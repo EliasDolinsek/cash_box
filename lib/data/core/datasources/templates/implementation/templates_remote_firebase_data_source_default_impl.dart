@@ -43,7 +43,6 @@ class TemplatesRemoteFirebaseDataSourceDefaultImpl implements TemplatesRemoteFir
 
   @override
   Future<void> updateType(String id, Template update) async {
-    print(update.toJson());
     await baseCollection.document(id).setData(update.toJson());
     templates = null;
   }

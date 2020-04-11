@@ -19,5 +19,5 @@ Template _$TemplateFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$TemplateToJson(Template instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'fields': instance.fields,
+      'fields': instance.fields.map((e) => e.toJson()).toList(),
     };
