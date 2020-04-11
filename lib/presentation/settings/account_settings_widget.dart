@@ -139,7 +139,9 @@ class _DataStorageLocationTileState extends State<DataStorageLocationTile> {
     showDialog(
       context: context,
       builder: (_) {
-        return DataStorageLocationSelectionDialog();
+        return DataStorageLocationSelectionDialog(
+          onChanged: () => setState((){}),
+        );
       },
     );
   }

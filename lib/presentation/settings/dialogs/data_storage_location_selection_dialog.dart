@@ -4,6 +4,11 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class DataStorageLocationSelectionDialog extends StatelessWidget {
+
+  final Function onChanged;
+
+  const DataStorageLocationSelectionDialog({Key key, this.onChanged}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -34,6 +39,7 @@ class DataStorageLocationSelectionDialog extends StatelessWidget {
   }
 
   void _onChanged(DataStorageLocation location) {
+    if(onChanged != null) onChanged();
     sl<Config>().setDataStorageLocation(location);
   }
 
