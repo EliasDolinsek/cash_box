@@ -9,6 +9,7 @@ import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
 import 'package:cash_box/presentation/settings/password_settings_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AccountSettingsWidget extends StatelessWidget {
   @override
@@ -36,12 +37,24 @@ class AccountSettingsWidget extends StatelessWidget {
               height: 16.0,
             ),
             SubscriptionTile(),
-            SizedBox(height: 16.0),
-            DataStorageLocationTile(),
+            _buildDataStorageLocationTile()
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildDataStorageLocationTile(){
+    if(kIsWeb){
+      return Container();
+    } else {
+      return Column(
+        children: <Widget>[
+          SizedBox(height: 16.0),
+          DataStorageLocationTile()
+        ],
+      );
+    }
   }
 }
 
