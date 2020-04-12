@@ -22,7 +22,7 @@ Map<String, dynamic> _$ReceiptToJson(Receipt instance) => <String, dynamic>{
       'id': instance.id,
       'type': _$ReceiptTypeEnumMap[instance.type],
       'creationDate': instance.creationDate.toIso8601String(),
-      'fields': instance.fields,
+      'fields': instance.fields.map((e) => e.toJson()).toList(),
       'tagIDs': instance.tagIDs,
     };
 

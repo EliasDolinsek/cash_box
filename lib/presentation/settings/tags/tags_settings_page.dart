@@ -1,13 +1,9 @@
-import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
-import 'package:cash_box/core/platform/entetie_converter.dart';
-import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
-import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsSettingsPage extends StatelessWidget {
@@ -82,28 +78,7 @@ class _TagsAvailableSettingsWidgetState extends State<TagsAvailableSettingsWidge
   @override
   Widget build(BuildContext context) {
     if (widget.tags.isEmpty) return _buildNoTags();
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 600) {
-          return Container(
-            constraints: BoxConstraints(maxWidth: 800),
-            child: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 1,
-                    child: _buildLoaded(),
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          return SingleChildScrollView(child: _buildLoaded());
-        }
-      },
-    );
+    return Center(child: ResponsiveCardWidget(child: _buildLoaded()));
   }
 
   Widget _buildNoTags() {

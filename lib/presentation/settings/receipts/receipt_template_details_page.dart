@@ -6,6 +6,7 @@ import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
+import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptTemplateDetailsPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _ReceiptTemplateDetailsPageState
         backgroundColor: Colors.white,
         actions: <Widget>[_buildDeleteButton()],
       ),
-      body: _buildListView(),
+      body: Center(child: ResponsiveWidget(child: _buildListView())),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _addEmptyField,
@@ -69,6 +70,7 @@ class _ReceiptTemplateDetailsPageState
 
   Widget _buildListView() {
     return ReorderableListView(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
       header: _buildNameFieldCardWidget(),
       onReorder: (oldIndex, newIndex) {
         setState(() {

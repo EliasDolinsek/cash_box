@@ -1,8 +1,10 @@
 import 'package:cash_box/app/injection.dart';
+import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
@@ -41,11 +43,18 @@ class AddReceiptPage extends StatelessWidget {
         if (snapshot.hasData) {
           final data = snapshot.data;
           if (data is ReceiptsAvailableState) {
+            if(data.receipts == null) return LoadingWidget();
+            return _buildContentForReceiptFromReceiptsList(
+                receiptID, data.receipts);
+          } else if(data is ReceiptsInReceiptMonthAvailableState) {
+            if(data.receipts == null) return LoadingWidget();
             return _buildContentForReceiptFromReceiptsList(
                 receiptID, data.receipts);
           } else if (data is ReceiptsErrorState) {
+            _loadReceipts();
             return ErrorWidget(data.errorMessage);
           } else {
+            _loadReceipts();
             return LoadingWidget();
           }
         } else {
@@ -73,9 +82,17 @@ class AddReceiptPage extends StatelessWidget {
     final receipt = receipts.firstWhere((element) => element.id == receiptID,
         orElse: () => null);
     if (receipt != null) {
-      return ReceiptDetailsPage(receipt);
+      return Center(child: ReceiptDetailsPage(receipt));
     } else {
       return LoadingWidget();
+    }
+  }
+
+  void _loadReceipts() async {
+    final state = await sl<ReceiptMonthBloc>().state.first;
+    if(state is ReceiptMonthAvailableState){
+      final event = GetReceiptsInReceiptMonthEvent(ReceiptMonth(state.month));
+      sl<ReceiptsBloc>().dispatch(event);
     }
   }
 }

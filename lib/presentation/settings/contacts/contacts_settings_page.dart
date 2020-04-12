@@ -3,6 +3,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
 class ContactsSettingsPage extends StatelessWidget {
@@ -67,37 +68,21 @@ class ContactsSettingsPage extends StatelessWidget {
 class ContactsAvailableSettingsWidget extends StatefulWidget {
   final List<Contact> contacts;
 
-  const ContactsAvailableSettingsWidget(this.contacts, {Key key}) : super(key: key);
+  const ContactsAvailableSettingsWidget(this.contacts, {Key key})
+      : super(key: key);
 
   @override
-  _ContactsAvailableSettingsWidgetState createState() => _ContactsAvailableSettingsWidgetState();
+  _ContactsAvailableSettingsWidgetState createState() =>
+      _ContactsAvailableSettingsWidgetState();
 }
 
-class _ContactsAvailableSettingsWidgetState extends State<ContactsAvailableSettingsWidget> {
+class _ContactsAvailableSettingsWidgetState
+    extends State<ContactsAvailableSettingsWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.contacts.isEmpty) return _buildNoContacts();
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 600) {
-          return Container(
-            constraints: BoxConstraints(maxWidth: 800),
-            child: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 1,
-                    child: _buildLoaded(),
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          return SingleChildScrollView(child: _buildLoaded());
-        }
-      },
+    return ResponsiveCardWidget(
+      child: _buildLoaded(),
     );
   }
 
@@ -150,7 +135,11 @@ class ContactListItem extends StatelessWidget {
       return localizations.translate("txt_no_fields");
     } else {
       return contact.fields.map((f) {
-        return f.description;
+        if (f.description.trim().isEmpty) {
+          return AppLocalizations.translateOf(context, "unnamed");
+        } else {
+          return f.description;
+        }
       }).join(" · ");
     }
   }
