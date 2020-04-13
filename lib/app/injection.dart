@@ -3,6 +3,7 @@ import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
+import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
@@ -65,6 +66,7 @@ import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dar
 import 'package:cash_box/domain/core/usecases/contacts/remove_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/update_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/filter_receipts_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_use_case.dart';
@@ -375,4 +377,14 @@ Future init() async {
         removeReceiptFromBucketUseCase: sl(),
         updateBucketUseCase: sl()),
   );
+
+  //
+  // Search
+  //
+
+  // UseCases
+  sl.registerLazySingleton(() => FilterReceiptsUseCase(sl()));
+
+  // BLoC
+  sl.registerLazySingleton(() => SearchBloc(filterReceiptsUseCase: sl()));
 }

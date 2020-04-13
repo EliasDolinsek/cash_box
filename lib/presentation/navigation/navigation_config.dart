@@ -1,12 +1,13 @@
 import 'package:cash_box/presentation/overview/overview_widget.dart';
+import 'package:cash_box/presentation/search/search_widget.dart';
 import 'package:cash_box/presentation/settings/settings_widget.dart';
 import 'package:flutter/material.dart';
 
 final pages = {
-  "overviewWidget":OverviewWidget(),
-  "searchWidget":Text("SEARCH"),
-  "statisticsWidget":Text("STATISTICS"),
-  "settingsWidget":SettingsWidget()
+  "overviewWidget": OverviewWidget(),
+  "searchWidget": SearchWidget(),
+  "statisticsWidget": Text("STATISTICS"),
+  "settingsWidget": SettingsWidget()
 };
 
 String selectedPage = "overviewWidget";
@@ -29,6 +30,6 @@ Color getColorForNavigationPage(String name, BuildContext context) {
   }
 }
 
-Color getSelectedColor(BuildContext context){
+Color getSelectedColor(BuildContext context) {
   return Theme.of(context).primaryColorDark;
 }

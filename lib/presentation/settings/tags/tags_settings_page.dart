@@ -35,7 +35,7 @@ class TagsSettingsPage extends StatelessWidget {
               return TagsAvailableSettingsWidget(data.tags);
             } else if (data is TagsErrorState) {
               tagsBloc.dispatch(GetTagsEvent());
-              return Text("ERROR");
+              return ErrorWidget(data.errorMessage);
             } else {
               tagsBloc.dispatch(GetTagsEvent());
               return LoadingWidget();
