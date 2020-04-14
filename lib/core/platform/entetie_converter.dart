@@ -33,6 +33,25 @@ String getFieldTypeAsString(FieldType type, AppLocalizations localizations){
   }
 }
 
+String getFieldValueFromFieldAsString(Field field){
+  return getFieldValueAsString(field.value, field.type);
+}
+
+String getFieldValueAsString(dynamic value, FieldType fieldType){
+  switch(fieldType){
+    case FieldType.text: return value;
+    case FieldType.file: return value.toString();
+    case FieldType.date: return getMonthAsReadableReceiptMonth(value);
+    case FieldType.amount: return value.toString();
+    case FieldType.image: return value.toString();
+    default: return value.toString();
+  }
+}
+
 String getMonthAsReadableReceiptMonth(DateTime dateTime){
   return DateFormat("MMMM yyyy").format(dateTime);
+}
+
+String getDateAsReadableDate(DateTime dateTime){
+  return DateFormat.yMd("de").format(dateTime);
 }
