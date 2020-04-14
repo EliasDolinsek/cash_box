@@ -43,11 +43,11 @@ class AddReceiptPage extends StatelessWidget {
         if (snapshot.hasData) {
           final data = snapshot.data;
           if (data is ReceiptsAvailableState) {
-            if(data.receipts == null) return LoadingWidget();
+            if (data.receipts == null) return LoadingWidget();
             return _buildContentForReceiptFromReceiptsList(
                 receiptID, data.receipts);
-          } else if(data is ReceiptsInReceiptMonthAvailableState) {
-            if(data.receipts == null) return LoadingWidget();
+          } else if (data is ReceiptsInReceiptMonthAvailableState) {
+            if (data.receipts == null) return LoadingWidget();
             return _buildContentForReceiptFromReceiptsList(
                 receiptID, data.receipts);
           } else if (data is ReceiptsErrorState) {
@@ -82,7 +82,7 @@ class AddReceiptPage extends StatelessWidget {
     final receipt = receipts.firstWhere((element) => element.id == receiptID,
         orElse: () => null);
     if (receipt != null) {
-      return Center(child: ReceiptDetailsPage(receipt));
+      return Center(child: ReceiptDetailsWidget(receipt));
     } else {
       return LoadingWidget();
     }
@@ -90,25 +90,98 @@ class AddReceiptPage extends StatelessWidget {
 
   void _loadReceipts() async {
     final state = await sl<ReceiptMonthBloc>().state.first;
-    if(state is ReceiptMonthAvailableState){
+    if (state is ReceiptMonthAvailableState) {
       final event = GetReceiptsInReceiptMonthEvent(ReceiptMonth(state.month));
       sl<ReceiptsBloc>().dispatch(event);
     }
   }
 }
 
-class ReceiptDetailsPage extends StatefulWidget {
-  final Receipt receipt;
-  final Function(Receipt update) onUpdate;
+class EditReceiptPage extends StatelessWidget {
+  final String receiptId;
 
-  const ReceiptDetailsPage(this.receipt, {Key key, this.onUpdate})
-      : super(key: key);
+  const EditReceiptPage({Key key, @required this.receiptId}) : super(key: key);
 
   @override
-  _ReceiptDetailsPageState createState() => _ReceiptDetailsPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(
+          AppLocalizations.translateOf(context, "txt_edit_receipt"),
+        ),
+      ),
+      body: _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return StreamBuilder(
+      stream: sl<ReceiptsBloc>().state,
+      builder: (_, AsyncSnapshot<ReceiptsState> snapshot) {
+        if (snapshot.hasData) {
+          final data = snapshot.data;
+          if (data is ReceiptsAvailableState) {
+            if (data.receipts == null) return LoadingWidget();
+            return _buildContentForReceiptFromReceiptsList(
+                context, receiptId, data.receipts);
+          } else if (data is ReceiptsInReceiptMonthAvailableState) {
+            if (data.receipts == null) return LoadingWidget();
+            return _buildContentForReceiptFromReceiptsList(
+                context, receiptId, data.receipts);
+          } else if (data is ReceiptsErrorState) {
+            _loadReceipts();
+            return ErrorWidget(data.errorMessage);
+          } else {
+            _loadReceipts();
+            return LoadingWidget();
+          }
+        } else {
+          return LoadingWidget();
+        }
+      },
+    );
+  }
+
+  Widget _buildContentForReceiptFromReceiptsList(
+      BuildContext context, String receiptID, List<Receipt> receipts) {
+    final receipt = receipts.firstWhere((element) => element.id == receiptID,
+        orElse: () => null);
+
+    return Center(
+      child: Builder(
+        builder: (_){
+          if (receipt != null) {
+            return ReceiptDetailsWidget(receipt);
+          } else {
+            return ErrorWidget(
+              AppLocalizations.translateOf(context, "txt_could_not_load_receipt"),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  void _loadReceipts() async {
+    final state = await sl<ReceiptMonthBloc>().state.first;
+    if (state is ReceiptMonthAvailableState) {
+      final event = GetReceiptsInReceiptMonthEvent(ReceiptMonth(state.month));
+      sl<ReceiptsBloc>().dispatch(event);
+    }
+  }
 }
 
-class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
+class ReceiptDetailsWidget extends StatefulWidget {
+  final Receipt receipt;
+
+  const ReceiptDetailsWidget(this.receipt, {Key key}) : super(key: key);
+
+  @override
+  _ReceiptDetailsWidgetState createState() => _ReceiptDetailsWidgetState();
+}
+
+class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
   List<Field> fields;
   List<String> tagIds;
   ReceiptType receiptType;
@@ -133,6 +206,7 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
   Widget build(BuildContext context) {
     return ResponsiveWidget(
       child: ListView(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
         shrinkWrap: true,
         children: _receiptFieldsAsItems(),
       ),
@@ -248,13 +322,11 @@ class _ReceiptDetailsPageState extends State<ReceiptDetailsPage> {
   }
 
   void _updateReceipt() {
-    final event = UpdateReceiptEvent(
-      widget.receipt.id,
-      type: receiptType,
-      fields: fields,
-      tagIDs: tagIds,
-      creationDate: creationDate
-    );
+    final event = UpdateReceiptEvent(widget.receipt.id,
+        type: receiptType,
+        fields: fields,
+        tagIDs: tagIds,
+        creationDate: creationDate);
 
     sl<ReceiptsBloc>().dispatch(event);
   }

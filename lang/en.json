@@ -137,6 +137,8 @@
   "btn_select_none": "SELECT NONE",
   "txt_search": "Search",
   "txt_no_search_result": "No search result",
-  "txt_could_not_load_tags": "Couldn't load tags"
+  "txt_could_not_load_tags": "Couldn't load tags",
+  "txt_edit_receipt": "Edit receipt",
+  "txt_could_not_load_receipt": "Couldn't load receipt"
 
 }

@@ -4,15 +4,22 @@ import 'package:flutter/material.dart';
 
 class ReceiptsOverviewWidget extends StatelessWidget {
   final List<Receipt> receipts;
+  final Function(Receipt receipt) onTap;
 
-  const ReceiptsOverviewWidget({Key key, @required this.receipts})
+  const ReceiptsOverviewWidget({Key key, @required this.receipts, this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children:
-          receipts.map((receipt) => ReceiptListItem(receipt: receipt)).toList(),
+      children: receipts
+          .map(
+            (receipt) => ReceiptListItem(
+              receipt: receipt,
+              onTap: () => onTap(receipt),
+            ),
+          )
+          .toList(),
     );
   }
 }

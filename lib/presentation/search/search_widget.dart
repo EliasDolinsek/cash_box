@@ -146,7 +146,14 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   Widget _buildLoaded(List<Receipt> receipts) {
     if (receipts.isNotEmpty) {
-      return ReceiptsOverviewWidget(receipts: receipts);
+      return ReceiptsOverviewWidget(
+        receipts: receipts,
+        onTap: (receipt) => Navigator.pushNamed(
+          context,
+          "/editReceipt",
+          arguments: receipt.id,
+        ),
+      );
     } else {
       return _buildNoSearchResults();
     }

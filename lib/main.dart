@@ -80,6 +80,9 @@ class CashBoxApp extends StatelessWidget {
           final fields = (settings.arguments as List).cast<Field>();
           return MaterialPageRoute(
               builder: (_) => AddReceiptPage(fields: fields));
+        } else if(settings.name == "/editReceipt"){
+          final receiptId = settings.arguments;
+          return MaterialPageRoute(builder: (_) => EditReceiptPage(receiptId: receiptId));
         } else if (settings.name == "/tagsSelection") {
           final Map params = settings.arguments;
           final initialSelectedTagIds = params["initialSelectedTags"];

@@ -5,12 +5,14 @@ import 'package:cash_box/core/platform/entetie_converter.dart' as converter;
 
 class ReceiptListItem extends StatelessWidget {
   final Receipt receipt;
+  final Function onTap;
 
-  const ReceiptListItem({Key key, @required this.receipt}) : super(key: key);
+  const ReceiptListItem({Key key, @required this.receipt, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       leading: CircleAvatar(
         child: Icon(_getIconForReceiptType()),
       ),
