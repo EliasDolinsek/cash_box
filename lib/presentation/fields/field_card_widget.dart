@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:intl/intl.dart';
 
 class FieldCard extends StatefulWidget {
   final Field field;
@@ -57,6 +59,8 @@ class _FieldCardState extends State<FieldCard> {
       }
     } else if (_type == FieldType.text && _value == null) {
       _value = "";
+    } else if(_type == FieldType.amount && _value == null){
+      _value = 0.0;
     }
   }
 
@@ -96,7 +100,7 @@ class _FieldCardState extends State<FieldCard> {
   void _showDeleteButton() async {
     final result =
         await showDialog(context: context, builder: (_) => DeleteDialog());
-    if(result != null && result){
+    if (result != null && result) {
       widget.onDelete();
     }
   }
@@ -145,7 +149,7 @@ class _FieldCardState extends State<FieldCard> {
   void _resetValue() {
     switch (_type) {
       case FieldType.amount:
-        _value = 0;
+        _value = 0.0;
         break;
       case FieldType.date:
         _value = DateTime.now();
@@ -207,7 +211,7 @@ class _FieldCardState extends State<FieldCard> {
   Widget _buildValueInput() {
     switch (_type) {
       case FieldType.amount:
-        return Text("NOT SUPPORTED YET");
+        return _buildValueAmountInput();
       case FieldType.date:
         return _buildValueDateInput();
       case FieldType.image:
@@ -217,6 +221,34 @@ class _FieldCardState extends State<FieldCard> {
       case FieldType.file:
         return Text("NOT SUPPORTED YET");
     }
+  }
+
+  Widget _buildValueAmountInput() {
+    return TextField(
+      controller: _getMoneyController(),
+      keyboardType:
+          TextInputType.numberWithOptions(signed: true, decimal: true),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: AppLocalizations.translateOf(context, "field_input_value"),
+      ),
+    );
+  }
+
+  MoneyMaskedTextController _getMoneyController(){
+    final controller = MoneyMaskedTextController(
+        decimalSeparator: ",",
+        thousandSeparator: ".",
+        initialValue: _value,
+        rightSymbol: "€"
+    );
+
+    controller.addListener(() {
+      _value = controller.numberValue;
+      widget.onFieldChanged(_getFieldFromInputs());
+    });
+
+    return controller;
   }
 
   Widget _buildValueTextInput() {
@@ -236,7 +268,9 @@ class _FieldCardState extends State<FieldCard> {
   Widget _buildValueDateInput() {
     final textChange = AppLocalizations.translateOf(context, "btn_change");
     return MaterialButton(
-      child: Text(InputConverter.dateFromValueAsReadableString(_value) + " - " + textChange),
+      child: Text(InputConverter.dateFromValueAsReadableString(_value) +
+          " - " +
+          textChange),
       onPressed: () async {
         final date = await _getDateTimeFromDatePicker();
         if (date != null) {
@@ -246,7 +280,6 @@ class _FieldCardState extends State<FieldCard> {
       },
     );
   }
-
 
   Future<DateTime> _getDateTimeFromDatePicker() async {
     final initalDate =
