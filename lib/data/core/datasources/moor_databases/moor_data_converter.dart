@@ -57,14 +57,20 @@ FieldsMoorData fieldsMoorDataFromField(Field field) {
       id: field.id,
       description: field.description,
       type: field.type.toString(),
-      value: field.value.toString());
+      value: field.value.toString(),
+      storageOnly: field.storageOnly);
 }
 
 Field fieldFromFieldsMoorData(FieldsMoorData fieldsMoorData) {
   final fieldType = fieldTypeFromString(fieldsMoorData.type);
   final value = valueFromFieldTypeAndString(fieldType, fieldsMoorData.value);
-  return Field(fieldsMoorData.id,
-      type: fieldType, description: fieldsMoorData.description, value: value);
+  return Field(
+    fieldsMoorData.id,
+    type: fieldType,
+    description: fieldsMoorData.description,
+    value: value,
+    storageOnly: fieldsMoorData.storageOnly,
+  );
 }
 
 dynamic valueFromFieldTypeAndString(FieldType fieldType, String data) {
