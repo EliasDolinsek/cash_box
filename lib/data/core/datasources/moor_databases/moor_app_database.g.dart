@@ -244,8 +244,10 @@ class $BucketsMoorTable extends BucketsMoor
 class ContactsMoorData extends DataClass
     implements Insertable<ContactsMoorData> {
   final String id;
+  final String name;
   final String fieldIDs;
-  ContactsMoorData({@required this.id, @required this.fieldIDs});
+  ContactsMoorData(
+      {@required this.id, @required this.name, @required this.fieldIDs});
   factory ContactsMoorData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -253,6 +255,7 @@ class ContactsMoorData extends DataClass
     final stringType = db.typeSystem.forDartType<String>();
     return ContactsMoorData(
       id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       fieldIDs: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}field_i_ds']),
     );
@@ -262,6 +265,7 @@ class ContactsMoorData extends DataClass
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return ContactsMoorData(
       id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
       fieldIDs: serializer.fromJson<String>(json['fieldIDs']),
     );
   }
@@ -270,6 +274,7 @@ class ContactsMoorData extends DataClass
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
       'fieldIDs': serializer.toJson<String>(fieldIDs),
     };
   }
@@ -278,49 +283,60 @@ class ContactsMoorData extends DataClass
   ContactsMoorCompanion createCompanion(bool nullToAbsent) {
     return ContactsMoorCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       fieldIDs: fieldIDs == null && nullToAbsent
           ? const Value.absent()
           : Value(fieldIDs),
     );
   }
 
-  ContactsMoorData copyWith({String id, String fieldIDs}) => ContactsMoorData(
+  ContactsMoorData copyWith({String id, String name, String fieldIDs}) =>
+      ContactsMoorData(
         id: id ?? this.id,
+        name: name ?? this.name,
         fieldIDs: fieldIDs ?? this.fieldIDs,
       );
   @override
   String toString() {
     return (StringBuffer('ContactsMoorData(')
           ..write('id: $id, ')
+          ..write('name: $name, ')
           ..write('fieldIDs: $fieldIDs')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode, fieldIDs.hashCode));
+  int get hashCode =>
+      $mrjf($mrjc(id.hashCode, $mrjc(name.hashCode, fieldIDs.hashCode)));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is ContactsMoorData &&
           other.id == this.id &&
+          other.name == this.name &&
           other.fieldIDs == this.fieldIDs);
 }
 
 class ContactsMoorCompanion extends UpdateCompanion<ContactsMoorData> {
   final Value<String> id;
+  final Value<String> name;
   final Value<String> fieldIDs;
   const ContactsMoorCompanion({
     this.id = const Value.absent(),
+    this.name = const Value.absent(),
     this.fieldIDs = const Value.absent(),
   });
   ContactsMoorCompanion.insert({
     @required String id,
+    this.name = const Value.absent(),
     this.fieldIDs = const Value.absent(),
   }) : id = Value(id);
-  ContactsMoorCompanion copyWith({Value<String> id, Value<String> fieldIDs}) {
+  ContactsMoorCompanion copyWith(
+      {Value<String> id, Value<String> name, Value<String> fieldIDs}) {
     return ContactsMoorCompanion(
       id: id ?? this.id,
+      name: name ?? this.name,
       fieldIDs: fieldIDs ?? this.fieldIDs,
     );
   }
@@ -343,6 +359,15 @@ class $ContactsMoorTable extends ContactsMoor
     );
   }
 
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        defaultValue: Constant(""));
+  }
+
   final VerificationMeta _fieldIDsMeta = const VerificationMeta('fieldIDs');
   GeneratedTextColumn _fieldIDs;
   @override
@@ -353,7 +378,7 @@ class $ContactsMoorTable extends ContactsMoor
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, fieldIDs];
+  List<GeneratedColumn> get $columns => [id, name, fieldIDs];
   @override
   $ContactsMoorTable get asDslTable => this;
   @override
@@ -368,6 +393,10 @@ class $ContactsMoorTable extends ContactsMoor
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
     } else if (isInserting) {
       context.missing(_idMeta);
+    }
+    if (d.name.present) {
+      context.handle(
+          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
     }
     if (d.fieldIDs.present) {
       context.handle(_fieldIDsMeta,
@@ -390,6 +419,9 @@ class $ContactsMoorTable extends ContactsMoor
     if (d.id.present) {
       map['id'] = Variable<String, StringType>(d.id.value);
     }
+    if (d.name.present) {
+      map['name'] = Variable<String, StringType>(d.name.value);
+    }
     if (d.fieldIDs.present) {
       map['field_i_ds'] = Variable<String, StringType>(d.fieldIDs.value);
     }
@@ -407,16 +439,19 @@ class FieldsMoorData extends DataClass implements Insertable<FieldsMoorData> {
   final String description;
   final String type;
   final String value;
+  final bool storageOnly;
   FieldsMoorData(
       {@required this.id,
       @required this.description,
       @required this.type,
-      @required this.value});
+      @required this.value,
+      @required this.storageOnly});
   factory FieldsMoorData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return FieldsMoorData(
       id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       description: stringType
@@ -424,6 +459,8 @@ class FieldsMoorData extends DataClass implements Insertable<FieldsMoorData> {
       type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
       value:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}value']),
+      storageOnly: boolType
+          .mapFromDatabaseResponse(data['${effectivePrefix}storage_only']),
     );
   }
   factory FieldsMoorData.fromJson(Map<String, dynamic> json,
@@ -434,6 +471,7 @@ class FieldsMoorData extends DataClass implements Insertable<FieldsMoorData> {
       description: serializer.fromJson<String>(json['description']),
       type: serializer.fromJson<String>(json['type']),
       value: serializer.fromJson<String>(json['value']),
+      storageOnly: serializer.fromJson<bool>(json['storageOnly']),
     );
   }
   @override
@@ -444,6 +482,7 @@ class FieldsMoorData extends DataClass implements Insertable<FieldsMoorData> {
       'description': serializer.toJson<String>(description),
       'type': serializer.toJson<String>(type),
       'value': serializer.toJson<String>(value),
+      'storageOnly': serializer.toJson<bool>(storageOnly),
     };
   }
 
@@ -457,16 +496,24 @@ class FieldsMoorData extends DataClass implements Insertable<FieldsMoorData> {
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       value:
           value == null && nullToAbsent ? const Value.absent() : Value(value),
+      storageOnly: storageOnly == null && nullToAbsent
+          ? const Value.absent()
+          : Value(storageOnly),
     );
   }
 
   FieldsMoorData copyWith(
-          {String id, String description, String type, String value}) =>
+          {String id,
+          String description,
+          String type,
+          String value,
+          bool storageOnly}) =>
       FieldsMoorData(
         id: id ?? this.id,
         description: description ?? this.description,
         type: type ?? this.type,
         value: value ?? this.value,
+        storageOnly: storageOnly ?? this.storageOnly,
       );
   @override
   String toString() {
@@ -474,14 +521,17 @@ class FieldsMoorData extends DataClass implements Insertable<FieldsMoorData> {
           ..write('id: $id, ')
           ..write('description: $description, ')
           ..write('type: $type, ')
-          ..write('value: $value')
+          ..write('value: $value, ')
+          ..write('storageOnly: $storageOnly')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(description.hashCode, $mrjc(type.hashCode, value.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(description.hashCode,
+          $mrjc(type.hashCode, $mrjc(value.hashCode, storageOnly.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -489,7 +539,8 @@ class FieldsMoorData extends DataClass implements Insertable<FieldsMoorData> {
           other.id == this.id &&
           other.description == this.description &&
           other.type == this.type &&
-          other.value == this.value);
+          other.value == this.value &&
+          other.storageOnly == this.storageOnly);
 }
 
 class FieldsMoorCompanion extends UpdateCompanion<FieldsMoorData> {
@@ -497,30 +548,36 @@ class FieldsMoorCompanion extends UpdateCompanion<FieldsMoorData> {
   final Value<String> description;
   final Value<String> type;
   final Value<String> value;
+  final Value<bool> storageOnly;
   const FieldsMoorCompanion({
     this.id = const Value.absent(),
     this.description = const Value.absent(),
     this.type = const Value.absent(),
     this.value = const Value.absent(),
+    this.storageOnly = const Value.absent(),
   });
   FieldsMoorCompanion.insert({
     @required String id,
     this.description = const Value.absent(),
     @required String type,
     @required String value,
+    @required bool storageOnly,
   })  : id = Value(id),
         type = Value(type),
-        value = Value(value);
+        value = Value(value),
+        storageOnly = Value(storageOnly);
   FieldsMoorCompanion copyWith(
       {Value<String> id,
       Value<String> description,
       Value<String> type,
-      Value<String> value}) {
+      Value<String> value,
+      Value<bool> storageOnly}) {
     return FieldsMoorCompanion(
       id: id ?? this.id,
       description: description ?? this.description,
       type: type ?? this.type,
       value: value ?? this.value,
+      storageOnly: storageOnly ?? this.storageOnly,
     );
   }
 }
@@ -577,8 +634,23 @@ class $FieldsMoorTable extends FieldsMoor
     );
   }
 
+  final VerificationMeta _storageOnlyMeta =
+      const VerificationMeta('storageOnly');
+  GeneratedBoolColumn _storageOnly;
   @override
-  List<GeneratedColumn> get $columns => [id, description, type, value];
+  GeneratedBoolColumn get storageOnly =>
+      _storageOnly ??= _constructStorageOnly();
+  GeneratedBoolColumn _constructStorageOnly() {
+    return GeneratedBoolColumn(
+      'storage_only',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, description, type, value, storageOnly];
   @override
   $FieldsMoorTable get asDslTable => this;
   @override
@@ -610,6 +682,12 @@ class $FieldsMoorTable extends FieldsMoor
     } else if (isInserting) {
       context.missing(_valueMeta);
     }
+    if (d.storageOnly.present) {
+      context.handle(_storageOnlyMeta,
+          storageOnly.isAcceptableValue(d.storageOnly.value, _storageOnlyMeta));
+    } else if (isInserting) {
+      context.missing(_storageOnlyMeta);
+    }
     return context;
   }
 
@@ -635,6 +713,9 @@ class $FieldsMoorTable extends FieldsMoor
     }
     if (d.value.present) {
       map['value'] = Variable<String, StringType>(d.value.value);
+    }
+    if (d.storageOnly.present) {
+      map['storage_only'] = Variable<bool, BoolType>(d.storageOnly.value);
     }
     return map;
   }
