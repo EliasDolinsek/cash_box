@@ -63,7 +63,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   void _addEmptyField() {
     setState(() {
       final field = Field.newField(
-          type: FieldType.text, description: "", value: "");
+          type: FieldType.text, description: "", value: "", storageOnly: true);
       _fields.add(field);
     });
   }
@@ -88,7 +88,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   Widget _buildNameFieldCardWidget() {
     final field =
-    Field.newField(type: FieldType.text, description: "Name", value: _name);
+    Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
     return FieldCard(
       field,
       deletable: false,

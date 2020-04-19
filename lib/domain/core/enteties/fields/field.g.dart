@@ -12,11 +12,13 @@ Field _$FieldFromJson(Map<String, dynamic> json) {
     type: _$enumDecode(_$FieldTypeEnumMap, json['type']),
     description: json['description'] as String,
     value: json['value'],
+    storageOnly: json['storageOnly'] as bool,
   );
 }
 
 Map<String, dynamic> _$FieldToJson(Field instance) => <String, dynamic>{
       'id': instance.id,
+      'storageOnly': instance.storageOnly,
       'type': _$FieldTypeEnumMap[instance.type],
       'description': instance.description,
       'value': instance.value,

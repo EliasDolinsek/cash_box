@@ -19,5 +19,5 @@ Contact _$ContactFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ContactToJson(Contact instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'fields': instance.fields.map((f) => f.toJson()).toList(),
+      'fields': instance.fields.map((e) => e.toJson()).toList(),
     };

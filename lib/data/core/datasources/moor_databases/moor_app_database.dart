@@ -38,6 +38,8 @@ class FieldsMoor extends Table {
 
   TextColumn get value => text()();
 
+  BoolColumn get storageOnly => boolean()();
+
   @override
   Set<Column> get primaryKey => {id};
 }

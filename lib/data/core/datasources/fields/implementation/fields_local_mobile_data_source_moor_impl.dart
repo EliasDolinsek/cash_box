@@ -29,7 +29,7 @@ class FieldsLocalMobileDataSourceMoorImpl extends FieldsLocalMobileDataSource {
   @override
   Future<void> updateType(String id, Field field) async {
     final update = Field(id,
-        type: field.type, description: field.description, value: field.value);
+        type: field.type, description: field.description, value: field.value, storageOnly: field.storageOnly);
 
     await appDatabase.updateField(fieldsMoorDataFromField(update));
   }

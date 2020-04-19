@@ -26,7 +26,7 @@ Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'appPassword': instance.appPassword,
       'name': instance.name,
       'userID': instance.userID,
-      'subscriptionInfo': instance.subscriptionInfo.toJson(),
+      'subscriptionInfo': instance.subscriptionInfo,
     };
 
 T _$enumDecode<T>(

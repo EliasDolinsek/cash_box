@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:intl/intl.dart';
 
 class FieldCard extends StatefulWidget {
   final Field field;
@@ -34,6 +33,7 @@ class _FieldCardState extends State<FieldCard> {
   String _description;
   dynamic _value;
   FieldType _type;
+  bool _storageOnly;
 
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -43,13 +43,16 @@ class _FieldCardState extends State<FieldCard> {
     _type = widget.field.type;
     _description = widget.field.description;
     _value = widget.field.value;
+    _storageOnly = widget.field.storageOnly;
     _initValue();
 
     _descriptionController.text = _description;
-    _descriptionController.addListener(() {
-      _description = _descriptionController.text;
-      widget.onFieldChanged(_getFieldFromInputs());
-    });
+    _descriptionController.addListener(() => _notifyUpdated());
+  }
+
+  void _notifyUpdated() {
+    _description = _descriptionController.text;
+    widget.onFieldChanged(_getFieldFromInputs());
   }
 
   void _initValue() {
@@ -59,14 +62,19 @@ class _FieldCardState extends State<FieldCard> {
       }
     } else if (_type == FieldType.text && _value == null) {
       _value = "";
-    } else if(_type == FieldType.amount && _value == null){
+    } else if (_type == FieldType.amount && _value == null) {
       _value = 0.0;
     }
   }
 
   Field _getFieldFromInputs() {
-    return Field(widget.field.id,
-        type: _type, description: _description, value: _value);
+    return Field(
+      widget.field.id,
+      type: _type,
+      description: _description,
+      value: _value,
+      storageOnly: _storageOnly,
+    );
   }
 
   @override
@@ -78,8 +86,99 @@ class _FieldCardState extends State<FieldCard> {
         SizedBox(height: 8.0),
         _buildFieldTypeSelectionChipsIfNessesscary(),
         SizedBox(height: 8.0),
-        _checkAndBuildDeleteButton()
+        _buildBottomBar()
       ],
+    );
+  }
+
+  Widget _buildBottomBar() {
+    if (widget.typeEditable &&
+        (_type == FieldType.amount || _type == FieldType.text)) {
+      return Row(
+        children: <Widget>[
+          _checkAndBuildDeleteButton(),
+          _buildInformationOnlySelection(),
+        ],
+      );
+    } else {
+      return _checkAndBuildDeleteButton();
+    }
+  }
+
+  Widget _buildInformationOnlySelection() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          items: _buildDropdownButtons(),
+          onChanged: (value) {
+            setState(() => _storageOnly = value);
+            _notifyUpdated();
+          },
+          value: _storageOnly,
+        ),
+      ),
+    );
+  }
+
+  List<DropdownMenuItem> _buildDropdownButtons() {
+    return [
+      _buildInformationalOnlyDropdownItem(),
+      _buildNonInformationalOnlyDropdownItem(),
+    ];
+  }
+
+  Widget _buildNonInformationalOnlyDropdownItem() {
+    if (_type == FieldType.text) {
+      return _buildUseAsTitleDropdownItem();
+    } else if (_type == FieldType.amount) {
+      return _buildUseAsAmountDropdownItem();
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _buildUseAsAmountDropdownItem() {
+    return _buildDropdownItemForChild(
+        child: ListTile(
+          title: Text(
+            AppLocalizations.translateOf(context, "txt_use_as_amount"),
+          ),
+          subtitle: Text(
+            AppLocalizations.translateOf(
+                context, "txt_use_as_amount_description"),
+          ),
+        ),
+        value: false);
+  }
+
+  Widget _buildUseAsTitleDropdownItem() {
+    return _buildDropdownItemForChild(
+        child: ListTile(
+          title:
+              Text(AppLocalizations.translateOf(context, "txt_use_as_title")),
+        ),
+        value: false);
+  }
+
+  DropdownMenuItem _buildInformationalOnlyDropdownItem() {
+    return _buildDropdownItemForChild(
+        child: ListTile(
+          title: Text(
+            AppLocalizations.translateOf(context, "txt_information_only"),
+          ),
+        ),
+        value: true);
+  }
+
+  Widget _buildDropdownItemForChild({Widget child, dynamic value}) {
+    return DropdownMenuItem(
+      value: value,
+      child: Container(
+        width: 200,
+        height: 60,
+        child: child,
+      ),
     );
   }
 
@@ -138,6 +237,8 @@ class _FieldCardState extends State<FieldCard> {
                 _type = type;
                 _resetValue();
               });
+
+              _notifyUpdated();
             }
           },
         ),
@@ -235,13 +336,12 @@ class _FieldCardState extends State<FieldCard> {
     );
   }
 
-  MoneyMaskedTextController _getMoneyController(){
+  MoneyMaskedTextController _getMoneyController() {
     final controller = MoneyMaskedTextController(
         decimalSeparator: ",",
         thousandSeparator: ".",
         initialValue: _value,
-        rightSymbol: "€"
-    );
+        rightSymbol: "€");
 
     controller.addListener(() {
       _value = controller.numberValue;

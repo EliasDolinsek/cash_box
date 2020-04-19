@@ -83,6 +83,7 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
       type: FieldType.text,
       description: "Name",
       value: _name,
+      storageOnly: true
     );
 
     return FieldCard(
