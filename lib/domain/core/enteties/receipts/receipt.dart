@@ -48,6 +48,8 @@ class Receipt extends UniqueComponent {
 
   Map<String, dynamic> toJson() => _$ReceiptToJson(this);
 
+  List<Field> get allFieldsNotAsStorageOnly => fields.where((element) => !element.storageOnly).toList();
+
   @override
   String toString() {
     return 'Receipt{type: $type, creationDate: $creationDate, fields: $fields, tagIDs: $tagIDs}';

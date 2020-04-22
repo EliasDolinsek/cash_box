@@ -53,7 +53,13 @@ class CashBoxApp extends StatelessWidget {
         return supportedLocales.first;
       },
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        primarySwatch: Colors.blue,
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.black),
+          textTheme: TextTheme(
+            headline6: TextStyle(color: Colors.black)
+          )
+        ),
       ),
       initialRoute: "/",
       routes: {
@@ -80,9 +86,10 @@ class CashBoxApp extends StatelessWidget {
           final fields = (settings.arguments as List).cast<Field>();
           return MaterialPageRoute(
               builder: (_) => AddReceiptPage(fields: fields));
-        } else if(settings.name == "/editReceipt"){
+        } else if (settings.name == "/editReceipt") {
           final receiptId = settings.arguments;
-          return MaterialPageRoute(builder: (_) => EditReceiptPage(receiptId: receiptId));
+          return MaterialPageRoute(
+              builder: (_) => EditReceiptPage(receiptId: receiptId));
         } else if (settings.name == "/tagsSelection") {
           final Map params = settings.arguments;
           final initialSelectedTagIds = params["initialSelectedTags"];

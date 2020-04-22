@@ -9,7 +9,8 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
   final Firestore firestore;
   final String userID;
 
-  ReceiptsCollection _receiptsCollection = ReceiptsCollection(null, null, false);
+  ReceiptsCollection _receiptsCollection =
+      ReceiptsCollection(null, null, false);
 
   ReceiptsRemoteFirebaseDataSourceDefaultImpl(this.firestore, this.userID);
 
@@ -24,9 +25,9 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
   Future<List<Receipt>> getReceiptsInReceiptMonth(
       ReceiptMonth receiptMonth) async {
     if (_receiptsCollection == null ||
+        _receiptsCollection.receipts == null ||
         (_receiptsCollection.receiptsMonth != receiptMonth &&
             _receiptsCollection.usesReceiptsMonth)) {
-
       await _loadReceiptsFromReceiptMonth(receiptMonth);
     }
 
@@ -35,7 +36,8 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
 
   @override
   Future<List<Receipt>> getTypes() async {
-    if(_receiptsCollection.usesReceiptsMonth || _receiptsCollection.receipts == null){
+    if (_receiptsCollection.usesReceiptsMonth ||
+        _receiptsCollection.receipts == null) {
       await _loadReceipts();
     }
 
@@ -44,7 +46,8 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
 
   Future _loadReceipts() async {
     final snapshot = await baseCollection.getDocuments();
-    _receiptsCollection.receipts = snapshot.documents.map((ds) => Receipt.fromJson(ds.data)).toList();
+    _receiptsCollection.receipts =
+        snapshot.documents.map((ds) => Receipt.fromJson(ds.data)).toList();
     _receiptsCollection.usesReceiptsMonth = false;
   }
 
@@ -71,7 +74,7 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
   Future<void> updateType(String id, Receipt update) async {
     final json = _firestoreJsonFromReceipt(update);
     await baseCollection.document(id).setData(json);
-  _receiptsCollection.receipts = null;
+    _receiptsCollection.receipts = null;
   }
 
   @override
@@ -80,7 +83,7 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
       .document(userID)
       .collection("user_receipts");
 
-  Map<String, dynamic> _firestoreJsonFromReceipt(Receipt receipt){
+  Map<String, dynamic> _firestoreJsonFromReceipt(Receipt receipt) {
     final receiptJson = receipt.toJson();
     receiptJson["creationMonth"] = receipt.creationDate.month;
     receiptJson["creationYear"] = receipt.creationDate.year;

@@ -1,7 +1,9 @@
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/domain/account/enteties/subscription.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 String getSubscriptionTypeAsString(SubscriptionType type, AppLocalizations localizations){
@@ -54,4 +56,23 @@ String getMonthAsReadableReceiptMonth(DateTime dateTime){
 
 String getDateAsReadableDate(DateTime dateTime){
   return DateFormat.yMd("de").format(dateTime);
+}
+
+String getReceiptTypeAsString(BuildContext context, ReceiptType type){
+  switch(type){
+    case ReceiptType.income: return AppLocalizations.translateOf(context, "txt_income");
+    case ReceiptType.outcome: return AppLocalizations.translateOf(context, "txt_outcome");
+    default: throw Exception("Couldn't resolve receipt-type as string for receipt-type $type");
+  }
+}
+
+double totalAmountOfReceipts(List<Receipt> receipts){
+  var totalAmount = 0.0;
+  receipts.forEach((element) {
+    element.allFieldsNotAsStorageOnly.forEach((element) {
+      if(element.type == FieldType.amount) totalAmount += element.value;
+    });
+  });
+
+  return totalAmount;
 }

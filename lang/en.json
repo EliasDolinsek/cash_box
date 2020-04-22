@@ -143,6 +143,7 @@
   "txt_information_only": "Information only",
   "txt_use_as_title": "Use as title",
   "txt_use_as_amount": "Use as amount",
-  "txt_use_as_amount_description": "Amount is used in statistics"
-
+  "txt_use_as_amount_description": "Amount is used in statistics",
+  "txt_outcomes": "Outcomes",
+  "txt_incomes": "Incomes"
 }
