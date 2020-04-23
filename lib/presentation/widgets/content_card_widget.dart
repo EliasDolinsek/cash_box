@@ -1,3 +1,4 @@
+import 'package:cash_box/presentation/widgets/default_card.dart';
 import 'package:flutter/material.dart';
 
 class ContentCardWidget extends StatelessWidget {
@@ -7,8 +8,7 @@ class ContentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
+    return DefaultCard(
       child: Padding(
         padding: EdgeInsets.all(16.0),
         child: content,

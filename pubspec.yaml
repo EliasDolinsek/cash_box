@@ -42,7 +42,7 @@ dependencies:
   json_serializable: ^3.2.5
 
   # Firebase
-  firebase_core: ^0.4.4+2
+  firebase_core: ^0.4.4+3
   firebase_auth: ^0.16.0
   cloud_firestore: ^0.13.5
   firebase_auth_web: ^0.1.2
@@ -60,7 +60,7 @@ dependencies:
   email_validator: ^1.0.4
 
   # Date-formatting
-  intl: ^0.16.1
+  intl: ^0.16.0
 
   # Color picker
   flutter_colorpicker: ^0.3.2

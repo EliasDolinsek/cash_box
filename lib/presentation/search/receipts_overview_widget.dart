@@ -16,7 +16,7 @@ class ReceiptsOverviewWidget extends StatelessWidget {
           .map(
             (receipt) => ReceiptListItem(
               receipt: receipt,
-              onTap: () => onTap(receipt),
+              onTap: () => onTap != null ? onTap(receipt) : null,
             ),
           )
           .toList(),

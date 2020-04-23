@@ -6,6 +6,7 @@ import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/receipts_gauge_pie_chart.dart';
 import 'package:cash_box/presentation/widgets/default_card.dart';
@@ -56,14 +57,18 @@ class StatisticsWidget extends StatelessWidget {
     final outcomeReceipts =
         receipts.where((e) => e.type == ReceiptType.outcome).toList();
 
-    return Column(
-      children: [
-        _buildChart(incomeReceipts, outcomeReceipts),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: _buildIncomesOutcomesCards(context, incomeReceipts, outcomeReceipts),
-        )
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildChart(incomeReceipts, outcomeReceipts),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _buildIncomesOutcomesCards(context, incomeReceipts, outcomeReceipts),
+          ),
+          SizedBox(height: 16.0),
+          ReceiptsOverviewWidget(receipts: receipts)
+        ],
+      ),
     );
   }
 

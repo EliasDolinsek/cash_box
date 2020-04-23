@@ -57,7 +57,7 @@ class CashBoxApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: Colors.black),
           textTheme: TextTheme(
-            headline6: TextStyle(color: Colors.black)
+            title: TextStyle(color: Colors.black)
           )
         ),
       ),
