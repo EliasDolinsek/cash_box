@@ -3,7 +3,6 @@ import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
 import 'package:cash_box/presentation/buckets/buckets_selection_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
-import 'package:cash_box/presentation/navigation/web_navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
 import 'package:cash_box/presentation/receipts/add_receipt_template_selection_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
@@ -57,8 +56,12 @@ class CashBoxApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: Colors.black),
           textTheme: TextTheme(
-            title: TextStyle(color: Colors.black)
-          )
+            title: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w500
+            ),
+          ),
         ),
       ),
       initialRoute: "/",
@@ -127,16 +130,22 @@ class CashBoxApp extends StatelessWidget {
           final data = snapshot.data;
           if (data is InitialAuthState) {
             authBloc.dispatch(LoadAuthStateEvent());
-            return LoadingWidget();
+            return _buildLoading();
           } else if (data is SignInStateAvailable) {
             return _buildWidgetForSignInState(data.signInState);
           } else {
             return Expanded(child: LoadingWidget());
           }
         } else {
-          return LoadingWidget();
+          return _buildLoading();
         }
       },
+    );
+  }
+
+  Widget _buildLoading(){
+    return Scaffold(
+      body: LoadingWidget(),
     );
   }
 

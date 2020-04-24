@@ -17,32 +17,29 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class AccountSettingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              AppLocalizations.translateOf(
-                  context, "account_settings_widget_account"),
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 20,
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            AppLocalizations.translateOf(
+                context, "account_settings_widget_account"),
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
             ),
-            SizedBox(height: 16.0),
-            NameEmailSettingsWidget(),
-            SizedBox(height: 16.0),
-            PasswordSettingsWidget(),
-            SizedBox(
-              height: 16.0,
-            ),
-            SubscriptionTile(),
-            _buildDataStorageLocationTile()
-          ],
-        ),
+          ),
+          SizedBox(height: 16.0),
+          NameEmailSettingsWidget(),
+          SizedBox(height: 16.0),
+          PasswordSettingsWidget(),
+          SizedBox(
+            height: 16.0,
+          ),
+          SubscriptionTile(),
+          _buildDataStorageLocationTile()
+        ],
       ),
     );
   }

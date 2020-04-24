@@ -1,13 +1,13 @@
-import 'package:cash_box/presentation/overview/overview_widget.dart';
+import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
 import 'package:cash_box/presentation/search/search_widget.dart';
 import 'package:cash_box/presentation/settings/settings_widget.dart';
-import 'package:cash_box/presentation/statistics/statistics_widget.dart';
+import 'package:cash_box/presentation/overview/overview_widget.dart';
 import 'package:flutter/material.dart';
 
 final pages = {
   "overviewWidget": OverviewWidget(),
   "searchWidget": SearchWidget(),
-  "statisticsWidget": StatisticsWidget(),
+  "statisticsWidget": BucketsOverviewWidget(),
   "settingsWidget": SettingsWidget()
 };
 

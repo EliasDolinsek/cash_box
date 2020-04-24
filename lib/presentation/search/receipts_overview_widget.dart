@@ -11,6 +11,10 @@ class ReceiptsOverviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    receipts.sort(
+      (a, b) => b.creationDate.millisecondsSinceEpoch
+          .compareTo(a.creationDate.millisecondsSinceEpoch),
+    );
     return Column(
       children: receipts
           .map(
