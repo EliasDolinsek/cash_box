@@ -275,7 +275,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
           style: _titleStyle,
         ),
         SizedBox(height: 8.0),
-        TagsSelectionWidget(
+        TagsSelectionBarWidget(
           initialTagIds: tagIds,
           onChange: (updatedTagIds) => tagIds = updatedTagIds,
         ),

@@ -6,6 +6,7 @@ import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
 import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/receipts_gauge_pie_chart.dart';
@@ -75,14 +76,7 @@ class OverviewWidget extends StatelessWidget {
                       context, incomeReceipts, outcomeReceipts),
                 ),
                 SizedBox(height: 16.0),
-                ReceiptsOverviewWidget(
-                  receipts: receipts,
-                  onTap: (receipt) => Navigator.pushNamed(
-                    context,
-                    "/editReceipt",
-                    arguments: receipt.id,
-                  ),
-                )
+                BucketsOverviewWidget()
               ],
             ),
           ),

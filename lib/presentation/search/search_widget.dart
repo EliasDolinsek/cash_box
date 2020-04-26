@@ -6,6 +6,7 @@ import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/default_card.dart';
 import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -32,27 +33,38 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   Widget _buildSearchBar() {
-    return Column(
-      children: <Widget>[_buildSearchTextField(), _buildTagsFilter()],
-    );
+    return _buildSearchTextField();
   }
 
   Widget _buildSearchTextField() {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-      child: TextField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: AppLocalizations.translateOf(context, "txt_search"),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.check),
-            onPressed: _isSearchTextInputValid() ? _search : null,
+      child: DefaultCard(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 8.0,
+          ),
+          child: TextField(
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: AppLocalizations.translateOf(context, "txt_search"),
+              suffixIcon: MaterialButton(
+                onPressed: () => Navigator.pushNamed(context, "/filterSelection", arguments: (ReceiptType receiptType, List<String> tagIds){
+                  tagIds = tagIds;
+                  _search();
+                }),
+                child: Text(
+                  AppLocalizations.translateOf(context, "btn_filter"),
+                ),
+              ),
+            ),
+            onChanged: (value) {
+              setState(() => searchText = value);
+            },
+            onSubmitted: (_) => _search(),
           ),
         ),
-        onChanged: (value) {
-          setState(() => searchText = value);
-        },
-        onSubmitted: (_) => _search(),
       ),
     );
   }
@@ -98,9 +110,11 @@ class _SearchWidgetState extends State<SearchWidget> {
             padding: const EdgeInsets.only(right: 4.0),
             child: FilterChip(
               label: Text(e.name),
+              avatar: CircleAvatar(
+                backgroundColor: e.colorAsColor,
+              ),
               selected: tagIds.contains(e.id),
-              backgroundColor: e.colorAsColor.withOpacity(0.6),
-              selectedColor: e.colorAsColor,
+              selectedColor: Colors.grey.withOpacity(0.3),
               onSelected: (value) {
                 setState(() {
                   if (tagIds.contains(e.id)) {

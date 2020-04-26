@@ -88,20 +88,23 @@ class _ReceiptTemplateDetailsPageState
 
   List<Widget> _getFieldsAsFieldCardWidgetList() {
     return _fields.map((field) {
-      return FieldCard(
-        field,
+      return Padding(
         key: ValueKey(field),
-        onFieldChanged: (update) {
-          final index = _fields.indexWhere((element) =>
-          element.id == update.id);
-          _fields.removeAt(index);
-          _fields.insert(index, update);
-        },
-        onDelete: () {
-          setState(() {
-            _fields.remove(field);
-          });
-        },
+        padding: const EdgeInsets.all(8.0),
+        child: FieldCard(
+          field,
+          onFieldChanged: (update) {
+            final index = _fields.indexWhere((element) =>
+            element.id == update.id);
+            _fields.removeAt(index);
+            _fields.insert(index, update);
+          },
+          onDelete: () {
+            setState(() {
+              _fields.remove(field);
+            });
+          },
+        ),
       );
     }).toList();
   }
@@ -117,14 +120,17 @@ class _ReceiptTemplateDetailsPageState
   Widget _buildNameFieldCardWidget() {
     final field =
     Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
-    return FieldCard(
-      field,
-      deletable: false,
-      descriptionEditable: false,
-      typeEditable: false,
-      onFieldChanged: (Field field) {
-        _name = field.value;
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: FieldCard(
+        field,
+        deletable: false,
+        descriptionEditable: false,
+        typeEditable: false,
+        onFieldChanged: (Field field) {
+          _name = field.value;
+        },
+      ),
     );
   }
 

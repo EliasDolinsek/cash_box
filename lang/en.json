@@ -145,5 +145,8 @@
   "txt_use_as_amount": "Use as amount",
   "txt_use_as_amount_description": "Amount is used in statistics",
   "txt_outcomes": "Outcomes",
-  "txt_incomes": "Incomes"
+  "txt_incomes": "Incomes",
+  "txt_no_data": "No data",
+  "btn_filter": "FILTER",
+  "txt_filter": "Filter"
 }

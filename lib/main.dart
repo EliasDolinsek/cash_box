@@ -5,6 +5,7 @@ import 'package:cash_box/presentation/buckets/buckets_selection_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
 import 'package:cash_box/presentation/receipts/add_receipt_template_selection_page.dart';
+import 'package:cash_box/presentation/search/search_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
 import 'package:cash_box/presentation/settings/receipts/receipt_template_details_page.dart';
@@ -57,10 +58,7 @@ class CashBoxApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.black),
           textTheme: TextTheme(
             title: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w500
-            ),
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
           ),
         ),
       ),
@@ -113,6 +111,13 @@ class CashBoxApp extends StatelessWidget {
               onChanged: onChanged,
             ),
           );
+        } else if (settings.name == "/filterSelection") {
+          final onChanged = settings.arguments;
+          return MaterialPageRoute(
+            builder: (_) => FilterPage(
+              onChanged: onChanged,
+            ),
+          );
         } else {
           return MaterialPageRoute(
               builder: (_) => FailurePage("main_failure_no_route"));
@@ -143,7 +148,7 @@ class CashBoxApp extends StatelessWidget {
     );
   }
 
-  Widget _buildLoading(){
+  Widget _buildLoading() {
     return Scaffold(
       body: LoadingWidget(),
     );

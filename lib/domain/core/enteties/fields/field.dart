@@ -14,7 +14,7 @@ class Field extends UniqueComponent {
   final dynamic value;
 
   Field(String id, {@required this.type, @required this.description, @required this.value, @required this.storageOnly})
-      : super(id, params: [type, description, value]);
+      : super(id, params: [type, description, value, storageOnly]);
 
   factory Field.newField({@required FieldType type, @required String description, @required dynamic value, @required bool storageOnly}){
     final id = Uuid().v4();

@@ -27,6 +27,7 @@ class ListContentCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContentCardWidget(
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: items,
         crossAxisAlignment: CrossAxisAlignment.start,
       ),

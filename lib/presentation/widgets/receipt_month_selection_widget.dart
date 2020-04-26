@@ -1,7 +1,10 @@
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipt_month_bloc/receipt_month_bloc.dart';
+import 'package:cash_box/app/receipts_bloc/bloc.dart';
+import 'package:cash_box/app/receipts_bloc/receipts_event.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -65,8 +68,11 @@ class _ReceiptMonthSelectionWidgetState
     final result =
         await showMonthPicker(context: context, initialDate: initialMonth);
     if (result != null) {
-      final event = SetReceiptMonthEvent(result);
-      sl<ReceiptMonthBloc>().dispatch(event);
+      final receiptMonthBlocEvent = SetReceiptMonthEvent(result);
+      final receiptsBlocEvent = GetReceiptsInReceiptMonthEvent(ReceiptMonth(result));
+
+      sl<ReceiptMonthBloc>().dispatch(receiptMonthBlocEvent);
+      sl<ReceiptsBloc>().dispatch(receiptsBlocEvent);
     }
   }
 }

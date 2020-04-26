@@ -56,16 +56,12 @@ class BucketsOverviewListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ResponsiveWidget(child: _buildContent()),
-    );
+    return ResponsiveWidget(child: _buildContent());
   }
 
   Widget _buildContent(){
-    return ListView.separated(
-      itemCount: buckets.length,
-      itemBuilder: (_, index) => BucketListItem(buckets[index]),
-      separatorBuilder: (_, __) => SizedBox(height: 0.0),
+    return Column(
+      children: buckets.map((bucket) => BucketListItem(bucket)).toList(),
     );
   }
 }

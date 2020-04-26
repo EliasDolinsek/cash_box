@@ -6,18 +6,18 @@ import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/static_widgets/loading_text_widget.dart';
 import 'package:flutter/material.dart';
 
-class TagsSelectionWidget extends StatefulWidget {
+class TagsSelectionBarWidget extends StatefulWidget {
   final Function(List<String> update) onChange;
   final List<String> initialTagIds;
 
-  const TagsSelectionWidget({Key key, this.initialTagIds, this.onChange})
+  const TagsSelectionBarWidget({Key key, this.initialTagIds = const[], this.onChange})
       : super(key: key);
 
   @override
-  _TagsSelectionWidgetState createState() => _TagsSelectionWidgetState();
+  _TagsSelectionBarWidgetState createState() => _TagsSelectionBarWidgetState();
 }
 
-class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
+class _TagsSelectionBarWidgetState extends State<TagsSelectionBarWidget> {
   List<String> tagIds;
 
   @override

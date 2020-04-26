@@ -28,10 +28,13 @@ class ReceiptTemplatesSettingsWidget extends StatelessWidget {
           final data = snapshot.data;
           if (snapshot.hasData) {
             if (data is TemplatesAvailableState) {
-              return TemplatesAvailableSettingsWidget(data.templates);
+              return TemplatesAvailableSettingsWidget(
+                data.templates,
+                key: ValueKey(data.props),
+              );
             } else if (data is TemplatesErrorState) {
               templatesBloc.dispatch(GetTemplatesEvent());
-              return Text("ERROR");
+              return ErrorWidget(data.errorMessage);
             } else {
               templatesBloc.dispatch(GetTemplatesEvent());
               return LoadingWidget();
@@ -85,8 +88,9 @@ class TemplatesAvailableSettingsWidget extends StatelessWidget {
                 t,
                 onTap: () {
                   Navigator.of(context).pushNamed(
-                      "/receiptTemplatesSettings/templateDetails",
-                      arguments: t);
+                    "/receiptTemplatesSettings/templateDetails",
+                    arguments: t,
+                  );
                 },
               ))
           .toList(),

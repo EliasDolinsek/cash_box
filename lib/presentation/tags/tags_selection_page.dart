@@ -7,11 +7,11 @@ import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsSelectionPage extends StatelessWidget {
-
   final Function(List<String> selectedTags) onChanged;
   final List<String> selectedTags;
 
-  const TagsSelectionPage({Key key, this.selectedTags = const [], this.onChanged})
+  const TagsSelectionPage(
+      {Key key, this.selectedTags = const [], this.onChanged})
       : super(key: key);
 
   @override
@@ -24,46 +24,11 @@ class TagsSelectionPage extends StatelessWidget {
         actions: <Widget>[_buildEditTagsButton(context)],
         backgroundColor: Colors.white,
       ),
-      body: StreamBuilder(
-        stream: sl<TagsBloc>().state,
-        builder: (_, AsyncSnapshot<TagsState> snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data;
-            if (data is TagsAvailableState) {
-              return _buildLoaded(context, data.tags);
-            } else if (data is TagsErrorState) {
-              _loadTags();
-              return ErrorWidget(data.errorMessage);
-            } else {
-              _loadTags();
-              return LoadingWidget();
-            }
-          } else {
-            return Center(child: LoadingWidget());
-          }
-        },
+      body: TagsSelectionWidget(
+        initialSelectedTags: selectedTags,
+        onChanged: onChanged,
       ),
     );
-  }
-
-  Widget _buildLoaded(BuildContext context, List<Tag> tags) {
-    if (tags.isNotEmpty) {
-      return ResponsiveCardWidget(
-        child: _TagsSelectionWidget(
-          tags: tags,
-          initialSelectedTags: selectedTags,
-          onChanged: onChanged
-        ),
-      );
-    } else {
-      return Center(
-        child: Text(AppLocalizations.translateOf(context, "no_tags")),
-      );
-    }
-  }
-
-  void _loadTags() {
-    sl<TagsBloc>().dispatch(GetTagsEvent());
   }
 
   Widget _buildEditTagsButton(BuildContext context) {
@@ -74,21 +39,19 @@ class TagsSelectionPage extends StatelessWidget {
   }
 }
 
-class _TagsSelectionWidget extends StatefulWidget {
-
+class TagsSelectionWidget extends StatefulWidget {
   final Function(List<String> tagIds) onChanged;
   final List<String> initialSelectedTags;
-  final List<Tag> tags;
 
-  const _TagsSelectionWidget(
-      {Key key, @required this.tags, @required this.initialSelectedTags, this.onChanged})
+  const TagsSelectionWidget(
+      {Key key, this.initialSelectedTags = const[], this.onChanged})
       : super(key: key);
 
   @override
   _TagsSelectionWidgetState createState() => _TagsSelectionWidgetState();
 }
 
-class _TagsSelectionWidgetState extends State<_TagsSelectionWidget> {
+class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
   List<String> selectedTags = [];
 
   @override
@@ -99,31 +62,70 @@ class _TagsSelectionWidgetState extends State<_TagsSelectionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: widget.tags.length,
-      itemBuilder: (_, index) {
-        final tag = widget.tags[index];
-        return ListTile(
-          leading: CircleAvatar(backgroundColor: tag.colorAsColor),
-          title: Text(tag.name),
-          trailing: _buildTrailingForTag(tag),
-          onTap: () => _onTap(tag),
-        );
+    return StreamBuilder(
+      stream: sl<TagsBloc>().state,
+      builder: (_, AsyncSnapshot<TagsState> snapshot) {
+        if (snapshot.hasData) {
+          final data = snapshot.data;
+          if (data is TagsAvailableState) {
+            return _buildLoaded(data.tags);
+          } else if (data is TagsErrorState) {
+            _loadTags();
+            return ErrorWidget(data.errorMessage);
+          } else {
+            _loadTags();
+            return LoadingWidget();
+          }
+        } else {
+          return Center(child: LoadingWidget());
+        }
       },
-      separatorBuilder: (_, __) => Divider(),
     );
   }
 
-  void _onTap(Tag tag){
+  void _loadTags() {
+    sl<TagsBloc>().dispatch(GetTagsEvent());
+  }
+
+  Widget _buildLoaded(List<Tag> tags) {
+    if (tags.isNotEmpty) {
+      return ResponsiveCardWidget(
+        child: _buildTagsList(tags),
+      );
+    } else {
+      return Center(
+        child: Text(AppLocalizations.translateOf(context, "no_tags")),
+      );
+    }
+  }
+
+  Widget _buildTagsList(List<Tag> tags) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: tags.map((tag) => _buildTagListTile(tag)).toList(),
+    );
+  }
+
+  Widget _buildTagListTile(Tag tag){
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      leading: CircleAvatar(backgroundColor: tag.colorAsColor),
+      title: Text(tag.name),
+      trailing: _buildTrailingForTag(tag),
+      onTap: () => _onTap(tag),
+    );
+  }
+
+  void _onTap(Tag tag) {
     setState(() {
-      if(_isTagSelected(tag)){
+      if (_isTagSelected(tag)) {
         selectedTags.remove(tag.id);
       } else {
         selectedTags.add(tag.id);
       }
     });
 
-    widget.onChanged(selectedTags);
+    widget.onChanged?.call(selectedTags);
   }
 
   Widget _buildTrailingForTag(Tag tag) {
