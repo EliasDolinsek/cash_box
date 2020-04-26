@@ -28,6 +28,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       text: event.text,
       tagIds: event.tagIds,
       receiptMonth: event.receiptMonth,
+      receiptType: event.receiptType
     );
 
     final result = await filterReceiptsUseCase(params);

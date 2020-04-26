@@ -15,34 +15,37 @@ class FilterReceiptsUseCase extends UseCase<List<Receipt>, FilterReceiptsUseCase
 
   @override
   Future<Either<Failure, List<Receipt>>> call(FilterReceiptsUseCaseParams params) async {
-
     if(params.receiptMonth != null){
       final result = await repository.getReceiptsInReceiptMonth(params.receiptMonth);
       return result.fold((l) => Left(l), (receipts){
-        final filteredReceipts = _filterReceipts(receipts, params.text, params.tagIds);
+        final filteredReceipts = _filterReceipts(receipts, params.text, params.tagIds, params.receiptType);
         return Right(filteredReceipts);
       });
     } else {
       final result = await repository.getReceipts();
       return result.fold((l) => Left(l), (receipts){
-        final filteredReceipts = _filterReceipts(receipts, params.text, params.tagIds);
+        final filteredReceipts = _filterReceipts(receipts, params.text, params.tagIds, params.receiptType);
         return Right(filteredReceipts);
       });
     }
   }
 
-  List<Receipt> _filterReceipts(List<Receipt> original, String text, List<String> tagIds){
-    var filteredReceipts = original;
+  List<Receipt> _filterReceipts(List<Receipt> original, String text, List<String> tagIds, ReceiptType receiptType){
+      var filteredReceipts = original;
 
-    if(tagIds != null && tagIds.isNotEmpty){
-      filteredReceipts = filteredReceipts.where((element) => _doTagIdsContainTagIds(element.tagIDs, tagIds)).toList();
-    }
+      if(receiptType != null){
+        filteredReceipts = filteredReceipts.where((element) => element.type == receiptType).toList();
+      }
 
-    if(text != null && text.trim().isNotEmpty){
-      filteredReceipts = filteredReceipts.where((element) => _doFieldValuesContainText(element.fields, text)).toList();
-    }
+      if(tagIds != null && tagIds.isNotEmpty){
+        filteredReceipts = filteredReceipts.where((element) => _doTagIdsContainTagIds(element.tagIDs, tagIds)).toList();
+      }
 
-    return filteredReceipts ?? [];
+      if(text != null && text.trim().isNotEmpty){
+        filteredReceipts = filteredReceipts.where((element) => _doFieldValuesContainText(element.fields, text)).toList();
+      }
+
+      return filteredReceipts ?? [];
   }
 
   bool _doFieldValuesContainText(List<Field> fields, String text){
@@ -64,10 +67,11 @@ class FilterReceiptsUseCaseParams extends Equatable {
   final String text;
   final List<String> tagIds;
   final ReceiptMonth receiptMonth;
+  final ReceiptType receiptType;
 
-  FilterReceiptsUseCaseParams({this.text = "", this.tagIds = const[], this.receiptMonth});
+  FilterReceiptsUseCaseParams({this.text = "", this.tagIds = const[], this.receiptMonth, this.receiptType});
 
   @override
-  List get props => [text, tagIds, receiptMonth];
+  List get props => [text, tagIds, receiptMonth, receiptType];
 
 }

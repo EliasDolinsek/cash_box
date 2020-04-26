@@ -16,6 +16,7 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
+  ReceiptType receiptType;
   String searchText = "";
   List<String> tagIds = [];
 
@@ -50,7 +51,10 @@ class _SearchWidgetState extends State<SearchWidget> {
               border: InputBorder.none,
               hintText: AppLocalizations.translateOf(context, "txt_search"),
               suffixIcon: MaterialButton(
-                onPressed: () => Navigator.pushNamed(context, "/filterSelection", arguments: (ReceiptType receiptType, List<String> tagIds){
+                onPressed: () => Navigator.pushNamed(
+                    context, "/filterSelection",
+                    arguments: (ReceiptType receiptType, List<String> tagIds) {
+                  this.receiptType = receiptType;
                   tagIds = tagIds;
                   _search();
                 }),
@@ -195,7 +199,9 @@ class _SearchWidgetState extends State<SearchWidget> {
       final text = searchText.isNotEmpty ? searchText : null;
       final tags = tagIds.isNotEmpty ? tagIds : null;
 
-      final event = ReceiptsSearchEvent(text: text, tagIds: tags);
+      final event = ReceiptsSearchEvent(
+          text: text, tagIds: tags, receiptType: receiptType);
+
       sl<SearchBloc>().dispatch(event);
     }
   }
