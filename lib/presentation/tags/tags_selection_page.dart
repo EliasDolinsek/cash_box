@@ -90,7 +90,7 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
   Widget _buildLoaded(List<Tag> tags) {
     if (tags.isNotEmpty) {
       return ResponsiveCardWidget(
-        child: _buildTagsList(tags),
+        child: SingleChildScrollView(child: _buildTagsList(tags)),
       );
     } else {
       return Center(

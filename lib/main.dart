@@ -112,10 +112,17 @@ class CashBoxApp extends StatelessWidget {
             ),
           );
         } else if (settings.name == "/filterSelection") {
-          final onChanged = settings.arguments;
+          final map = settings.arguments as Map;
+
+          final onChanged = map["onChanged"];
+          final selectedTagIds = map["selectedTagIds"];
+          final selectedReceiptType = map["selectedReceiptType"];
+
           return MaterialPageRoute(
             builder: (_) => FilterPage(
               onChanged: onChanged,
+              selectedTagIds: selectedTagIds,
+              selectedReceiptType: selectedReceiptType,
             ),
           );
         } else {

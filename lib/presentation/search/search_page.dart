@@ -6,7 +6,12 @@ import 'package:flutter/material.dart';
 class FilterPage extends StatelessWidget {
   final Function(ReceiptType receiptType, List<String> tagIds) onChanged;
 
-  const FilterPage({Key key, this.onChanged}) : super(key: key);
+  final List<String> selectedTagIds;
+  final ReceiptType selectedReceiptType;
+
+  const FilterPage(
+      {Key key, this.onChanged, this.selectedTagIds, this.selectedReceiptType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +23,8 @@ class FilterPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: FilterWidget(
           onChanged: onChanged,
+          selectedReceiptType: selectedReceiptType,
+          selectedTagIds: selectedTagIds,
         ),
       ),
     );
@@ -25,19 +32,33 @@ class FilterPage extends StatelessWidget {
 }
 
 class FilterWidget extends StatefulWidget {
+
+  final List<String> selectedTagIds;
+  final ReceiptType selectedReceiptType;
   final Function(ReceiptType receiptType, List<String> tagIds) onChanged;
 
-  const FilterWidget({Key key, this.onChanged}) : super(key: key);
+  const FilterWidget({Key key, this.onChanged, this.selectedTagIds, this.selectedReceiptType}) : super(key: key);
 
   @override
   _FilterWidgetState createState() => _FilterWidgetState();
 }
 
 class _FilterWidgetState extends State<FilterWidget> {
+  List<ReceiptType> receiptTypes = [];
+  List<String> selectedTagIds = [];
 
-  List<ReceiptType> receiptTypes = []..addAll(ReceiptType.values);
-  List<String> tagIds = [];
+  @override
+  void initState() {
+    super.initState();
 
+    if(widget.selectedReceiptType != null){
+      receiptTypes.add(widget.selectedReceiptType);
+    } else {
+      receiptTypes.addAll(ReceiptType.values);
+    }
+
+    selectedTagIds = widget.selectedTagIds ?? [];
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -100,9 +121,9 @@ class _FilterWidgetState extends State<FilterWidget> {
     );
   }
 
-  void onChanged(){
+  void onChanged() {
     final receiptType = receiptTypes.length > 1 ? null : receiptTypes.first;
-    widget.onChanged(receiptType, tagIds);
+    widget.onChanged(receiptType, selectedTagIds);
   }
 
   Widget _buildTagsSelection(BuildContext context) {
@@ -119,10 +140,11 @@ class _FilterWidgetState extends State<FilterWidget> {
         ),
         SizedBox(height: 8.0),
         TagsSelectionWidget(
-          onChanged: (tagIds){
-            this.tagIds = tagIds;
+          onChanged: (tagIds) {
+            this.selectedTagIds = tagIds;
             onChanged();
           },
+          initialSelectedTags: selectedTagIds,
         )
       ],
     );

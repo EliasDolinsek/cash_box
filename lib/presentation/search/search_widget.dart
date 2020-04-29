@@ -1,8 +1,6 @@
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/search_bloc/bloc.dart';
-import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
@@ -50,22 +48,9 @@ class _SearchWidgetState extends State<SearchWidget> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: AppLocalizations.translateOf(context, "txt_search"),
-              suffixIcon: MaterialButton(
-                onPressed: () => Navigator.pushNamed(
-                    context, "/filterSelection",
-                    arguments: (ReceiptType receiptType, List<String> tagIds) {
-                  this.receiptType = receiptType;
-                  tagIds = tagIds;
-                  _search();
-                }),
-                child: Text(
-                  AppLocalizations.translateOf(context, "btn_filter"),
-                ),
-              ),
+              suffixIcon: _buildFilterButton(),
             ),
-            onChanged: (value) {
-              setState(() => searchText = value);
-            },
+            onChanged: (value) => setState(() => searchText = value),
             onSubmitted: (_) => _search(),
           ),
         ),
@@ -73,66 +58,24 @@ class _SearchWidgetState extends State<SearchWidget> {
     );
   }
 
-  Widget _buildTagsFilter() {
-    return StreamBuilder<TagsState>(
-      stream: sl<TagsBloc>().state,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is TagsAvailableState) {
-            return _buildTagsList(data.tags);
-          } else if (data is TagsErrorState) {
-            return Text(
-              AppLocalizations.translateOf(context, "txt_could_not_load_tags"),
-            );
-          } else {
-            _loadTags();
-            return _buildLoadingText();
-          }
-        } else {
-          return _buildLoadingText();
-        }
-      },
-    );
-  }
+  Widget _buildFilterButton() {
+    return MaterialButton(
+      onPressed: () => Navigator.pushNamed(
+        context,
+        "/filterSelection",
+        arguments: {
+          "onChanged": (ReceiptType receiptType, List<String> tagIds) {
+            this.receiptType = receiptType;
+            this.tagIds = tagIds;
 
-  void _loadTags() {
-    sl<TagsBloc>().dispatch(GetTagsEvent());
-  }
-
-  Widget _buildLoadingText() {
-    return Text(AppLocalizations.translateOf(context, "txt_loading"));
-  }
-
-  Widget _buildTagsList(List<Tag> tags) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: tags.map((e) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 4.0),
-            child: FilterChip(
-              label: Text(e.name),
-              avatar: CircleAvatar(
-                backgroundColor: e.colorAsColor,
-              ),
-              selected: tagIds.contains(e.id),
-              selectedColor: Colors.grey.withOpacity(0.3),
-              onSelected: (value) {
-                setState(() {
-                  if (tagIds.contains(e.id)) {
-                    tagIds.remove(e.id);
-                  } else {
-                    tagIds.add(e.id);
-                  }
-                });
-
-                _search();
-              },
-            ),
-          );
-        }).toList(),
+            _search();
+          },
+          "selectedTagIds": tagIds,
+          "selectedReceiptType": receiptType,
+        },
+      ),
+      child: Text(
+        AppLocalizations.translateOf(context, "btn_filter"),
       ),
     );
   }
