@@ -70,7 +70,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   Widget _buildListView() {
     return ReorderableListView(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(vertical: 16.0),
       header: _buildNameFieldCardWidget(),
       onReorder: (oldIndex, newIndex) {
         setState(() {
@@ -89,35 +89,53 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   Widget _buildNameFieldCardWidget() {
     final field =
     Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
-    return FieldWidget(
-      field,
-      deletable: false,
-      descriptionEditable: false,
-      typeEditable: false,
-      onFieldChanged: (Field field) {
-        _name = field.value;
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: FieldWidget(
+        field,
+        deletable: false,
+        descriptionEditable: false,
+        typeEditable: false,
+        onFieldChanged: (Field field) {
+          _name = field.value;
+        },
+      ),
     );
   }
 
   List<Widget> _getFieldsAsFieldCardWidgetList() {
     return _fields.map((field) {
-      return FieldWidget(
-        field,
+      return Column(
         key: ValueKey(field),
-        onFieldChanged: (update) {
-          final index = _fields.indexWhere((element) =>
-          element.id == update.id);
-          _fields.removeAt(index);
-          _fields.insert(index, update);
-        },
-        onDelete: () {
-          setState(() {
-            _fields.remove(field);
-          });
-        },
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _buildFieldCardForField(field),
+          ),
+          SizedBox(height: 8.0),
+          Divider(),
+        ],
       );
     }).toList();
+  }
+
+  Widget _buildFieldCardForField(Field field){
+    return FieldWidget(
+      field,
+      onFieldChanged: (update) {
+        final index = _fields.indexWhere((element) =>
+        element.id == update.id);
+        _fields.removeAt(index);
+        _fields.insert(index, update);
+      },
+      onDelete: () {
+        setState(() {
+          _fields.remove(field);
+        });
+      },
+    );
   }
 
   String _getAppBarTitle() {
