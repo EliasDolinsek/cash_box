@@ -150,12 +150,13 @@ class EditReceiptPage extends StatelessWidget {
 
     return Center(
       child: Builder(
-        builder: (_){
+        builder: (_) {
           if (receipt != null) {
             return ReceiptDetailsWidget(receipt);
           } else {
             return ErrorWidget(
-              AppLocalizations.translateOf(context, "txt_could_not_load_receipt"),
+              AppLocalizations.translateOf(
+                  context, "txt_could_not_load_receipt"),
             );
           }
         },
@@ -206,7 +207,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
   Widget build(BuildContext context) {
     return ResponsiveWidget(
       child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
+        padding: EdgeInsets.all(16.0),
         shrinkWrap: true,
         children: _receiptFieldsAsItems(),
       ),
@@ -215,7 +216,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
 
   List<Widget> _receiptFieldsAsItems() {
     final templateFields = widget.receipt.fields.map<Widget>((e) {
-      return FieldCard(
+      return FieldWidget(
         e,
         key: ValueKey(e),
         deletable: false,
@@ -233,7 +234,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
   }
 
   Widget get _defaultReceiptFields {
-    return TitledListContentCardWidget(
+    return TitledListContentWidget(
       title: Text(
         AppLocalizations.translateOf(context, "txt_receipt_details"),
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),

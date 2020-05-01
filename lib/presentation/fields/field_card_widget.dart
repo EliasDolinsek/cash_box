@@ -9,14 +9,14 @@ import 'package:flutter/rendering.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-class FieldCard extends StatefulWidget {
+class FieldWidget extends StatefulWidget {
   final Field field;
   final bool typeEditable, descriptionEditable, deletable;
 
   final Function(Field update) onFieldChanged;
   final Function onDelete;
 
-  const FieldCard(this.field,
+  const FieldWidget(this.field,
       {Key key,
       this.typeEditable = true,
       this.descriptionEditable = true,
@@ -26,10 +26,10 @@ class FieldCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  _FieldCardState createState() => _FieldCardState();
+  _FieldWidgetState createState() => _FieldWidgetState();
 }
 
-class _FieldCardState extends State<FieldCard> {
+class _FieldWidgetState extends State<FieldWidget> {
   String _description;
   dynamic _value;
   FieldType _type;
@@ -79,7 +79,7 @@ class _FieldCardState extends State<FieldCard> {
 
   @override
   Widget build(BuildContext context) {
-    return TitledListContentCardWidget(
+    return TitledListContentWidget(
       title: _buildTitleTypeBar(),
       items: <Widget>[
         _buildValueInput(),

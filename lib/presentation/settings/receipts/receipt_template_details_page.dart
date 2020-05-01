@@ -91,7 +91,7 @@ class _ReceiptTemplateDetailsPageState
       return Padding(
         key: ValueKey(field),
         padding: const EdgeInsets.all(8.0),
-        child: FieldCard(
+        child: FieldWidget(
           field,
           onFieldChanged: (update) {
             final index = _fields.indexWhere((element) =>
@@ -122,7 +122,7 @@ class _ReceiptTemplateDetailsPageState
     Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: FieldCard(
+      child: FieldWidget(
         field,
         deletable: false,
         descriptionEditable: false,

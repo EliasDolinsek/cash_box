@@ -17,6 +17,21 @@ class ContentCardWidget extends StatelessWidget {
   }
 }
 
+class ListContentWidget extends StatelessWidget {
+  final List<Widget> items;
+
+  const ListContentWidget({Key key, this.items}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: items,
+      crossAxisAlignment: CrossAxisAlignment.start,
+    );
+  }
+}
+
 class ListContentCardWidget extends StatelessWidget {
   final List<Widget> items;
 
@@ -26,11 +41,21 @@ class ListContentCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ContentCardWidget(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: items,
-        crossAxisAlignment: CrossAxisAlignment.start,
-      ),
+      content: ListContentWidget(items: items),
+    );
+  }
+}
+
+class TitledContentWidget extends StatelessWidget {
+  final Widget title, content;
+
+  const TitledContentWidget({Key key, this.title, this.content})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListContentWidget(
+      items: [title, SizedBox(height: 8.0), content],
     );
   }
 }
@@ -44,8 +69,32 @@ class TitledContentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListContentCardWidget(
-      items: [title, SizedBox(height: 8.0), content],
+    return ContentCardWidget(
+      content: TitledContentWidget(
+        title: title,
+        content: content,
+      ),
+    );
+  }
+}
+
+class TitledListContentWidget extends StatelessWidget {
+  final Widget title;
+  final List<Widget> items;
+
+  const TitledListContentWidget(
+      {Key key, @required this.title, @required this.items})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListContentWidget(
+      items: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: title,
+        )
+      ]..addAll(items),
     );
   }
 }
@@ -60,12 +109,8 @@ class TitledListContentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListContentCardWidget(
-        items: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: title,
-      )
-    ]..addAll(items));
+    return ContentCardWidget(
+      content: TitledListContentWidget(title: title, items: items),
+    );
   }
 }

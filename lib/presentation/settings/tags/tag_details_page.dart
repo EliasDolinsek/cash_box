@@ -86,7 +86,7 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
       storageOnly: true
     );
 
-    return FieldCard(
+    return FieldWidget(
       field,
       deletable: false,
       descriptionEditable: false,

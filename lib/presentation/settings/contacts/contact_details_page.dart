@@ -89,7 +89,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   Widget _buildNameFieldCardWidget() {
     final field =
     Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
-    return FieldCard(
+    return FieldWidget(
       field,
       deletable: false,
       descriptionEditable: false,
@@ -102,7 +102,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   List<Widget> _getFieldsAsFieldCardWidgetList() {
     return _fields.map((field) {
-      return FieldCard(
+      return FieldWidget(
         field,
         key: ValueKey(field),
         onFieldChanged: (update) {
