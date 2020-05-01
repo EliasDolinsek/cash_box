@@ -148,5 +148,8 @@
   "txt_incomes": "Incomes",
   "txt_no_data": "No data",
   "btn_filter": "FILTER",
-  "txt_filter": "Filter"
+  "txt_filter": "Filter",
+  "txt_bucket_settings": "Bucket Settings",
+  "txt_buckets": "Buckets",
+  "txt_bucket_settings_hint": "Add, remove and update buckets"
 }

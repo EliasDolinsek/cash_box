@@ -1,26 +1,14 @@
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/settings/settings_widget.dart';
 import 'package:flutter/material.dart';
 
 class TagsSettingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            AppLocalizations.translateOf(
-                context, "tags_settings_widget_tags"),
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
-            ),
-          ),
-          SizedBox(height: 16.0),
-          _buildEditTagsListTile(context),
-        ],
-      ),
+    return SettingsWidget(
+      title: AppLocalizations.translateOf(
+          context, "tags_settings_widget_tags"),
+      content: _buildEditTagsListTile(context),
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
 import 'package:cash_box/presentation/search/search_widget.dart';
-import 'package:cash_box/presentation/settings/settings_widget.dart';
+import 'package:cash_box/presentation/settings/settings_overview_widget.dart';
 import 'package:cash_box/presentation/overview/overview_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +8,7 @@ final pages = {
   "overviewWidget": OverviewWidget(),
   "searchWidget": SearchWidget(),
   "statisticsWidget": BucketsOverviewWidget(),
-  "settingsWidget": SettingsWidget()
+  "settingsWidget": SettingsOverviewWidget()
 };
 
 String selectedPage = "overviewWidget";

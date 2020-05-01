@@ -1,30 +1,29 @@
-import 'package:cash_box/presentation/settings/contacts/contacts_settings_widget.dart';
-import 'package:cash_box/presentation/settings/receipts/receipts_settings_widget.dart';
-import 'package:cash_box/presentation/settings/tags/tags_settings_widget.dart';
 import 'package:flutter/material.dart';
 
-import 'account_settings_widget.dart';
-
 class SettingsWidget extends StatelessWidget {
+
+  final String title;
+  final Widget content;
+
+  const SettingsWidget({Key key, this.title, this.content}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(8.0),
-      child: Center(
-        child: Container(
-          constraints: BoxConstraints(maxWidth: 600),
-          child: Column(
-            children: <Widget>[
-              AccountSettingsWidget(),
-              SizedBox(height: 8.0),
-              ContactsSettingsWidget(),
-              SizedBox(height: 8.0),
-              TagsSettingsWidget(),
-              SizedBox(height: 8.0),
-              ReceiptsSettingsWidgets()
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+            ),
           ),
-        ),
+          SizedBox(height: 16.0),
+          content
+        ],
       ),
     );
   }
