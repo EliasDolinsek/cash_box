@@ -54,14 +54,6 @@ class ContactsSettingsPage extends StatelessWidget {
 
     final event = AddContactEvent(contact);
     sl<ContactsBloc>().dispatch(event);
-
-    _showAddingNewContactSnackbar(context);
-  }
-
-  void _showAddingNewContactSnackbar(BuildContext context) {
-    final text =
-        AppLocalizations.translateOf(context, "txt_adding_new_contact");
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 }
 
