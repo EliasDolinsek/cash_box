@@ -26,8 +26,7 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
       ReceiptMonth receiptMonth) async {
     if (_receiptsCollection == null ||
         _receiptsCollection.receipts == null ||
-        (_receiptsCollection.receiptsMonth != receiptMonth &&
-            _receiptsCollection.usesReceiptsMonth)) {
+        (_receiptsCollection.receiptsMonth != receiptMonth)) {
       await _loadReceiptsFromReceiptMonth(receiptMonth);
     }
 
@@ -61,6 +60,7 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
         query.documents.map((ds) => Receipt.fromJson(ds.data)).toList();
 
     _receiptsCollection.receipts = receipts;
+    _receiptsCollection.receiptsMonth = receiptMonth;
     _receiptsCollection.usesReceiptsMonth = true;
   }
 

@@ -68,10 +68,7 @@ class _ReceiptMonthSelectionWidgetState
     final result =
         await showMonthPicker(context: context, initialDate: initialMonth);
     if (result != null) {
-      final receiptMonthBlocEvent = SetReceiptMonthEvent(result);
       final receiptsBlocEvent = GetReceiptsInReceiptMonthEvent(ReceiptMonth(result));
-
-      sl<ReceiptMonthBloc>().dispatch(receiptMonthBlocEvent);
       sl<ReceiptsBloc>().dispatch(receiptsBlocEvent);
     }
   }

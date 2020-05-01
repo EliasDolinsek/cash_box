@@ -7,7 +7,6 @@ import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
-import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/receipts_gauge_pie_chart.dart';
 import 'package:cash_box/presentation/widgets/default_card.dart';
@@ -97,6 +96,7 @@ class OverviewWidget extends StatelessWidget {
 
   Widget _buildChart(
       List<Receipt> incomeReceipts, List<Receipt> outcomeReceipts) {
+
     return Container(
       child: ReceiptsGaugePieChart.fromReceipts(
         incomeReceipts,
