@@ -60,8 +60,8 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               children: <Widget>[
-                _buildNameFieldCard(),
-                _buildColorCard(),
+                _buildNameFieldWidget(),
+                _buildColorSelectionWidget(),
               ],
             ),
           ),
@@ -78,7 +78,7 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
     }
   }
 
-  Widget _buildNameFieldCard() {
+  Widget _buildNameFieldWidget() {
     final field = Field.newField(
       type: FieldType.text,
       description: "Name",
@@ -86,32 +86,32 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
       storageOnly: true
     );
 
-    return FieldWidget(
-      field,
-      deletable: false,
-      descriptionEditable: false,
-      typeEditable: false,
-      onFieldChanged: (update) {
-        _name = update.value;
-      },
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: FieldWidget(
+        field,
+        deletable: false,
+        descriptionEditable: false,
+        typeEditable: false,
+        onFieldChanged: (update) {
+          _name = update.value;
+        },
+      ),
     );
   }
 
-  Widget _buildColorCard() {
+  Widget _buildColorSelectionWidget() {
     final localizations = AppLocalizations.of(context);
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: _color,
-          ),
-          title: Text(localizations.translate("txt_color")),
-          trailing: MaterialButton(
-            child: Text(localizations.translate("btn_change")),
-            onPressed: _showPickColorDialog,
-          ),
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: _color,
+        ),
+        title: Text(localizations.translate("txt_color")),
+        trailing: MaterialButton(
+          child: Text(localizations.translate("btn_change")),
+          onPressed: _showPickColorDialog,
         ),
       ),
     );

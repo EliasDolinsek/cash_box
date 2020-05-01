@@ -88,25 +88,35 @@ class _ReceiptTemplateDetailsPageState
 
   List<Widget> _getFieldsAsFieldCardWidgetList() {
     return _fields.map((field) {
-      return Padding(
+      return Column(
         key: ValueKey(field),
-        padding: const EdgeInsets.all(8.0),
-        child: FieldWidget(
-          field,
-          onFieldChanged: (update) {
-            final index = _fields.indexWhere((element) =>
-            element.id == update.id);
-            _fields.removeAt(index);
-            _fields.insert(index, update);
-          },
-          onDelete: () {
-            setState(() {
-              _fields.remove(field);
-            });
-          },
-        ),
+        children: [
+          SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _buildFieldWidget(field),
+          ),
+          Divider()
+        ],
       );
     }).toList();
+  }
+
+  Widget _buildFieldWidget(Field field){
+    return FieldWidget(
+      field,
+      onFieldChanged: (update) {
+        final index = _fields.indexWhere((element) =>
+        element.id == update.id);
+        _fields.removeAt(index);
+        _fields.insert(index, update);
+      },
+      onDelete: () {
+        setState(() {
+          _fields.remove(field);
+        });
+      },
+    );
   }
 
   String _getAppBarTitle() {
@@ -121,7 +131,7 @@ class _ReceiptTemplateDetailsPageState
     final field =
     Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: FieldWidget(
         field,
         deletable: false,

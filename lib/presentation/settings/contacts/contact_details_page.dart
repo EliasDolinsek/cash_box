@@ -70,7 +70,6 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   Widget _buildListView() {
     return ReorderableListView(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
       header: _buildNameFieldCardWidget(),
       onReorder: (oldIndex, newIndex) {
         setState(() {
@@ -90,7 +89,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     final field =
     Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.all(16.0),
       child: FieldWidget(
         field,
         deletable: false,
