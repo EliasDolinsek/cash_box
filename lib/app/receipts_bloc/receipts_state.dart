@@ -30,18 +30,6 @@ class ReceiptsAvailableState extends ReceiptsState {
   List get props => [receipts];
 }
 
-class ReceiptAvailableState extends ReceiptsState {
-
-  final Receipt receipt;
-
-  ReceiptAvailableState(this.receipt);
-
-  @override
-  List get props => [receipt];
-}
-
-class ReceiptsUnavailableState extends ReceiptsState {}
-
 class ReceiptsErrorState extends ReceiptsState {
 
   final String errorMessage;

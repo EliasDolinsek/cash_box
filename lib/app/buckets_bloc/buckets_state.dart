@@ -19,8 +19,6 @@ class BucketsAvailableState extends BucketsState {
 
 }
 
-class BucketsUnavailableState extends BucketsState {}
-
 class BucketsErrorState extends BucketsState {
 
   final String errorMessage;
