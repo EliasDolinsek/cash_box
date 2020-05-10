@@ -2,7 +2,7 @@ import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';

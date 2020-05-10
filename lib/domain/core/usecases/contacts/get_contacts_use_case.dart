@@ -3,7 +3,7 @@ import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/repositories/contacts_repository.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/usecases/use_case.dart';
+import '../use_case.dart';
 
 class GetContactsUseCase extends UseCase<List<Contact>, NoParams> {
 

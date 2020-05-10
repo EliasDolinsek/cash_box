@@ -1,7 +1,7 @@
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/repositories/templates_repository.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 

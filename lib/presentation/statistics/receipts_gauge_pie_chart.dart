@@ -2,7 +2,6 @@ import 'package:cash_box/core/platform/constants.dart'
     show incomeColor, outcomeColor;
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'dart:math' show pi;

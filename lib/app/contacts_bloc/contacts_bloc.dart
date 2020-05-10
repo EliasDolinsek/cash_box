@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/add_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dart';

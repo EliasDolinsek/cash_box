@@ -1,5 +1,5 @@
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/usecases/contacts/add_contact_use_case.dart';

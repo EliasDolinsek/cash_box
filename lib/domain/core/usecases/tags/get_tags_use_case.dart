@@ -3,7 +3,7 @@ import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/repositories/tags_repository.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/usecases/use_case.dart';
+import '../use_case.dart';
 
 class GetTagsUseCase extends UseCase<List<Tag>, NoParams> {
 

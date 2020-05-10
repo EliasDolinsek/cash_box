@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/core/usecases/buckets/add_bucket_use_case.dart';
 import 'package:cash_box/domain/core/usecases/buckets/add_receipt_to_bucket_use_case.dart';
 import 'package:cash_box/domain/core/usecases/buckets/get_buckets_use_case.dart';

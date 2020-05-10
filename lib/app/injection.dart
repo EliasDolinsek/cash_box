@@ -7,6 +7,7 @@ import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
+import 'package:cash_box/domain/core/usecases/buckets/get_incomes_outcomes_of_bucket_use_case.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_remote_firebase_data_source.dart';
@@ -67,6 +68,7 @@ import 'package:cash_box/domain/core/usecases/contacts/remove_contact_use_case.d
 import 'package:cash_box/domain/core/usecases/contacts/update_contact_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/filter_receipts_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_amount_of_receipts_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_use_case.dart';
@@ -291,6 +293,7 @@ Future init() async {
   sl.registerLazySingleton(() => GetTagsUseCase(sl()));
   sl.registerLazySingleton(() => RemoveTagUseCase(sl(), sl()));
   sl.registerLazySingleton(() => UpdateTagUseCase(sl()));
+  sl.registerLazySingleton(() => GetIncomesOutcomesOfBucketUseCase(sl()));
 
   // BLoCs
   sl.registerLazySingleton(
@@ -366,6 +369,7 @@ Future init() async {
   sl.registerLazySingleton(() => RemoveBucketUseCase(sl()));
   sl.registerLazySingleton(() => RemoveReceiptFromBucketUseCase(sl()));
   sl.registerLazySingleton(() => UpdateBucketUseCase(sl()));
+  sl.registerLazySingleton(() => GetAmountOfReceiptsUseCase());
 
   // BLoC
   sl.registerLazySingleton(

@@ -1,5 +1,5 @@
 import 'package:cash_box/domain/core/usecases/contacts/get_contacts_use_case.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';

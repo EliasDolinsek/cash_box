@@ -1,5 +1,5 @@
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';

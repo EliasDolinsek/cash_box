@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';

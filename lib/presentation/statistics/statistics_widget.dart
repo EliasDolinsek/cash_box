@@ -90,7 +90,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget>
           icon: Icons.label_outline,
           selectedColor: Theme.of(context)
               .primaryColor
-              .withAlpha((50 * tabController.animation.value).toInt()),
+              .withAlpha((100 * tabController.animation.value).toInt()),
           onTap: () {
             tabController.animateTo(1);
           },

@@ -5,7 +5,7 @@ import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/usecases/use_case.dart';
+import '../use_case.dart';
 import 'get_bucket_use_case.dart';
 
 class RemoveReceiptFromBucketUseCase extends UseCase<EmptyData, RemoveReceiptFromBucketUseCaseParams>{

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_state.dart';
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_sign_in_state_use_case.dart';
 import './bloc.dart';
 import 'package:meta/meta.dart';

@@ -1,7 +1,7 @@
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';

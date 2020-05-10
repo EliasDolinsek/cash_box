@@ -18,7 +18,7 @@ class StatisticsListTile extends StatelessWidget {
         style: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.w400,
-          shadows: [Shadow(color: Colors.black, blurRadius: 2)],
+          shadows: [Shadow(color: Colors.black, blurRadius: 1)],
         ),
       ),
       trailing: Text(
@@ -64,10 +64,12 @@ class StatisticsListTile extends StatelessWidget {
 
   Widget _buildProgressIndicators(BuildContext context, double maxWidth) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: progressIndicatorData
           .map(
-            (e) => Padding(
+            (e) {
+              return Padding(
               padding: EdgeInsets.only(right: indicatorsSpacing),
               child: Container(
                 child: StatisticsListTileProgressIndicator(data: e),
@@ -76,7 +78,8 @@ class StatisticsListTile extends StatelessWidget {
                         maxWidth, indicatorsSpacing) /
                     100,
               ),
-            ),
+            );
+            },
           )
           .toList(),
     );
@@ -93,8 +96,10 @@ class StatisticsListTile extends StatelessWidget {
     }
   }
 
-  double _getSpaceAsPercentOfProgressIndicatorData(double count) =>
-      100 / _getProgressIndicatorDataMaxCount() * count;
+  double _getSpaceAsPercentOfProgressIndicatorData(double count) {
+    if(_getProgressIndicatorDataMaxCount() == 0 || count == 0) return 100;
+    return 100 / _getProgressIndicatorDataMaxCount() * count;
+  }
 
   double _getProgressIndicatorDataMaxCount() {
     double count = 0;

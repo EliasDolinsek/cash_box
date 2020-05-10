@@ -1,5 +1,5 @@
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/subscription.dart';
 import 'package:cash_box/domain/account/repositories/accounts_repository.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';

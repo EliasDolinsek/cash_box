@@ -1,5 +1,5 @@
 import 'package:cash_box/app/buckets_bloc/bloc.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:cash_box/domain/core/usecases/buckets/add_bucket_use_case.dart';

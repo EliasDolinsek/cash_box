@@ -4,7 +4,7 @@ import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/usecases/use_case.dart';
+import '../use_case.dart';
 
 class GetReceiptUseCase extends UseCase<Receipt, GetReceiptUseCaseParams> {
 

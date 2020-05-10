@@ -1,7 +1,7 @@
 import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/auth_bloc/auth_state.dart';
-import 'package:cash_box/core/usecases/use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:cash_box/domain/account/usecases/get_sign_in_state_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
