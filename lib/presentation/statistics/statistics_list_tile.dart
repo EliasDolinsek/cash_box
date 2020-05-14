@@ -66,22 +66,20 @@ class StatisticsListTile extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: progressIndicatorData
-          .map(
-            (e) {
-              return Padding(
-              padding: EdgeInsets.only(right: indicatorsSpacing),
-              child: Container(
-                child: StatisticsListTileProgressIndicator(data: e),
-                width: _getSpaceAsPercentOfProgressIndicatorData(e.count) *
-                    _getMaxWidthForProgressIndicator(
-                        maxWidth, indicatorsSpacing) /
-                    100,
-              ),
-            );
-            },
-          )
-          .toList(),
+      children: progressIndicatorData.where((e) => e.count != 0).map(
+        (e) {
+          return Padding(
+            padding: EdgeInsets.only(right: indicatorsSpacing),
+            child: Container(
+              child: StatisticsListTileProgressIndicator(data: e),
+              width: _getSpaceAsPercentOfProgressIndicatorData(e.count) *
+                  _getMaxWidthForProgressIndicator(
+                      maxWidth, indicatorsSpacing) /
+                  100,
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 
@@ -97,7 +95,7 @@ class StatisticsListTile extends StatelessWidget {
   }
 
   double _getSpaceAsPercentOfProgressIndicatorData(double count) {
-    if(_getProgressIndicatorDataMaxCount() == 0 || count == 0) return 100;
+    if (_getProgressIndicatorDataMaxCount() == 0 || count == 0) return 100;
     return 100 / _getProgressIndicatorDataMaxCount() * count;
   }
 

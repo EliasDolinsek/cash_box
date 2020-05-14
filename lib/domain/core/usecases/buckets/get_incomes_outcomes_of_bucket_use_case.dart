@@ -6,10 +6,13 @@ import 'package:cash_box/domain/core/usecases/receipts/get_amount_of_receipts_us
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
+import 'dart:math' as math;
+
 import 'package:meta/meta.dart';
 
-class GetIncomesOutcomesOfBucketUseCase
-    extends UseCase<GetIncomesOutcomesOfBucketUseCaseResult, GetIncomesOutcomesOfBucketUseCaseParams> {
+class GetIncomesOutcomesOfBucketUseCase extends UseCase<
+    GetIncomesOutcomesOfBucketUseCaseResult,
+    GetIncomesOutcomesOfBucketUseCaseParams> {
   final GetAmountOfReceiptsUseCase getAmountOfReceiptsUseCase;
 
   GetIncomesOutcomesOfBucketUseCase(this.getAmountOfReceiptsUseCase);
@@ -17,17 +20,22 @@ class GetIncomesOutcomesOfBucketUseCase
   @override
   Future<Either<Failure, GetIncomesOutcomesOfBucketUseCaseResult>> call(
       GetIncomesOutcomesOfBucketUseCaseParams params) async {
-    final incomeReceipts = params.receipts
+    final receiptsOfBuckets =
+        _filterReceiptsOfBucket(params.bucket, params.receipts);
+
+    final incomeReceipts = receiptsOfBuckets
         .where((element) => element.type == ReceiptType.income)
         .toList();
-    final outcomeReceipts = params.receipts
+
+    final outcomeReceipts = receiptsOfBuckets
         .where((element) => element.type == ReceiptType.outcome)
         .toList();
 
     final incomeReceiptsAmountResult = await getAmountOfReceiptsUseCase(
         GetAmountOfReceiptsUseCaseParams(incomeReceipts));
+
     final outcomeReceiptsAmountResult = await getAmountOfReceiptsUseCase(
-        GetAmountOfReceiptsUseCaseParams(incomeReceipts));
+        GetAmountOfReceiptsUseCaseParams(outcomeReceipts));
 
     var incomeReceiptsAmount, outcomeReceiptsAmount;
     incomeReceiptsAmountResult.fold((l) {
@@ -47,16 +55,27 @@ class GetIncomesOutcomesOfBucketUseCase
     }
 
     if (outcomeReceiptsAmount is Failure) {
-      return Left(incomeReceiptsAmount);
+      return Left(outcomeReceiptsAmount);
+    }
+
+    if(outcomeReceiptsAmount < 0){
+      outcomeReceiptsAmount *= -1;
     }
 
     final result = GetIncomesOutcomesOfBucketUseCaseResult(
-        incomeReceipts: incomeReceipts,
-        incomeReceiptsAmount: incomeReceiptsAmount,
-        outcomeReceipts: outcomeReceipts,
-        outcomeReceiptsAmount: outcomeReceiptsAmount);
+      incomeReceipts: incomeReceipts,
+      incomeReceiptsAmount: incomeReceiptsAmount,
+      outcomeReceipts: outcomeReceipts,
+      outcomeReceiptsAmount: outcomeReceiptsAmount,
+    );
 
     return Right(result);
+  }
+
+  List<Receipt> _filterReceiptsOfBucket(Bucket bucket, List<Receipt> receipts) {
+    return receipts
+        .where((element) => bucket.receiptsIDs.contains(element.id))
+        .toList();
   }
 }
 

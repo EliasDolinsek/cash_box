@@ -323,11 +323,13 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
   }
 
   void _updateReceipt() {
-    final event = UpdateReceiptEvent(widget.receipt.id,
-        type: receiptType,
-        fields: fields,
-        tagIDs: tagIds,
-        creationDate: creationDate);
+    final event = UpdateReceiptEvent(
+      widget.receipt.id,
+      type: receiptType,
+      fields: fields,
+      tagIDs: tagIds,
+      creationDate: creationDate,
+    );
 
     sl<ReceiptsBloc>().dispatch(event);
   }

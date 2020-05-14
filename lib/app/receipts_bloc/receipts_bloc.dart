@@ -55,11 +55,13 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
   }
 
   Future _updateReceipt(UpdateReceiptEvent event) async {
-    final params = UpdateReceiptUseCaseParams(event.id,
-        type: event.type,
-        fields: event.fields,
-        tagIDs: event.tagIDs,
-        creationDate: event.creationDate);
+    final params = UpdateReceiptUseCaseParams(
+      event.id,
+      type: event.type,
+      fields: event.fields,
+      tagIDs: event.tagIDs,
+      creationDate: event.creationDate,
+    );
 
     await updateReceiptUseCase(params);
   }

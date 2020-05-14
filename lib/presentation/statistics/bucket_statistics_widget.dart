@@ -41,7 +41,7 @@ class BucketStatisticsWidget extends StatelessWidget {
           if (snapshot.hasData){
             return StatisticsListTile(
               title: buckets[index].name,
-              trailing: snapshot.data.first.count.toString(),
+              trailing: "TODO!!!!!",
               progressIndicatorData: snapshot.data,
             );
           } else {
