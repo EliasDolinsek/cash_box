@@ -33,7 +33,7 @@ class StatisticsListTile extends StatelessWidget {
   }
 
   Widget _buildSubtitle(BuildContext context) {
-    if (progressIndicatorData != null) {
+    if (progressIndicatorData != null && progressIndicatorData.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: _buildProgressIndicatorContainer(context),

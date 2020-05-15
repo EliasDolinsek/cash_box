@@ -2,7 +2,7 @@ import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/usecases/buckets/get_incomes_outcomes_of_bucket_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/statistics_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +55,8 @@ class BucketStatisticsWidget extends StatelessWidget {
   }
 
   Future<List<StatisticsListTileProgressIndicatorData>> _getProgressIndicatorDataForBucket(Bucket bucket) async {
-    final params = GetIncomesOutcomesOfBucketUseCaseParams(bucket, receipts);
-    final result = await sl<GetIncomesOutcomesOfBucketUseCase>().call(params);
+    final params = GetIncomesOutcomesUseCaseParams(bucket.receiptsIDs, receipts);
+    final result = await sl<GetIncomesOutcomesUseCase>().call(params);
 
     return result.fold((l) => null, (r){
       if(r.incomeReceiptsAmount == 0 && r.outcomeReceiptsAmount == 0){

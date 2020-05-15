@@ -7,7 +7,7 @@ import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
-import 'package:cash_box/domain/core/usecases/buckets/get_incomes_outcomes_of_bucket_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_remote_firebase_data_source.dart';
@@ -293,7 +293,7 @@ Future init() async {
   sl.registerLazySingleton(() => GetTagsUseCase(sl()));
   sl.registerLazySingleton(() => RemoveTagUseCase(sl(), sl()));
   sl.registerLazySingleton(() => UpdateTagUseCase(sl()));
-  sl.registerLazySingleton(() => GetIncomesOutcomesOfBucketUseCase(sl()));
+  sl.registerLazySingleton(() => GetIncomesOutcomesUseCase(sl()));
 
   // BLoCs
   sl.registerLazySingleton(

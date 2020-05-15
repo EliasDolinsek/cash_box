@@ -151,5 +151,7 @@
   "txt_filter": "Filter",
   "txt_bucket_settings": "Bucket Settings",
   "txt_buckets": "Buckets",
-  "txt_bucket_settings_hint": "Add, remove and update buckets"
+  "txt_bucket_settings_hint": "Add, remove and update buckets",
+  "btn_tags": "TAGS",
+  "btn_buckets": "BUCKETS"
 }

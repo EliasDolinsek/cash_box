@@ -1,27 +1,24 @@
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
-import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_amount_of_receipts_use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-import 'dart:math' as math;
-
 import 'package:meta/meta.dart';
 
-class GetIncomesOutcomesOfBucketUseCase extends UseCase<
+class GetIncomesOutcomesUseCase extends UseCase<
     GetIncomesOutcomesOfBucketUseCaseResult,
-    GetIncomesOutcomesOfBucketUseCaseParams> {
+    GetIncomesOutcomesUseCaseParams> {
   final GetAmountOfReceiptsUseCase getAmountOfReceiptsUseCase;
 
-  GetIncomesOutcomesOfBucketUseCase(this.getAmountOfReceiptsUseCase);
+  GetIncomesOutcomesUseCase(this.getAmountOfReceiptsUseCase);
 
   @override
   Future<Either<Failure, GetIncomesOutcomesOfBucketUseCaseResult>> call(
-      GetIncomesOutcomesOfBucketUseCaseParams params) async {
+      GetIncomesOutcomesUseCaseParams params) async {
     final receiptsOfBuckets =
-        _filterReceiptsOfBucket(params.bucket, params.receipts);
+        _filterReceiptsOfSearchedReceipts(params.receiptIds, params.receipts);
 
     final incomeReceipts = receiptsOfBuckets
         .where((element) => element.type == ReceiptType.income)
@@ -72,9 +69,9 @@ class GetIncomesOutcomesOfBucketUseCase extends UseCase<
     return Right(result);
   }
 
-  List<Receipt> _filterReceiptsOfBucket(Bucket bucket, List<Receipt> receipts) {
+  List<Receipt> _filterReceiptsOfSearchedReceipts(List<String> receiptIds, List<Receipt> receipts) {
     return receipts
-        .where((element) => bucket.receiptsIDs.contains(element.id))
+        .where((element) => receiptIds.contains(element.id))
         .toList();
   }
 }
@@ -99,12 +96,12 @@ class GetIncomesOutcomesOfBucketUseCaseResult extends Equatable {
       ];
 }
 
-class GetIncomesOutcomesOfBucketUseCaseParams extends Equatable {
-  final Bucket bucket;
+class GetIncomesOutcomesUseCaseParams extends Equatable {
+  final List<String> receiptIds;
   final List<Receipt> receipts;
 
-  GetIncomesOutcomesOfBucketUseCaseParams(this.bucket, this.receipts);
+  GetIncomesOutcomesUseCaseParams(this.receiptIds, this.receipts);
 
   @override
-  List get props => [bucket, receipts];
+  List get props => [receiptIds, receipts];
 }
