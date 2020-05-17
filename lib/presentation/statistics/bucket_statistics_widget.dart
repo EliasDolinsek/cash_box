@@ -34,24 +34,15 @@ class BucketStatisticsWidget extends StatelessWidget {
   }
 
   Widget _buildLoaded(List<Bucket> buckets) {
-    /*return ListView.separated(
-      itemBuilder: (_, index) => FutureBuilder<List<StatisticsListTileProgressIndicatorData>>(
-        future: _getProgressIndicatorDataForBucket(buckets[index]),
-        builder: (_, snapshot){
-          if (snapshot.hasData){
-            return StatisticsListTile(
-              title: buckets[index].name,
-              trailing: "TODO!!!!!",
-              progressIndicatorData: snapshot.data,
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
-        },
+    return ListView.separated(
+      itemBuilder: (context, index) => BucketStatisticsListTile(
+        bucket: buckets[index],
+        receipts: receipts,
       ),
-      separatorBuilder: (_, index) => SizedBox(height: 16.0),
+      separatorBuilder: (context, index) => SizedBox(
+        height: 8.0,
+      ),
       itemCount: buckets.length,
-    );*/
-    return Text("LOADED");
+    );
   }
 }

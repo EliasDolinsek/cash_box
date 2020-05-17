@@ -18,13 +18,20 @@ class BucketStatisticsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return StatisticsListTile(
+      data: _getStatisticsListTileData(),
+      trailing: "10€",
+      title: bucket.name,
+    );
   }
 
   List<StatisticsListTileData> _getStatisticsListTileData() {
-    final List<Receipt> bucketReceipts = receipts
-        .where((element) => bucket.receiptsIDs.contains(element.id))
-        .toList();
+    final params =
+        GetIncomesOutcomesUseCaseParams(bucket.receiptsIDs, receipts);
+    final result = sl<GetIncomesOutcomesUseCase>().call(params);
+
+    return StatisticsListTileData.fromGetIncomesOutcomesOfBucketUseCaseResult(
+        result, "INCOMES TOOD", "OUTCOMES TODO", "0€TODO");
   }
 }
 
@@ -42,7 +49,7 @@ class TagStatisticsListTile extends StatelessWidget {
       data: _getStatisticsListTileData(),
       title: tag.name,
       spacing: 8,
-      trailing: "TODO",
+      trailing: "10€",
     );
   }
 
@@ -80,14 +87,33 @@ class StatisticsListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        title,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            trailing,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
-      trailing: Text(trailing),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 8.0),
-        child: _buildSubtitle(),
+        child: LayoutBuilder(
+          builder: (context, constraints) => ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 10),
+            child: _buildSubtitle(),
+          ),
+        ),
       ),
     );
   }
@@ -95,9 +121,31 @@ class StatisticsListTile extends StatelessWidget {
   Widget _buildSubtitle() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: _getStatisticsProgressIndicators(constraints.maxWidth),
+        final progressIndicators =
+            _getStatisticsProgressIndicators(constraints.maxWidth);
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: progressIndicators,
+            ),
+            SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: progressIndicators
+                  .map(
+                    (e) => Container(
+                      width: e.width,
+                      child: Text(
+                        e.statisticsListTileData.text,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            )
+          ],
         );
       },
     );
@@ -108,7 +156,11 @@ class StatisticsListTile extends StatelessWidget {
     return data.map((e) {
       if (e.count == 0) {
         return _StatisticsProgressIndicator(
-            width: maxWidth, height: height, color: e.color);
+          width: maxWidth,
+          height: height,
+          color: e.color,
+          statisticsListTileData: e,
+        );
       } else {
         final appliedSpacing = data.length <= 1 ? 0 : spacing;
 
@@ -116,7 +168,11 @@ class StatisticsListTile extends StatelessWidget {
         double width = widthAsPercent / 100 * (maxWidth - appliedSpacing);
 
         return _StatisticsProgressIndicator(
-            width: width, height: height, color: e.color);
+          width: width,
+          height: height,
+          color: e.color,
+          statisticsListTileData: e,
+        );
       }
     }).toList();
   }
@@ -174,6 +230,7 @@ class StatisticsListTileData {
 }
 
 class _StatisticsProgressIndicator extends StatelessWidget {
+  final StatisticsListTileData statisticsListTileData;
   final double width, height, borderRadius;
   final Color color;
 
@@ -182,6 +239,7 @@ class _StatisticsProgressIndicator extends StatelessWidget {
       @required this.width,
       @required this.height,
       @required this.color,
+      @required this.statisticsListTileData,
       this.borderRadius = 8})
       : super(key: key);
 
