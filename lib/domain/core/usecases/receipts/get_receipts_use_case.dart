@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 
 import '../use_case.dart';
 
-class GetReceiptsUseCase extends UseCase<List<Receipt>, NoParams> {
+class GetReceiptsUseCase extends AsyncUseCase<List<Receipt>, NoParams> {
 
   final ReceiptsRepository receiptsRepository;
 

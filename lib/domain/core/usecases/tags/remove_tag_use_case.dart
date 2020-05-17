@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 
 import '../use_case.dart';
 
-class RemoveTagUseCase extends UseCase<EmptyData, RemoveTagUseCaseParams> {
+class RemoveTagUseCase extends AsyncUseCase<EmptyData, RemoveTagUseCaseParams> {
 
   final TagsRepository tagsRepository;
   final ReceiptsRepository receiptsRepository;

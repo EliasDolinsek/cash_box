@@ -10,7 +10,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UpdateAccountUseCase
-    extends UseCase<EmptyData, UpdateAccountUseCaseParams> {
+    extends AsyncUseCase<EmptyData, UpdateAccountUseCaseParams> {
 
   final FirebaseAuth firebaseAuth;
   final AccountsRepository repository;

@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
-class SignInWithEmailAndPasswordUseCase extends UseCase<EmptyData, SignInWithEmailAndPasswordUseCaseParams> {
+class SignInWithEmailAndPasswordUseCase extends AsyncUseCase<EmptyData, SignInWithEmailAndPasswordUseCaseParams> {
 
   final FirebaseAuth firebaseAuth;
 

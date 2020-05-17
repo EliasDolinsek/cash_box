@@ -5,7 +5,7 @@ import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class RemoveReceiptUseCase extends UseCase<EmptyData, RemoveReceiptUseCaseParams> {
+class RemoveReceiptUseCase extends AsyncUseCase<EmptyData, RemoveReceiptUseCaseParams> {
 
   final ReceiptsRepository repository;
 

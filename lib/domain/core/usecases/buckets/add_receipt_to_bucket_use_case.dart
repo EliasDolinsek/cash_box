@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 import '../use_case.dart';
 import 'get_bucket_use_case.dart';
 
-class AddReceiptToBucketUseCase extends UseCase<EmptyData, AddReceiptToBucketUseCaseParams> {
+class AddReceiptToBucketUseCase extends AsyncUseCase<EmptyData, AddReceiptToBucketUseCaseParams> {
 
   final BucketsRepository repository;
 

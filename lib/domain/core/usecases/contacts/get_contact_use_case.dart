@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 
 import '../use_case.dart';
 
-class GetContactUseCase extends UseCase<Contact, GetContactUseCaseParams> {
+class GetContactUseCase extends AsyncUseCase<Contact, GetContactUseCaseParams> {
 
   final ContactsRepository repository;
 

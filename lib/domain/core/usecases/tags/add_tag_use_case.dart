@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 
 import '../use_case.dart';
 
-class AddTagUseCase extends UseCase<EmptyData, AddTagUseCaseParams> {
+class AddTagUseCase extends AsyncUseCase<EmptyData, AddTagUseCaseParams> {
 
   final TagsRepository repository;
 

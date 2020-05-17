@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 
 import '../use_case.dart';
 
-class AddReceiptUseCase extends UseCase<EmptyData, AddReceiptUseCaseParams> {
+class AddReceiptUseCase extends AsyncUseCase<EmptyData, AddReceiptUseCaseParams> {
 
   final ReceiptsRepository repository;
 

@@ -9,7 +9,7 @@ import '../use_case.dart';
 import 'get_receipt_use_case.dart';
 
 class UpdateReceiptUseCase
-    extends UseCase<EmptyData, UpdateReceiptUseCaseParams> {
+    extends AsyncUseCase<EmptyData, UpdateReceiptUseCaseParams> {
 
   final ReceiptsRepository repository;
 

@@ -4,7 +4,7 @@ import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class GetSignInStateUseCase extends UseCase<SignInState, NoParams> {
+class GetSignInStateUseCase extends AsyncUseCase<SignInState, NoParams> {
 
   final FirebaseAuth firebaseAuth;
 

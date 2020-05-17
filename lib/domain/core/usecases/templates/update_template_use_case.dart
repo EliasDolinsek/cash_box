@@ -9,7 +9,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 class UpdateTemplateUseCase
-    extends UseCase<EmptyData, UpdateTemplateUseCaseParams> {
+    extends AsyncUseCase<EmptyData, UpdateTemplateUseCaseParams> {
 
   final TemplatesRepository repository;
 

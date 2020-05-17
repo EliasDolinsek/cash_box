@@ -5,7 +5,7 @@ import 'package:cash_box/domain/account/repositories/subscriptions_repository.da
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class GetCurrentSubscriptionUseCase extends UseCase<SubscriptionInfo, GetCurrentSubscriptionUseCaseParams> {
+class GetCurrentSubscriptionUseCase extends AsyncUseCase<SubscriptionInfo, GetCurrentSubscriptionUseCaseParams> {
 
   final SubscriptionsRepository repository;
 

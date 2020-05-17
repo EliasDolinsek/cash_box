@@ -7,7 +7,7 @@ import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class UpdateTagUseCase extends UseCase<EmptyData, UpdateTagUseCaseParams> {
+class UpdateTagUseCase extends AsyncUseCase<EmptyData, UpdateTagUseCaseParams> {
 
   final TagsRepository repository;
 

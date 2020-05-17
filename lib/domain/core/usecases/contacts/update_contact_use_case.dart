@@ -10,7 +10,7 @@ import 'package:equatable/equatable.dart';
 import '../use_case.dart';
 
 class UpdateContactUseCase
-    extends UseCase<EmptyData, UpdateContactUseCaseParams> {
+    extends AsyncUseCase<EmptyData, UpdateContactUseCaseParams> {
   final ContactsRepository repository;
 
   UpdateContactUseCase(this.repository);

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterWithEmailAndPasswordUseCase
-    extends UseCase<String, RegisterWithEmailAndPasswordUseCaseParams> {
+    extends AsyncUseCase<String, RegisterWithEmailAndPasswordUseCaseParams> {
   final FirebaseAuth firebaseAuth;
 
   RegisterWithEmailAndPasswordUseCase(this.firebaseAuth);

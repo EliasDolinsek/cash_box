@@ -9,7 +9,7 @@ import '../use_case.dart';
 import 'get_bucket_use_case.dart';
 
 class UpdateBucketUseCase
-    extends UseCase<EmptyData, UpdateBucketUseCaseParams> {
+    extends AsyncUseCase<EmptyData, UpdateBucketUseCaseParams> {
   final BucketsRepository repository;
 
   UpdateBucketUseCase(this.repository);

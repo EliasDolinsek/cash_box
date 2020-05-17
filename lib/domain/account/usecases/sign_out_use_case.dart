@@ -4,7 +4,7 @@ import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class SignOutUseCase extends UseCase<EmptyData, NoParams> {
+class SignOutUseCase extends AsyncUseCase<EmptyData, NoParams> {
 
   final FirebaseAuth firebaseAuth;
 

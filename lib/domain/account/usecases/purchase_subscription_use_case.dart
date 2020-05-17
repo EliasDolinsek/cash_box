@@ -7,7 +7,7 @@ import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class PurchaseSubscriptionUseCase extends UseCase<EmptyData, PurchaseSubscriptionUseCaseParams> {
+class PurchaseSubscriptionUseCase extends AsyncUseCase<EmptyData, PurchaseSubscriptionUseCaseParams> {
 
   final AccountsRepository repository;
 

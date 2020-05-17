@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 
 import '../use_case.dart';
 
-class GetBucketUseCase extends UseCase<Bucket, GetBucketUseCaseParams> {
+class GetBucketUseCase extends AsyncUseCase<Bucket, GetBucketUseCaseParams> {
 
   final BucketsRepository repository;
 

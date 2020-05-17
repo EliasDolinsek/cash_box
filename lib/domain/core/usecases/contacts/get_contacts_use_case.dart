@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 
 import '../use_case.dart';
 
-class GetContactsUseCase extends UseCase<List<Contact>, NoParams> {
+class GetContactsUseCase extends AsyncUseCase<List<Contact>, NoParams> {
 
   final ContactsRepository repository;
 

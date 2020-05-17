@@ -5,7 +5,7 @@ import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class DeleteAccountUseCase extends UseCase<EmptyData, DeleteAccountUseCaseParams> {
+class DeleteAccountUseCase extends AsyncUseCase<EmptyData, DeleteAccountUseCaseParams> {
 
   final AccountsRepository repository;
 

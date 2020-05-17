@@ -7,7 +7,7 @@ import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class FilterReceiptsUseCase extends UseCase<List<Receipt>, FilterReceiptsUseCaseParams> {
+class FilterReceiptsUseCase extends AsyncUseCase<List<Receipt>, FilterReceiptsUseCaseParams> {
 
   final ReceiptsRepository repository;
 

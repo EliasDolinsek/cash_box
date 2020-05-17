@@ -5,7 +5,7 @@ import 'package:cash_box/domain/account/repositories/accounts_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class GetAccountUseCase extends UseCase<Account, GetAccountUseCaseParams> {
+class GetAccountUseCase extends AsyncUseCase<Account, GetAccountUseCaseParams> {
 
   final AccountsRepository repository;
 

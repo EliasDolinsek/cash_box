@@ -5,7 +5,7 @@ import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class RemoveTemplateUseCase extends UseCase<EmptyData, RemoveTemplateUseCaseParams> {
+class RemoveTemplateUseCase extends AsyncUseCase<EmptyData, RemoveTemplateUseCaseParams> {
 
   final TemplatesRepository repository;
 

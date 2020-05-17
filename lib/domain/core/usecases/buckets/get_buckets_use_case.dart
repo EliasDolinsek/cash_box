@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 
 import '../use_case.dart';
 
-class GetBucketsUseCase extends UseCase<List<Bucket>, NoParams> {
+class GetBucketsUseCase extends AsyncUseCase<List<Bucket>, NoParams> {
 
   final BucketsRepository repository;
 

@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class UpdateUserPasswordUseCase extends UseCase<EmptyData, UpdateUserPasswordUseCaseParams> {
+class UpdateUserPasswordUseCase extends AsyncUseCase<EmptyData, UpdateUserPasswordUseCaseParams> {
 
   final FirebaseAuth firebaseAuth;
 

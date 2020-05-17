@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 
 import '../use_case.dart';
 
-class GetTagsUseCase extends UseCase<List<Tag>, NoParams> {
+class GetTagsUseCase extends AsyncUseCase<List<Tag>, NoParams> {
 
   final TagsRepository repository;
 
