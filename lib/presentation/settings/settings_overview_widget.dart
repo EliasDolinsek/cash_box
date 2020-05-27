@@ -5,6 +5,7 @@ import 'package:cash_box/presentation/settings/buckets/buckets_settings_widget.d
 import 'package:flutter/material.dart';
 
 import 'accounts/account_settings_widget.dart';
+import 'currency/currency_settings_widget.dart';
 
 class SettingsOverviewWidget extends StatelessWidget {
   @override
@@ -25,6 +26,8 @@ class SettingsOverviewWidget extends StatelessWidget {
               ReceiptsSettingsWidget(),
               SizedBox(height: 8.0),
               BucketsSettingsWidget(),
+              SizedBox(height: 8.0),
+              CurrencySettingsWidget(),
             ],
           ),
         ),

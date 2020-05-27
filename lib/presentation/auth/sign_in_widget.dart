@@ -279,6 +279,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
       email: _email,
       appPassword: "",
       name: _name,
+      currencyCode: "USD",
       subscriptionInfo: SubscriptionInfo(
         subscriptionType: _getSubscriptionTypeFromAccountType(),
         purchaseDate: DateTime.now(),

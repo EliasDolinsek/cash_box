@@ -14,7 +14,9 @@ class _MobileNavigationPageState extends State<MobileNavigationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("CashBox"),
+        elevation: 1,
         backgroundColor: Colors.white,
+        centerTitle: false,
         actions: <Widget>[
           ReceiptMonthSelectionWidget(),
         ],

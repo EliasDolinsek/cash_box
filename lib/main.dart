@@ -8,6 +8,7 @@ import 'package:cash_box/presentation/receipts/add_receipt_template_selection_pa
 import 'package:cash_box/presentation/search/search_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
+import 'package:cash_box/presentation/settings/currency/currency_settings_page.dart';
 import 'package:cash_box/presentation/settings/receipts/receipt_template_details_page.dart';
 import 'package:cash_box/presentation/settings/receipts/receipt_templates_settings_page.dart';
 import 'package:cash_box/presentation/settings/tags/tag_details_page.dart';
@@ -70,6 +71,7 @@ class CashBoxApp extends StatelessWidget {
         "/receiptTemplatesSettings": (context) =>
             ReceiptTemplatesSettingsWidget(),
         "/addReceipt": (context) => AddReceiptTemplateSelectionPage(),
+        "/currencySettings": (context) => CurrencySettingsPage()
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {

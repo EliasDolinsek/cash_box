@@ -17,8 +17,7 @@ class AccountsRepositoryDefaultFirebaseImpl extends AccountsRepository {
   @override
   Future<Either<Failure, EmptyData>> createAccount(Account account) async {
     try {
-      final document = usersCollectionReference.document(account.userID);
-      await document.setData(account.toJSON());
+      await usersCollectionReference.document(account.userID).setData(account.toJSON());
       return Right(EmptyData());
     } on Exception {
       return Left(AccountsRepositoryFailure());

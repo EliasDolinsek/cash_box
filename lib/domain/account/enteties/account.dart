@@ -10,22 +10,24 @@ part 'account.g.dart';
 
 @JsonSerializable(nullable: false)
 class Account extends Equatable {
-
   final SignInSource signInSource;
   final AccountType accountType;
   final String email, appPassword;
   final String name;
   final String userID;
+  final String currencyCode;
   final SubscriptionInfo subscriptionInfo;
 
-  Account(
-      {@required this.userID,
-      @required this.signInSource,
-      @required this.accountType,
-      @required this.email,
-      @required this.appPassword,
-      @required this.name,
-      @required this.subscriptionInfo});
+  Account({
+    @required this.userID,
+    @required this.signInSource,
+    @required this.accountType,
+    @required this.email,
+    @required this.appPassword,
+    @required this.name,
+    @required this.currencyCode,
+    @required this.subscriptionInfo,
+  });
 
   factory Account.fromJSON(Map<String, dynamic> json) =>
       _$AccountFromJson(json);
@@ -33,7 +35,16 @@ class Account extends Equatable {
   Map<String, dynamic> toJSON() => _$AccountToJson(this);
 
   @override
-  List get props => [accountType, email, appPassword, name, userID, signInSource, subscriptionInfo];
+  List get props => [
+        accountType,
+        email,
+        appPassword,
+        name,
+        userID,
+        currencyCode,
+        signInSource,
+        subscriptionInfo
+      ];
 }
 
 enum AccountType { private, business }
