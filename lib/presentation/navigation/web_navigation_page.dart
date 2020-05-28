@@ -3,7 +3,6 @@ import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
-import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/widgets/receipt_month_selection_widget.dart';
@@ -139,14 +138,13 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
       builder: (_, AsyncSnapshot<AccountsState> snapshot) {
         if (snapshot.hasData) {
           final data = snapshot.data;
-          if (data is InitialAccountsState) {
-            _getUserID().then((userID) {
-              authBloc.dispatch(GetAccountEvent(userID));
-            });
-            return _buildUseChipWithText(
-                AppLocalizations.translateOf(context, "navigation_loading"));
-          } else if (data is AccountAvailableState) {
-            return _buildUseChipWithText(data.account.email);
+          if (data is AccountAvailableState) {
+            if(data.account != null){
+              return _buildUseChipWithText(data.account.email);
+            } else {
+              return _buildUseChipWithText(
+                  AppLocalizations.translateOf(context, "navigation_loading"));
+            }
           } else {
             return Container();
           }
@@ -155,11 +153,6 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
         }
       },
     );
-  }
-
-  Future<String> _getUserID() async {
-    final user = await sl<GetUserIdUserCase>()(NoParams());
-    return user.fold((l) => null, (uid) => uid);
   }
 
   Widget _buildUseChipWithText(String text) {

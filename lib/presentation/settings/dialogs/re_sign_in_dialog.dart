@@ -4,7 +4,6 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
-import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
@@ -66,11 +65,9 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
             _email = data.account.email;
             return _buildLoaded(data.account);
           } else {
-            _callGetAccountEvent(accountsBloc);
             return LoadingWidget();
           }
         } else {
-          _callGetAccountEvent(accountsBloc);
           return LoadingWidget();
         }
       },
@@ -101,20 +98,6 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
       ),
       obscureText: true,
     );
-  }
-
-  void _callGetAccountEvent(AccountsBloc accountsBloc) {
-    _getUserID().then((value) {
-      if (value != null) {
-        accountsBloc.dispatch(GetAccountEvent(value));
-      }
-    });
-  }
-
-  Future<String> _getUserID() async {
-    final useCase = sl<GetUserIdUserCase>();
-    final result = await useCase(NoParams());
-    return result.fold((l) => null, (userID) => userID);
   }
 
   void _checkAndReSignIn() {

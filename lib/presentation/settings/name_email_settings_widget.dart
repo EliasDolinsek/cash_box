@@ -2,7 +2,6 @@ import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
-import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/re_sign_in_dialog.dart';
@@ -37,11 +36,9 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
             }
             return _buildLoaded();
           } else {
-            _getAccountEvent(accountsBloc);
             return LoadingWidget();
           }
         } else {
-          _getAccountEvent(accountsBloc);
           return LoadingWidget();
         }
       },
@@ -51,18 +48,6 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
   void _setDataFromAccountAvailableState(AccountAvailableState state) {
     _nameController.text = state.account.name;
     _emailController.text = state.account.email;
-  }
-
-  void _getAccountEvent(AccountsBloc bloc) {
-    _getUserID().then((value) => () {
-          bloc.dispatch(GetAccountEvent(value));
-        });
-  }
-
-  Future<String> _getUserID() async {
-    final useCase = sl<GetUserIdUserCase>();
-    final result = await useCase(NoParams());
-    return result.fold((l) => null, (r) => r);
   }
 
   Widget _buildLoaded() {
@@ -155,20 +140,9 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
   }
 
   void _updateDetails() async {
-    final userID = await _getUserID();
-    final params = UpdateAccountUseCaseParams(userID,
-        name: _nameController.text, email: _emailController.text);
-
     _showUpdatingDetailsSnackbar();
-    final useCase = sl<UpdateAccountUseCase>();
-    final result = await useCase(params);
-
-    result.fold((_) {
-      setState(() {
-        _errorText = AppLocalizations.translateOf(
-            context, "name_email_settings_widget_error_updating");
-      });
-    }, (_) => _showUpdatedDetailsSnackbar());
+    sl<AccountsBloc>().dispatch(UpdateAccountEvent(
+        name: _nameController.text, email: _emailController.text));
   }
 
   void _clearErrors() {
@@ -179,13 +153,15 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
     });
   }
 
-  void _showUpdatingDetailsSnackbar(){
-    final text = AppLocalizations.translateOf(context, "name_email_settings_widget_updating");
+  void _showUpdatingDetailsSnackbar() {
+    final text = AppLocalizations.translateOf(
+        context, "name_email_settings_widget_updating");
     Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
-  void _showUpdatedDetailsSnackbar(){
-    final text = AppLocalizations.translateOf(context, "name_email_settings_widget_updated_details");
+  void _showUpdatedDetailsSnackbar() {
+    final text = AppLocalizations.translateOf(
+        context, "name_email_settings_widget_updated_details");
     Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 }

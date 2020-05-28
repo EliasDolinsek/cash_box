@@ -1,4 +1,5 @@
 import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
+import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
@@ -43,7 +44,6 @@ import 'package:cash_box/domain/account/usecases/create_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/delete_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_sign_in_state_use_case.dart';
-import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/domain/account/usecases/register_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
@@ -94,6 +94,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_bloc/auth_bloc.dart';
 
 final sl = GetIt.instance;
+
+Future start() async {
+  await init();
+  await setup();
+}
+
+Future setup() async {
+  sl<AccountsBloc>().dispatch(GetAccountEvent());
+}
 
 Future init() async {
   //
@@ -152,8 +161,6 @@ Future init() async {
       () => UpdateUserPasswordUseCase(sl()));
 
   // Account UseCases
-
-  sl.registerLazySingleton(() => GetUserIdUserCase(sl()));
 
   sl.registerLazySingleton(() => CreateAccountUseCase(sl()));
 

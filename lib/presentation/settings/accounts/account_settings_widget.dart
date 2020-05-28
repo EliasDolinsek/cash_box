@@ -4,14 +4,12 @@ import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
-import 'package:cash_box/domain/account/usecases/get_user_id_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/data_storage_location_selection_dialog.dart';
 import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
 import 'package:cash_box/presentation/settings/password_settings_widget.dart';
 import 'package:cash_box/presentation/settings/settings_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/default_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -63,9 +61,12 @@ class _SubscriptionTileState extends State<SubscriptionTile> {
         if (snapshot.hasData) {
           final data = snapshot.data;
           if (data is AccountAvailableState) {
-            return _buildLoaded(data.account);
+            if(data != null){
+              return _buildLoaded(data.account);
+            } else {
+              return LoadingWidget();
+            }
           } else {
-            _callGetAccountEvent(accountsBloc);
             return LoadingWidget();
           }
         } else {
@@ -73,20 +74,6 @@ class _SubscriptionTileState extends State<SubscriptionTile> {
         }
       },
     );
-  }
-
-  void _callGetAccountEvent(AccountsBloc accountsBloc) {
-    _getUserID().then((value) {
-      if (value != null) {
-        accountsBloc.dispatch(GetAccountEvent(value));
-      }
-    });
-  }
-
-  Future<String> _getUserID() async {
-    final useCase = sl<GetUserIdUserCase>();
-    final result = await useCase(NoParams());
-    return result.fold((l) => null, (userID) => userID);
   }
 
   Widget _buildLoaded(Account account) {

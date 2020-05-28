@@ -1,4 +1,6 @@
 import 'package:cash_box/domain/account/enteties/account.dart';
+import 'package:cash_box/domain/account/enteties/subscription.dart';
+import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AccountsEvent extends Equatable {}
@@ -21,11 +23,25 @@ class DeleteAccountEvent extends AccountsEvent {
   List get props => [userID];
 }
 
-class GetAccountEvent extends AccountsEvent {
-  final String userID;
+class GetAccountEvent extends AccountsEvent {}
 
-  GetAccountEvent(this.userID);
+class UpdateAccountEvent extends AccountsEvent {
 
-  @override
-  List get props => [userID];
+  final String name;
+  final String appPassword;
+  final String email;
+  final String currencyCode;
+  final SubscriptionInfo subscriptionInfo;
+
+  UpdateAccountEvent({this.name, this.appPassword, this.email, this.currencyCode, this.subscriptionInfo});
+
+  UpdateAccountUseCaseParams asParams(String userId) =>
+      UpdateAccountUseCaseParams(
+        userId,
+        name: name,
+        appPassword: appPassword,
+        email: email,
+        subscriptionInfo: subscriptionInfo,
+        currencyCode: currencyCode
+      );
 }

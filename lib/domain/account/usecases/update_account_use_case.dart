@@ -50,6 +50,7 @@ class UpdateAccountUseCase
         email: params.email ?? original.email,
         appPassword: params.appPassword ?? original.appPassword,
         name: params.name ?? original.name,
+        currencyCode: params.currencyCode ?? original.currencyCode,
         subscriptionInfo: params.subscriptionInfo ?? original.subscriptionInfo);
   }
 
@@ -62,12 +63,12 @@ class UpdateAccountUseCase
 
 class UpdateAccountUseCaseParams extends Equatable {
   final String userID;
-  final String email, appPassword, name;
+  final String email, appPassword, name, currencyCode;
   final SubscriptionInfo subscriptionInfo;
 
   UpdateAccountUseCaseParams(this.userID,
-      {this.email, this.appPassword, this.name, this.subscriptionInfo});
+      {this.email, this.appPassword, this.name, this.currencyCode, this.subscriptionInfo});
 
   @override
-  List get props => [userID, email, appPassword, name, subscriptionInfo];
+  List get props => [userID, email, appPassword, name, currencyCode, subscriptionInfo];
 }
