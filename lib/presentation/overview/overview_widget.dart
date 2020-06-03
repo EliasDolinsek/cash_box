@@ -1,58 +1,41 @@
+import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
+import 'package:cash_box/app/accounts_bloc/accounts_state.dart';
 import 'package:cash_box/app/injection.dart';
-import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/constants.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
+import 'package:cash_box/domain/account/enteties/currencies.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
+import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/overview_statistics/receipts_gauge_pie_chart.dart';
-import 'package:cash_box/presentation/widgets/default_card.dart';
 import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OverviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ReceiptsState>(
-      stream: sl<ReceiptsBloc>().state,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is ReceiptsAvailableState) {
-            return _buildLoaded(context, data.receipts, data);
-          } else if (data is ReceiptsInReceiptMonthAvailableState) {
-            return _buildLoaded(context, data.receipts, data);
-          } else if (data is ReceiptsErrorState) {
-            _loadReceipts();
-            return Expanded(
-              child: Center(
-                child: ErrorWidget(data.errorMessage),
-              ),
-            );
+    return BlocBuilder(
+      bloc: sl<ReceiptsBloc>(),
+      builder: (context, state) {
+        if (state is ReceiptsAvailableState) {
+          if (state.receipts != null) {
+            return _buildLoaded(context, state.receipts, state.month);
           } else {
-            _loadReceipts();
-            return _buildLoading();
+            return LoadingWidget();
           }
         } else {
-          return _buildLoading();
+          return LoadingWidget();
         }
       },
     );
   }
 
-  void _loadReceipts() async {
-    final state = await sl<ReceiptMonthBloc>().state.first;
-    if (state is ReceiptMonthAvailableState) {
-      final receiptMonth = ReceiptMonth(state.month);
-      sl<ReceiptsBloc>().dispatch(GetReceiptsInReceiptMonthEvent(receiptMonth));
-    }
-  }
-
   Widget _buildLoaded(
-      BuildContext context, List<Receipt> receipts, ReceiptsState state) {
+      BuildContext context, List<Receipt> receipts, DateTime month) {
     final incomeReceipts =
         receipts.where((e) => e.type == ReceiptType.income).toList();
     final outcomeReceipts =
@@ -68,12 +51,8 @@ class OverviewWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                _buildChart(incomeReceipts, outcomeReceipts),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _buildIncomesOutcomesCards(
-                      context, incomeReceipts, outcomeReceipts),
-                ),
+                _buildChart(month, incomeReceipts, outcomeReceipts),
+                _buildCards(context, incomeReceipts, outcomeReceipts),
                 SizedBox(height: 16.0),
                 BucketsOverviewWidget()
               ],
@@ -94,11 +73,11 @@ class OverviewWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildChart(
-      List<Receipt> incomeReceipts, List<Receipt> outcomeReceipts) {
-
+  Widget _buildChart(DateTime month, List<Receipt> incomeReceipts,
+      List<Receipt> outcomeReceipts) {
     return Container(
       child: ReceiptsGaugePieChart.fromReceipts(
+        month,
         incomeReceipts,
         outcomeReceipts,
       ),
@@ -106,82 +85,139 @@ class OverviewWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildIncomesOutcomesCards(BuildContext context,
-      List<Receipt> incomeReceipts, List<Receipt> outcomeReceipts) {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildIncomesCard(context, incomeReceipts),
-          flex: 5,
-        ),
-        SizedBox(width: 16.0),
-        Expanded(
-          child: _buildOutcomesCard(context, outcomeReceipts),
-          flex: 5,
-        )
-      ],
-    );
-  }
-
-  Widget _buildOutcomesCard(
-      BuildContext context, List<Receipt> outcomeReceipts) {
-    return _buildIncomesOutcomesCard(
-      child: Column(
-        children: [
-          Text(
-            "${totalAmountOfReceipts(outcomeReceipts)}",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-          ),
-          SizedBox(height: 4),
-          Text(
-            AppLocalizations.translateOf(context, "txt_outcomes").toUpperCase(),
-            style: TextStyle(
-              color: incomeColor,
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIncomesCard(BuildContext context, List<Receipt> incomeReceipts) {
-    return _buildIncomesOutcomesCard(
-      child: Column(
-        children: [
-          Text(
-            "${totalAmountOfReceipts(incomeReceipts)}",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
-          ),
-          SizedBox(height: 4),
-          Text(
-            AppLocalizations.translateOf(context, "txt_incomes").toUpperCase(),
-            style: TextStyle(
-              color: outcomeColor,
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIncomesOutcomesCard({@required Widget child}) {
-    return DefaultCard(
+  Widget _buildCards(BuildContext context, List<Receipt> incomeReceipts,
+      List<Receipt> outcomeReceipts) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.all(8.0),
+        child: BlocBuilder(
+          bloc: sl<AccountsBloc>(),
+          builder: (context, state) {
+            var currencySymbol = "";
+            if(state is AccountAvailableState){
+              final currencyCode = currencySymbol = state.account.currencyCode;
+              currencySymbol = currencySymbolFromCode(currencyCode);
+            }
+
+            return Row(
+              children: [
+                SizedBox(width: 16.0),
+                _buildCardContainer(
+                  _buildResultCard(context, incomeReceipts, outcomeReceipts, currencySymbol),
+                ),
+                SizedBox(width: 16.0),
+                _buildCardContainer(
+                  _buildIncomesCard(context, incomeReceipts, currencySymbol),
+                ),
+                SizedBox(width: 16.0),
+                _buildCardContainer(
+                  _buildOutcomesCard(context, outcomeReceipts, currencySymbol),
+                ),
+                SizedBox(width: 16.0),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCardContainer(Widget card) {
+    return Container(
+      constraints: BoxConstraints(minWidth: 200),
+      child: card,
+    );
+  }
+
+  Widget _buildResultCard(BuildContext context, List<Receipt> incomeReceipts,
+      List<Receipt> outcomeReceipts, String currencySymbol) {
+    final resultAmount = totalAmountOfReceipts(incomeReceipts) -
+        totalAmountOfReceipts(outcomeReceipts);
+    final formattedAmount = sl<FormatCurrencyUseCase>().call(
+        FormatCurrencyUseCaseParams(
+            amount: resultAmount, symbol: currencySymbol));
+
+    return _buildIncomesOutcomesCard(
+      titleText: formattedAmount,
+      subtitleText: AppLocalizations.translateOf(context, "txt_cash"),
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+    );
+  }
+
+  Widget _buildOutcomesCard(BuildContext context, List<Receipt> outcomeReceipts,
+      String currencySymbol) {
+    final resultAmount = totalAmountOfReceipts(outcomeReceipts);
+    final formattedAmount = sl<FormatCurrencyUseCase>().call(
+        FormatCurrencyUseCaseParams(
+            amount: resultAmount, symbol: currencySymbol));
+
+    return _buildIncomesOutcomesCard(
+      titleText: formattedAmount,
+      subtitleText:
+          AppLocalizations.translateOf(context, "txt_outcomes").toUpperCase(),
+      backgroundColor: outcomeColor,
+    );
+  }
+
+  Widget _buildIncomesCard(BuildContext context, List<Receipt> incomeReceipts,
+      String currencySymbol) {
+    final resultAmount = totalAmountOfReceipts(incomeReceipts);
+    final formattedAmount = sl<FormatCurrencyUseCase>().call(
+        FormatCurrencyUseCaseParams(
+            amount: resultAmount, symbol: currencySymbol));
+
+    return _buildIncomesOutcomesCard(
+      titleText: formattedAmount,
+      subtitleText:
+          AppLocalizations.translateOf(context, "txt_incomes").toUpperCase(),
+      backgroundColor: incomeColor,
+    );
+  }
+
+  Widget _buildIncomesOutcomesCard(
+      {@required String titleText,
+      @required String subtitleText,
+      @required Color backgroundColor,
+      Color textColor = Colors.white}) {
+    return _buildCard(
+      color: backgroundColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            titleText,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 24,
+              color: textColor,
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            subtitleText,
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCard({@required Widget child, @required Color color}) {
+    return Material(
+      elevation: 3,
+      borderRadius: BorderRadius.circular(8.0),
+      color: color,
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
         child: child,
       ),
-    );
-  }
-
-  Widget _buildLoading() {
-    return Center(
-      child: LoadingWidget(),
     );
   }
 }

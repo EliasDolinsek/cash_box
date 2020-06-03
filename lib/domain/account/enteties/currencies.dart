@@ -482,3 +482,5 @@ final currencies = {
     "flag": "zm",
   }
 };
+
+String currencySymbolFromCode(String currencyCode) => currencies[currencyCode]["symbol"];

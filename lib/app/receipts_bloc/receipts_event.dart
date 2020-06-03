@@ -1,6 +1,5 @@
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ReceiptsEvent extends Equatable {}
@@ -14,16 +13,14 @@ class AddReceiptEvent extends ReceiptsEvent {
   List get props => [receipt];
 }
 
-class GetReceiptsInReceiptMonthEvent extends ReceiptsEvent {
-  final ReceiptMonth receiptMonth;
+class GetReceiptsOfMonthEvent extends ReceiptsEvent {
+  final DateTime month;
 
-  GetReceiptsInReceiptMonthEvent(this.receiptMonth);
+  GetReceiptsOfMonthEvent({this.month});
 
   @override
-  List get props => [receiptMonth];
+  List get props => [month];
 }
-
-class GetReceiptsEvent extends ReceiptsEvent {}
 
 class UpdateReceiptEvent extends ReceiptsEvent {
 

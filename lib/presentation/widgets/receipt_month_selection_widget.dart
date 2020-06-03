@@ -1,10 +1,7 @@
 import 'package:cash_box/app/injection.dart';
-import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
-import 'package:cash_box/app/receipt_month_bloc/receipt_month_bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/receipts_event.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
-import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -19,13 +16,13 @@ class _ReceiptMonthSelectionWidgetState
     extends State<ReceiptMonthSelectionWidget> {
   @override
   Widget build(BuildContext context) {
-    final bloc = sl<ReceiptMonthBloc>();
+    final bloc = sl<ReceiptsBloc>();
     return StreamBuilder(
       stream: bloc.state,
-      builder: (_, AsyncSnapshot<ReceiptMonthState> snapshot) {
+      builder: (_, AsyncSnapshot<ReceiptsState> snapshot) {
         if (snapshot.hasData) {
           final data = snapshot.data;
-          if (data is ReceiptMonthAvailableState) {
+          if (data is ReceiptsAvailableState && data.receipts != null) {
             return _buildLoaded(data);
           } else {
             return _buildLoading();
@@ -43,7 +40,7 @@ class _ReceiptMonthSelectionWidgetState
     );
   }
 
-  Widget _buildLoaded(ReceiptMonthAvailableState data) {
+  Widget _buildLoaded(ReceiptsAvailableState data) {
     final text = getMonthAsReadableReceiptMonth(data.month);
     return ActionChip(
       label: Text(
@@ -68,7 +65,7 @@ class _ReceiptMonthSelectionWidgetState
     final result =
         await showMonthPicker(context: context, initialDate: initialMonth);
     if (result != null) {
-      final receiptsBlocEvent = GetReceiptsInReceiptMonthEvent(ReceiptMonth(result));
+      final receiptsBlocEvent = GetReceiptsOfMonthEvent(month: result);
       sl<ReceiptsBloc>().dispatch(receiptsBlocEvent);
     }
   }

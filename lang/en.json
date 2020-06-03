@@ -155,5 +155,6 @@
   "btn_tags": "TAGS",
   "btn_buckets": "BUCKETS",
   "txt_currency_settings": "Currency Settings",
-  "txt_select_currency": "Select currency"
+  "txt_select_currency": "Select currency",
+  "txt_cash": "CASH"
 }

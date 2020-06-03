@@ -1,9 +1,6 @@
 import 'package:cash_box/app/injection.dart';
-import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
-import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/bucket_statistics_widget.dart';
@@ -57,14 +54,13 @@ class _StatisticsWidgetState extends State<StatisticsWidget>
     return BlocBuilder(
       bloc: sl<ReceiptsBloc>(),
       builder: (_, state){
-        if(state is ReceiptsInReceiptMonthAvailableState){
-          return _buildLoaded(state.receipts);
-        } else if(state is ReceiptsAvailableState){
-          return _buildLoaded(state.receipts);
-        } else if(state is ReceiptsErrorState){
-          return Text(state.errorMessage);
+        if(state is ReceiptsAvailableState){
+          if(state.receipts != null){
+            return _buildLoaded(state.receipts);
+          } else {
+            return LoadingWidget();
+          }
         } else {
-          _loadReceipts();
           return LoadingWidget();
         }
       },
@@ -119,13 +115,5 @@ class _StatisticsWidgetState extends State<StatisticsWidget>
         );
       },
     );
-  }
-
-  void _loadReceipts() async {
-    final state = await sl<ReceiptMonthBloc>().state.first;
-    if(state is ReceiptMonthAvailableState){
-      final receiptMonth = ReceiptMonth(state.month);
-      sl<ReceiptsBloc>().dispatch(GetReceiptsInReceiptMonthEvent(receiptMonth));
-    }
   }
 }

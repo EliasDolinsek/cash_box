@@ -60,7 +60,7 @@ void main() {
     when(addReceiptUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
+    final expect = [LoadingReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -75,7 +75,7 @@ void main() {
     when(getReceiptUseCase.call(params))
         .thenAnswer((_) async => Right(receipt));
 
-    final expect = [InitialReceiptsState(), ReceiptAvailableState(receipt)];
+    final expect = [LoadingReceiptsState(), ReceiptAvailableState(receipt)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -88,7 +88,7 @@ void main() {
         .thenAnswer((_) async => Right(receiptFixtures));
 
     final expect = [
-      InitialReceiptsState(),
+      LoadingReceiptsState(),
       ReceiptsAvailableState(receiptFixtures)
     ];
 
@@ -105,13 +105,13 @@ void main() {
         .thenAnswer((_) async => Right(receiptFixtures));
 
     final expect = [
-      InitialReceiptsState(),
+      LoadingReceiptsState(),
       ReceiptsInReceiptMonthAvailableState(receiptMonth, receiptFixtures)
     ];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
-    final event = GetReceiptsInReceiptMonthEvent(receiptMonth);
+    final event = GetReceiptsOfMonthEvent(receiptMonth);
     bloc.dispatch(event);
   });
 
@@ -131,7 +131,7 @@ void main() {
     when(updateReceiptUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
+    final expect = [LoadingReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -149,7 +149,7 @@ void main() {
     when(removeReceiptUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
+    final expect = [LoadingReceiptsState(), ReceiptsAvailableState(receiptFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 

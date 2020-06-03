@@ -2,12 +2,12 @@ import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
-import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
+import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/filter_receipts_by_type_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
@@ -102,6 +102,7 @@ Future start() async {
 
 Future setup() async {
   sl<AccountsBloc>().dispatch(GetAccountEvent());
+  sl<ReceiptsBloc>().dispatch(GetReceiptsOfMonthEvent());
 }
 
 Future init() async {
@@ -269,8 +270,6 @@ Future init() async {
   sl.registerLazySingleton(() => GetIncomesOutcomesUseCase(sl(), sl()));
 
   // BLoC
-  final initialReceiptMonth = DateTime.now();
-  sl.registerLazySingleton(() => ReceiptMonthBloc(initialReceiptMonth));
   sl.registerLazySingleton(
     () => ReceiptsBloc(
         addReceiptUseCase: sl(),
@@ -278,7 +277,7 @@ Future init() async {
         getReceiptsInReceiptMonthUseCase: sl(),
         updateReceiptUseCase: sl(),
         removeReceiptUseCase: sl(),
-        receiptMonthBloc: sl()),
+    ),
   );
 
   //
@@ -401,4 +400,9 @@ Future init() async {
 
   // BLoC
   sl.registerLazySingleton(() => SearchBloc(filterReceiptsUseCase: sl()));
+
+  //
+  // Currency
+  //
+  sl.registerLazySingleton(() => FormatCurrencyUseCase());
 }

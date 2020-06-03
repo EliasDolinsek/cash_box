@@ -6,25 +6,27 @@ import 'package:cash_box/domain/core/repositories/receipts_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-class GetReceiptsInReceiptMonthUseCase extends AsyncUseCase<List<Receipt>, GetReceiptsInReceiptMonthUseCaseParams> {
-
+class GetReceiptsInReceiptMonthUseCase extends AsyncUseCase<List<Receipt>,
+    GetReceiptsInReceiptMonthUseCaseParams> {
   final ReceiptsRepository repository;
 
   GetReceiptsInReceiptMonthUseCase(this.repository);
 
   @override
-  Future<Either<Failure, List<Receipt>>> call(GetReceiptsInReceiptMonthUseCaseParams params) {
-    return repository.getReceiptsInReceiptMonth(params.receiptMonth);
+  Future<Either<Failure, List<Receipt>>> call(
+      GetReceiptsInReceiptMonthUseCaseParams params) {
+    return repository.getReceiptsInReceiptMonth(params.asReceiptMonth);
   }
-
 }
 
 class GetReceiptsInReceiptMonthUseCaseParams extends Equatable {
 
-  final ReceiptMonth receiptMonth;
+  final DateTime month;
 
-  GetReceiptsInReceiptMonthUseCaseParams(this.receiptMonth);
+  GetReceiptsInReceiptMonthUseCaseParams(this.month);
+
+  ReceiptMonth get asReceiptMonth => ReceiptMonth(month);
 
   @override
-  List get props => [receiptMonth];
+  List get props => [month];
 }

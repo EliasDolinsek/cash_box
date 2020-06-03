@@ -7,14 +7,15 @@ import 'package:flutter/material.dart';
 import 'dart:math' show pi;
 
 class ReceiptsGaugePieChart extends StatelessWidget {
-
+  final DateTime month;
   final List<ReceiptSegment> segments;
 
   const ReceiptsGaugePieChart(
-      {Key key, @required this.segments})
+      {Key key, @required this.month, @required this.segments})
       : super(key: key);
 
   factory ReceiptsGaugePieChart.fromReceipts(
+      DateTime receiptMonth,
     List<Receipt> incomeReceipts,
     List<Receipt> outcomeReceipts,
   ) {
@@ -27,6 +28,7 @@ class ReceiptsGaugePieChart extends StatelessWidget {
     ];
 
     return ReceiptsGaugePieChart(
+      month: receiptMonth,
       segments: segments,
     );
   }
@@ -46,22 +48,15 @@ class ReceiptsGaugePieChart extends StatelessWidget {
         ),
         Center(
           child: Text(
-            getCashAsString(),
+            getMonthAsReadableReceiptMonth(month),
             style: TextStyle(
-              fontSize: 32,
+              fontSize: 22,
               fontWeight: FontWeight.w500,
             ),
           ),
         )
       ],
     );
-  }
-
-  String getCashAsString(){
-    final outcomeSegment = segments.firstWhere((element) => element.receiptType == ReceiptType.outcome, orElse: () => null);
-    final incomeSegment = segments.firstWhere((element) => element.receiptType == ReceiptType.income, orElse: () => null);
-
-    return "${incomeSegment.amount - outcomeSegment.amount}€";
   }
 
   List<charts.Series> getSeries(BuildContext context) => [

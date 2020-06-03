@@ -1,11 +1,9 @@
 import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/contacts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
-import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
-import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
@@ -31,7 +29,7 @@ class ConfigDefaultImpl implements Config {
       final locationAsString =
           sharedPreferences.getString(dataStorageLocationKey);
       if (locationAsString == null || locationAsString.isEmpty)
-        return DataStorageLocation.LOCAL_MOBILE;
+        return DataStorageLocation.REMOTE_FIREBASE;
       return dataStorageLocationFromString(locationAsString);
     } else {
       return DataStorageLocation.REMOTE_FIREBASE;
@@ -61,14 +59,6 @@ class ConfigDefaultImpl implements Config {
     sl<ContactsBloc>().dispatch(GetContactsEvent());
     sl<TagsBloc>().dispatch(GetTagsEvent());
     sl<TemplatesBloc>().dispatch(GetTemplatesEvent());
-    _reloadReceipts();
-  }
-
-  void _reloadReceipts() async {
-    final state = await sl<ReceiptMonthBloc>().state.first;
-    if(state is ReceiptMonthAvailableState){
-      final event = GetReceiptsInReceiptMonthEvent(ReceiptMonth(state.month));
-      sl<ReceiptsBloc>().dispatch(event);
-    }
+    sl<ReceiptsBloc>().dispatch(GetReceiptsOfMonthEvent());
   }
 }

@@ -1,5 +1,4 @@
 import 'package:cash_box/app/injection.dart';
-import 'package:cash_box/app/receipt_month_bloc/bloc.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
@@ -14,6 +13,7 @@ import 'package:cash_box/presentation/receipts/widgets/receipt_type_selection_wi
 import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:cash_box/presentation/tags/widgets/tags_selection_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddReceiptPage extends StatelessWidget {
   final List<Field> fields;
@@ -37,24 +37,13 @@ class AddReceiptPage extends StatelessWidget {
 
   Widget _buildContent() {
     final receiptID = _addNewReceipt();
-    return StreamBuilder(
-      stream: sl<ReceiptsBloc>().state,
-      builder: (_, AsyncSnapshot<ReceiptsState> snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is ReceiptsAvailableState) {
-            if (data.receipts == null) return LoadingWidget();
-            return _buildContentForReceiptFromReceiptsList(
-                receiptID, data.receipts);
-          } else if (data is ReceiptsInReceiptMonthAvailableState) {
-            if (data.receipts == null) return LoadingWidget();
-            return _buildContentForReceiptFromReceiptsList(
-                receiptID, data.receipts);
-          } else if (data is ReceiptsErrorState) {
-            _loadReceipts();
-            return ErrorWidget(data.errorMessage);
+    return BlocBuilder(
+      bloc: sl<ReceiptsBloc>(),
+      builder: (context, state) {
+        if(state is ReceiptsAvailableState){
+          if(state.receipts != null){
+            return _buildContentForReceiptFromReceiptsList(receiptID, state.receipts);
           } else {
-            _loadReceipts();
             return LoadingWidget();
           }
         } else {
@@ -87,14 +76,6 @@ class AddReceiptPage extends StatelessWidget {
       return LoadingWidget();
     }
   }
-
-  void _loadReceipts() async {
-    final state = await sl<ReceiptMonthBloc>().state.first;
-    if (state is ReceiptMonthAvailableState) {
-      final event = GetReceiptsInReceiptMonthEvent(ReceiptMonth(state.month));
-      sl<ReceiptsBloc>().dispatch(event);
-    }
-  }
 }
 
 class EditReceiptPage extends StatelessWidget {
@@ -116,32 +97,20 @@ class EditReceiptPage extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    return StreamBuilder(
-      stream: sl<ReceiptsBloc>().state,
-      builder: (_, AsyncSnapshot<ReceiptsState> snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is ReceiptsAvailableState) {
-            if (data.receipts == null) return LoadingWidget();
-            return _buildContentForReceiptFromReceiptsList(
-                context, receiptId, data.receipts);
-          } else if (data is ReceiptsInReceiptMonthAvailableState) {
-            if (data.receipts == null) return LoadingWidget();
-            return _buildContentForReceiptFromReceiptsList(
-                context, receiptId, data.receipts);
-          } else if (data is ReceiptsErrorState) {
-            _loadReceipts();
-            return ErrorWidget(data.errorMessage);
+    return BlocBuilder(
+      bloc: sl<ReceiptsBloc>(),
+      builder: (context, state) {
+        if(state is ReceiptsAvailableState){
+          if(state.receipts != null){
+            return _buildContentForReceiptFromReceiptsList(context, receiptId, state.receipts);
           } else {
-            _loadReceipts();
             return LoadingWidget();
           }
         } else {
           return LoadingWidget();
         }
       },
-    );
-  }
+    );  }
 
   Widget _buildContentForReceiptFromReceiptsList(
       BuildContext context, String receiptID, List<Receipt> receipts) {
@@ -162,14 +131,6 @@ class EditReceiptPage extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void _loadReceipts() async {
-    final state = await sl<ReceiptMonthBloc>().state.first;
-    if (state is ReceiptMonthAvailableState) {
-      final event = GetReceiptsInReceiptMonthEvent(ReceiptMonth(state.month));
-      sl<ReceiptsBloc>().dispatch(event);
-    }
   }
 }
 
