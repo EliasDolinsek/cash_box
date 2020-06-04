@@ -5,6 +5,7 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BucketSelectionPage extends StatelessWidget {
   final Function(Bucket bucket) onChanged;
@@ -24,23 +25,21 @@ class BucketSelectionPage extends StatelessWidget {
         ),
         actions: <Widget>[_buildSelectNoBucketButton(context)],
       ),
-      body: StreamBuilder(
-        stream: sl<BucketsBloc>().state,
-        builder: (_, snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data;
-            if (data is BucketsAvailableState) {
+      body: BlocBuilder(
+        bloc: sl<BucketsBloc>(),
+        builder: (context, state) {
+          if (state is BucketsAvailableState) {
+            if (state.buckets != null) {
               return _BucketSelectionWidget(
-                buckets: data.buckets,
+                buckets: state.buckets,
                 initialSelectedBucketId: initialSelectedBucketId,
                 onChanged: onChanged,
               );
-            } else if (data is BucketsErrorState) {
-              _loadBuckets();
-              return ErrorWidget(data.errorMessage);
             } else {
-              _loadBuckets();
-              return LoadingWidget();
+              return ErrorWidget(
+                AppLocalizations.translateOf(
+                    context, "txt_default_error_message"),
+              );
             }
           } else {
             return LoadingWidget();

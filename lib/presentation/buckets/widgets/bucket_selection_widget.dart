@@ -31,7 +31,7 @@ class _BucketSelectionWidgetState extends State<BucketSelectionWidget> {
           final data = snapshot.data;
           if (data is BucketsAvailableState) {
             return _buildLoaded(context, data.buckets);
-          } else if (data is BucketsErrorState) {
+          } else if (data is BucketsLoadingState) {
             loadBuckets();
             return ErrorTextWidget(
               text: AppLocalizations.translateOf(

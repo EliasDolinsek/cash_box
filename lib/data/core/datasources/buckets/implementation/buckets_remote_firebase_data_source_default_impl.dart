@@ -15,8 +15,8 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
 
   @override
   Future<void> addType(Bucket type) async {
-    await baseCollection.document(type.id).setData(type.toJson());
     buckets = null;
+    await baseCollection.document(type.id).setData(type.toJson());
   }
 
   @override

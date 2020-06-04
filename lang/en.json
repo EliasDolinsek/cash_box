@@ -156,5 +156,9 @@
   "btn_buckets": "BUCKETS",
   "txt_currency_settings": "Currency Settings",
   "txt_select_currency": "Select currency",
-  "txt_cash": "CASH"
+  "txt_cash": "CASH",
+  "txt_default_error_message": "Es ist ein Fehler aufgetreten",
+  "txt_name": "Name",
+  "txt_bucket_details": "Bucket details",
+  "btn_add_bucket": "ADD BUCKET"
 }

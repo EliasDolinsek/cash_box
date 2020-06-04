@@ -19,13 +19,8 @@ class BucketStatisticsWidget extends StatelessWidget {
     return BlocBuilder(
       bloc: sl<BucketsBloc>(),
       builder: (context, state) {
-        if (state is InitialBucketsState) {
-          sl<BucketsBloc>().dispatch(GetBucketsEvent());
-          return LoadingWidget();
-        } else if (state is BucketsAvailableState) {
+        if (state is BucketsAvailableState) {
           return _buildLoaded(state.buckets);
-        } else if (state is BucketsErrorState) {
-          return ErrorWidget(state.errorMessage);
         } else {
           return LoadingWidget();
         }

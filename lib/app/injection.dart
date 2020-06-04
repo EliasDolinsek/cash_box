@@ -103,6 +103,7 @@ Future start() async {
 Future setup() async {
   sl<AccountsBloc>().dispatch(GetAccountEvent());
   sl<ReceiptsBloc>().dispatch(GetReceiptsOfMonthEvent());
+  sl<BucketsBloc>().dispatch(GetBucketsEvent());
 }
 
 Future init() async {

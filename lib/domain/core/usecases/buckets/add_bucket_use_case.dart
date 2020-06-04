@@ -14,8 +14,8 @@ class AddBucketUseCase extends AsyncUseCase<EmptyData, AddBucketUseCaseParams> {
   AddBucketUseCase(this.repository);
 
   @override
-  Future<Either<Failure, EmptyData>> call(AddBucketUseCaseParams params) {
-    return repository.addBucket(params.bucket);
+  Future<Either<Failure, EmptyData>> call(AddBucketUseCaseParams params) async {
+    return await repository.addBucket(params.bucket);
   }
 
 }

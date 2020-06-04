@@ -20,7 +20,7 @@ class BucketsSettingsWidget extends StatelessWidget {
       subtitle: Text(
           AppLocalizations.translateOf(context, "txt_bucket_settings_hint")),
       trailing: MaterialButton(
-        onPressed: () {},
+        onPressed: () => Navigator.of(context).pushNamed("/bucketSettings"),
         child: Text(
           AppLocalizations.translateOf(context, "btn_more"),
         ),

@@ -28,33 +28,48 @@ class BucketsBloc extends Bloc<BucketsEvent, BucketsState> {
       @required this.updateBucketUseCase});
 
   @override
-  BucketsState get initialState => InitialBucketsState();
+  BucketsState get initialState => BucketsLoadingState();
 
   @override
   Stream<BucketsState> mapEventToState(
     BucketsEvent event,
   ) async* {
     if (event is AddBucketEvent) {
+      yield BucketsLoadingState();
+
       final params = AddBucketUseCaseParams(event.bucket);
       await addBucketUseCase(params);
+
       dispatch(GetBucketsEvent());
     } else if (event is AddReceiptToBucketEvent) {
+      yield BucketsLoadingState();
+
       final params =
           AddReceiptToBucketUseCaseParams(event.bucketID, event.receiptID);
       await addReceiptToBucketUseCase(params);
+
       dispatch(GetBucketsEvent());
     } else if (event is GetBucketsEvent) {
+      yield BucketsLoadingState();
       yield await _getBuckets(event);
     } else if (event is RemoveBucketEvent) {
+      yield BucketsLoadingState();
+
       final params = RemoveBucketUseCaseParams(event.bucketID);
       await removeBucketUseCase(params);
+
       dispatch(GetBucketsEvent());
     } else if (event is RemoveReceiptFromBucketEvent) {
+      yield BucketsLoadingState();
+
       final params =
           RemoveReceiptFromBucketUseCaseParams(event.receiptID, event.bucketID);
       await removeReceiptFromBucketUseCase(params);
+
       dispatch(GetBucketsEvent());
     } else if (event is UpdateBucketEvent) {
+      yield BucketsLoadingState();
+
       final params = UpdateBucketUseCaseParams(event.id,
           name: event.name,
           description: event.description,
@@ -68,7 +83,7 @@ class BucketsBloc extends Bloc<BucketsEvent, BucketsState> {
   Future<BucketsState> _getBuckets(GetBucketsEvent event) async {
     final bucketsEither = await getBucketsUseCase(NoParams());
     return bucketsEither.fold((l) {
-      return BucketsErrorState(l.toString());
+      return BucketsAvailableState(null);
     }, (buckets) {
       return BucketsAvailableState(buckets);
     });

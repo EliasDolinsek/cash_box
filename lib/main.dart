@@ -6,6 +6,9 @@ import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
 import 'package:cash_box/presentation/receipts/add_receipt_template_selection_page.dart';
 import 'package:cash_box/presentation/search/search_page.dart';
+import 'package:cash_box/presentation/settings/buckets/bucket_details_page.dart';
+import 'package:cash_box/presentation/settings/buckets/bucket_settings_page.dart';
+import 'package:cash_box/presentation/settings/buckets/buckets_settings_widget.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
 import 'package:cash_box/presentation/settings/currency/currency_settings_page.dart';
@@ -56,6 +59,8 @@ class CashBoxApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
+          color: Colors.white,
+          elevation: 1,
           iconTheme: IconThemeData(color: Colors.black),
           textTheme: TextTheme(
             title: TextStyle(
@@ -71,7 +76,8 @@ class CashBoxApp extends StatelessWidget {
         "/receiptTemplatesSettings": (context) =>
             ReceiptTemplatesSettingsWidget(),
         "/addReceipt": (context) => AddReceiptTemplateSelectionPage(),
-        "/currencySettings": (context) => CurrencySettingsPage()
+        "/currencySettings": (context) => CurrencySettingsPage(),
+        "/bucketSettings": (context) => BucketSettingsPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {
@@ -126,6 +132,11 @@ class CashBoxApp extends StatelessWidget {
               selectedTagIds: selectedTagIds,
               selectedReceiptType: selectedReceiptType,
             ),
+          );
+        } else if (settings.name == "/bucketSettings/bucketDetails") {
+          final bucketId = settings.arguments;
+          return MaterialPageRoute(
+            builder: (context) => BucketDetailsPage(bucket: bucketId),
           );
         } else {
           return MaterialPageRoute(

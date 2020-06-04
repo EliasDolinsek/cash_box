@@ -17,7 +17,7 @@ class CurrencySettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title:
-        Text(AppLocalizations.translateOf(context, "txt_select_currency")),
+            Text(AppLocalizations.translateOf(context, "txt_select_currency")),
         backgroundColor: Colors.white,
       ),
       body: ScreenTypeLayout(
@@ -39,7 +39,10 @@ class MobileCurrencySettingsPage extends StatelessWidget {
 class TabletDesktopCurrencySettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return WidthConstrainedWidget(child: CurrencySettingsWidget());
+    return Align(
+      alignment: Alignment.topCenter,
+      child: WidthConstrainedWidget(child: CurrencySettingsWidget()),
+    );
   }
 }
 
@@ -65,11 +68,7 @@ class _CurrencySettingsWidgetState extends State<CurrencySettingsWidget> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                top: 16.0,
-                bottom: 8.0
-            ),
+                left: 16.0, right: 16.0, top: 16.0, bottom: 8.0),
             child: SearchTextField(
               onChanged: _filterCurrencies,
               onSearch: _filterCurrencies,
@@ -103,7 +102,7 @@ class _CurrencySettingsWidgetState extends State<CurrencySettingsWidget> {
     setState(() {
       displayedCurrencies = Map<String, Map<String, String>>.from(currencies)
         ..removeWhere(
-              (key, value) {
+          (key, value) {
             return !key.toLowerCase().contains(search.toLowerCase()) &&
                 !value["name"].toLowerCase().contains(search.toLowerCase()) &&
                 !value["symbol"].toLowerCase().contains(search.toLowerCase());
@@ -210,9 +209,7 @@ class CurrencyListItem extends StatelessWidget {
     if (selected) {
       return Icon(
         Icons.check,
-        color: Theme
-            .of(context)
-            .primaryColor,
+        color: Theme.of(context).primaryColor,
       );
     } else {
       return Container(width: 0, height: 0);
