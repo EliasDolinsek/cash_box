@@ -2,15 +2,17 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
-import 'package:cash_box/presentation/widgets/template_list_item.dart';
+import 'package:cash_box/presentation/widgets/add_component_button.dart';
+import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReceiptTemplatesSettingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final templatesBloc = sl<TemplatesBloc>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -18,82 +20,77 @@ class ReceiptTemplatesSettingsWidget extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _addNewTemplate(context),
-      ),
-      body: StreamBuilder(
-        stream: templatesBloc.state,
-        builder: (_, AsyncSnapshot<TemplatesState> snapshot) {
-          final data = snapshot.data;
-          if (snapshot.hasData) {
-            if (data is TemplatesAvailableState) {
-              return TemplatesAvailableSettingsWidget(
-                data.templates,
-                key: ValueKey(data.props),
-              );
-            } else if (data is TemplatesErrorState) {
-              templatesBloc.dispatch(GetTemplatesEvent());
-              return ErrorWidget(data.errorMessage);
-            } else {
-              templatesBloc.dispatch(GetTemplatesEvent());
-              return LoadingWidget();
-            }
-          } else {
-            return LoadingWidget();
-          }
-        },
-      ),
+      body: ScreenTypeLayout(
+          mobile: Align(
+        alignment: Alignment.topCenter,
+        child: WidthConstrainedWidget(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: _TemplatesSettingsPageContentWidget(),
+          ),
+        ),
+      )),
     );
-  }
-
-  void _addNewTemplate(BuildContext context) {
-    final name = AppLocalizations.translateOf(context, "txt_new_template");
-    final template = Template.newTemplate(name: name, fields: []);
-
-    final event = AddTemplateEvent(template);
-    sl<TemplatesBloc>().dispatch(event);
   }
 }
 
-class TemplatesAvailableSettingsWidget extends StatelessWidget {
-  final List<Template> templates;
-
-  const TemplatesAvailableSettingsWidget(this.templates, {Key key})
-      : super(key: key);
-
+class _TemplatesSettingsPageContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (templates.isEmpty) return _buildNoTemplates(context);
-    return Center(
-      child: ResponsiveCardWidget(
-        child: _buildLoaded(context),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          AddComponentButton(
+            text: AppLocalizations.translateOf(context, "btn_add_template"),
+            onPressed: () => _addNewTemplate(context),
+          ),
+          BlocBuilder(
+            bloc: sl<TemplatesBloc>(),
+            builder: (context, state) {
+              if (state is TemplatesAvailableState) {
+                if (state.templates != null) {
+                  return _buildTemplatesList(context, state.templates);
+                } else {
+                  return LoadingWidget();
+                }
+              } else {
+                return LoadingWidget();
+              }
+            },
+          )
+        ],
       ),
     );
   }
 
-  Widget _buildNoTemplates(BuildContext context) {
-    return Center(
-      child: Text(
-        AppLocalizations.translateOf(context, "txt_no_templates"),
-      ),
-    );
-  }
-
-  Widget _buildLoaded(BuildContext context) {
-    final reversedTemplates = templates.reversed;
+  Widget _buildTemplatesList(BuildContext context, List<Template> templates) {
     return Column(
-      children: reversedTemplates
-          .map((t) => TemplateListItem(
-                t,
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    "/receiptTemplatesSettings/templateDetails",
-                    arguments: t,
-                  );
-                },
-              ))
+      children: templates
+          .map(
+            (t) => TemplateListTile(
+              template: t,
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  "/receiptTemplatesSettings/templateDetails",
+                  arguments: t,
+                );
+              },
+            ),
+          )
           .toList(),
+    );
+  }
+
+  _addNewTemplate(BuildContext context) {
+    final template = Template.newTemplate(name: "", fields: []);
+
+    final event = AddTemplateEvent(template);
+    sl<TemplatesBloc>().dispatch(event);
+
+    Navigator.of(context).pushNamed(
+      "/receiptTemplatesSettings/templateDetails",
+      arguments: template,
     );
   }
 }

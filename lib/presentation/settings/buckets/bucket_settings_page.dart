@@ -10,12 +10,12 @@ import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BucketSettingsPage extends StatelessWidget {
+class BucketsSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Buckets"),
+        title: Text(AppLocalizations.translateOf(context, "txt_buckets")),
       ),
       body: ScreenTypeLayout(
         mobile: Align(

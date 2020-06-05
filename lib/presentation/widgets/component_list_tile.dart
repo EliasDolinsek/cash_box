@@ -1,13 +1,17 @@
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
+import 'package:cash_box/domain/core/enteties/tags/tag.dart';
+import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ComponentListTile extends StatelessWidget {
+
   final String title;
   final String description;
   final Function onTap;
+  final Color avatarBorderColor;
 
-  ComponentListTile({@required this.title, @required this.description, this.onTap});
+  ComponentListTile({@required this.title, this.description, this.onTap, this.avatarBorderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +19,14 @@ class ComponentListTile extends StatelessWidget {
       onTap: onTap,
       leading: CircleAvatar(
         radius: 22,
+        backgroundColor: avatarBorderColor ?? Theme.of(context).primaryColor,
         child: CircleAvatar(
           child: Builder(
             builder: (context) {
               final secureTitle = _getTitle(context);
-              return Text(secureTitle.length >= 2 ? secureTitle.substring(0, 2) : secureTitle);
+              return Text(secureTitle.length >= 2
+                  ? secureTitle.substring(0, 2)
+                  : secureTitle);
             },
           ),
           radius: 21,
@@ -28,12 +35,12 @@ class ComponentListTile extends StatelessWidget {
         ),
       ),
       title: Text(_getTitle(context)),
-      subtitle: Text(_getDescription(context)),
+      subtitle: description != null ? Text(_getDescription(context)) : null,
     );
   }
 
-  String _getTitle(BuildContext context){
-    if(title == null || title.isEmpty){
+  String _getTitle(BuildContext context) {
+    if (title == null || title.isEmpty) {
       return AppLocalizations.translateOf(context, "unnamed");
     } else {
       return title;
@@ -41,11 +48,32 @@ class ComponentListTile extends StatelessWidget {
   }
 
   String _getDescription(BuildContext context) {
-    if(description == null || description.isEmpty){
+    if (description == null || description.isEmpty) {
       return AppLocalizations.translateOf(context, "txt_no_description");
     } else {
       return description;
     }
+  }
+}
+
+class TitleOnlyComponentListTile extends StatelessWidget {
+
+  final String title;
+  final Function onTap;
+  final Color avatarBorderColor;
+
+  const TitleOnlyComponentListTile({Key key, this.title, this.onTap, this.avatarBorderColor}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: ComponentListTile(
+        onTap: onTap,
+        title: title,
+        avatarBorderColor: avatarBorderColor,
+      ),
+    );
   }
 }
 
@@ -62,6 +90,38 @@ class BucketListTile extends StatelessWidget {
       onTap: onTap,
       title: bucket.name,
       description: bucket.description,
+    );
+  }
+}
+
+class TemplateListTile extends StatelessWidget {
+  final Template template;
+  final Function onTap;
+
+  const TemplateListTile({Key key, this.template, this.onTap})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TitleOnlyComponentListTile(
+      onTap: onTap,
+      title: template.name,
+    );
+  }
+}
+
+class TagListTile extends StatelessWidget {
+  final Tag tag;
+  final Function onTap;
+
+  const TagListTile({Key key, this.tag, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TitleOnlyComponentListTile(
+      title: tag.name,
+      onTap: onTap,
+      avatarBorderColor: tag.colorAsColor,
     );
   }
 }

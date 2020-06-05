@@ -24,44 +24,44 @@ class TemplatesBloc extends Bloc<TemplatesEvent, TemplatesState> {
       @required this.updateTemplateUseCase});
 
   @override
-  TemplatesState get initialState => InitialTemplatesState();
+  TemplatesState get initialState => TemplatesLoadingState();
 
   @override
   Stream<TemplatesState> mapEventToState(
     TemplatesEvent event,
   ) async* {
     if (event is AddTemplateEvent) {
+      yield TemplatesLoadingState();
+
       final params = AddTemplateUseCaseParams(event.template);
       await addTemplateUseCase(params);
+
       dispatch(GetTemplatesEvent());
-    } else if (event is GetTemplateEvent) {
-      yield await _getTemplate(event);
     } else if (event is GetTemplatesEvent) {
+      yield TemplatesLoadingState();
+
       yield await _getTemplates();
     } else if (event is RemoveTemplateEvent) {
+      yield TemplatesLoadingState();
+
       final params = RemoveTemplateUseCaseParams(event.templateID);
       await removeTemplateUseCase(params);
+
       dispatch(GetTemplatesEvent());
     } else if (event is UpdateTemplateEvent) {
+      yield TemplatesLoadingState();
+
       final params = UpdateTemplateUseCaseParams(event.id,
           name: event.name, fields: event.fields);
       await updateTemplateUseCase(params);
+
       dispatch(GetTemplatesEvent());
     }
   }
 
-  Future<TemplatesState> _getTemplate(GetTemplateEvent event) async {
-    final params = GetTemplateUseCaseParams(event.templateID);
-    final templatesEither = await getTemplateUseCase(params);
-    return templatesEither.fold((l) => TemplatesErrorState(l.toString()),
-        (template) {
-      return TemplateAvailableState(template);
-    });
-  }
-
   Future<TemplatesState> _getTemplates() async {
     final templatesEither = await getTemplatesUseCase(NoParams());
-    return templatesEither.fold((l) => TemplatesErrorState(l.toString()),
+    return templatesEither.fold((l) => TemplatesAvailableState(null),
         (templates) {
       return TemplatesAvailableState(templates);
     });

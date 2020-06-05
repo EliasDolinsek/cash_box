@@ -13,15 +13,6 @@ class AddTemplateEvent extends TemplatesEvent {
   List get props => [template];
 }
 
-class GetTemplateEvent extends TemplatesEvent {
-  final String templateID;
-
-  GetTemplateEvent(this.templateID);
-
-  @override
-  List get props => [templateID];
-}
-
 class GetTemplatesEvent extends TemplatesEvent {}
 
 class RemoveTemplateEvent extends TemplatesEvent {

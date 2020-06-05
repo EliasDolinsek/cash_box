@@ -4,7 +4,9 @@ import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/static_widgets/loading_text_widget.dart';
+import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TagsSelectionBarWidget extends StatefulWidget {
   final Function(List<String> update) onChange;
@@ -28,22 +30,17 @@ class _TagsSelectionBarWidgetState extends State<TagsSelectionBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: sl<TagsBloc>().state,
-      builder: (_, AsyncSnapshot<TagsState> snapshot) {
-        if (snapshot.hasData) {
-          final state = snapshot.data;
-          if (state is TagsAvailableState) {
+    return BlocBuilder(
+      bloc: sl<TagsBloc>(),
+      builder: (context, state) {
+        if(state is TagsAvailableState){
+          if(state.tags != null){
             return _buildLoaded(state.tags);
-          } else if (state is TagsErrorState) {
-            _loadTags();
-            return _buildError(state.errorMessage);
           } else {
-            _loadTags();
-            return LoadingTextWidget();
+            return LoadingWidget();
           }
         } else {
-          return LoadingTextWidget();
+          return LoadingWidget();
         }
       },
     );

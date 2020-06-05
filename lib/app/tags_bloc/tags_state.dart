@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 abstract class TagsState extends Equatable {}
 
-class InitialTagsState extends TagsState {
+class TagsLoadingState extends TagsState {
   @override
   List<Object> get props => [];
 }
@@ -17,16 +17,4 @@ class TagsAvailableState extends TagsState {
   @override
   List get props => [tags];
 
-}
-
-class TagsUnavailableState extends TagsState {}
-
-class TagsErrorState extends TagsState {
-
-  final String errorMessage;
-
-  TagsErrorState(this.errorMessage);
-
-  @override
-  List get props => [errorMessage];
 }

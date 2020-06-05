@@ -77,7 +77,7 @@ class CashBoxApp extends StatelessWidget {
             ReceiptTemplatesSettingsWidget(),
         "/addReceipt": (context) => AddReceiptTemplateSelectionPage(),
         "/currencySettings": (context) => CurrencySettingsPage(),
-        "/bucketSettings": (context) => BucketSettingsPage(),
+        "/bucketSettings": (context) => BucketsSettingsPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {

@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 abstract class TemplatesState extends Equatable {}
 
-class InitialTemplatesState extends TemplatesState {
+class TemplatesLoadingState extends TemplatesState {
   @override
   List<Object> get props => [];
 }
@@ -15,24 +15,4 @@ class TemplatesAvailableState extends TemplatesState {
 
   @override
   List get props => [templates];
-}
-
-class TemplatesUnavailableState extends TemplatesState {}
-
-class TemplatesErrorState extends TemplatesState {
-  final String errorMessage;
-
-  TemplatesErrorState(this.errorMessage);
-
-  @override
-  List get props => [errorMessage];
-}
-
-class TemplateAvailableState extends TemplatesState {
-  final Template template;
-
-  TemplateAvailableState(this.template);
-
-  @override
-  List get props => [template];
 }

@@ -5,6 +5,7 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TagsSelectionPage extends StatelessWidget {
   final Function(List<String> selectedTags) onChanged;
@@ -62,29 +63,20 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: sl<TagsBloc>().state,
-      builder: (_, AsyncSnapshot<TagsState> snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is TagsAvailableState) {
-            return _buildLoaded(data.tags);
-          } else if (data is TagsErrorState) {
-            _loadTags();
-            return ErrorWidget(data.errorMessage);
+    return BlocBuilder(
+      bloc: sl<TagsBloc>(),
+      builder: (context, state) {
+        if(state is TagsAvailableState){
+          if(state.tags != null){
+            return _buildLoaded(state.tags);
           } else {
-            _loadTags();
             return LoadingWidget();
           }
         } else {
-          return Center(child: LoadingWidget());
+          return LoadingWidget();
         }
       },
     );
-  }
-
-  void _loadTags() {
-    sl<TagsBloc>().dispatch(GetTagsEvent());
   }
 
   Widget _buildLoaded(List<Tag> tags) {

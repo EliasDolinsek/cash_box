@@ -2,14 +2,17 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
+import 'package:cash_box/presentation/widgets/add_component_button.dart';
+import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TagsSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tagsBloc = sl<TagsBloc>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -18,100 +21,79 @@ class TagsSettingsPage extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      floatingActionButton: Builder(
-        builder: (context) {
-          return FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () => _addNewTag(context),
-          );
-        },
+      body: ScreenTypeLayout(
+          mobile: Align(
+            alignment: Alignment.topCenter,
+            child: WidthConstrainedWidget(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: _TagsSettingsPageContentWidget(),
+              ),
+            ),
+          )
       ),
-      body: StreamBuilder(
-        stream: tagsBloc.state,
-        builder: (context, AsyncSnapshot<TagsState> snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data;
-            if (data is TagsAvailableState) {
-              return TagsAvailableSettingsWidget(data.tags);
-            } else if (data is TagsErrorState) {
-              tagsBloc.dispatch(GetTagsEvent());
-              return ErrorWidget(data.errorMessage);
-            } else {
-              tagsBloc.dispatch(GetTagsEvent());
-              return LoadingWidget();
-            }
-          } else {
-            return LoadingWidget();
-          }
-        },
+    );
+  }
+}
+
+class _TagsSettingsPageContentWidget extends StatefulWidget {
+
+  @override
+  _TagsSettingsPageContentWidgetState createState() =>
+      _TagsSettingsPageContentWidgetState();
+}
+
+class _TagsSettingsPageContentWidgetState
+    extends State<_TagsSettingsPageContentWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          AddComponentButton(
+            text: AppLocalizations.translateOf(context, "btn_add_tag"),
+            onPressed: () => _addNewTag(context),
+          ),
+          BlocBuilder(
+            bloc: sl<TagsBloc>(),
+            builder: (context, state) {
+              if (state is TagsAvailableState) {
+                if (state.tags != null) {
+                  return _buildTagsList(state.tags);
+                } else {
+                  return LoadingWidget();
+                }
+              } else {
+                return LoadingWidget();
+              }
+            },
+          )
+        ],
       ),
     );
   }
 
-  void _addNewTag(BuildContext context) {
-    final text = AppLocalizations.translateOf(context, "txt_new_tag");
+  Widget _buildTagsList(List<Tag> tags) {
+    return Column(
+      children: tags
+          .map((c) => TagListTile(
+                tag: c,
+                onTap: () {
+                  Navigator.of(context).pushNamed("/tagsSettings/tagDetails", arguments: c);
+                },
+              ))
+          .toList(),
+    );
+  }
+
+  _addNewTag(BuildContext context) {
     final color = Tag.colorAsString(Theme.of(context).primaryColor);
-    final tag = Tag.newTag(name: text, color: color);
+    final tag = Tag.newTag(name: "", color: color);
 
     final event = AddTagEvent(tag);
     sl<TagsBloc>().dispatch(event);
 
-    _showAddingNewTagSnackbar(context);
-  }
-
-  void _showAddingNewTagSnackbar(BuildContext context) {
-    final text = AppLocalizations.translateOf(context, "txt_adding_new_tag");
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
-  }
-}
-
-class TagsAvailableSettingsWidget extends StatefulWidget {
-  final List<Tag> tags;
-
-  const TagsAvailableSettingsWidget(this.tags, {Key key}) : super(key: key);
-
-  @override
-  _TagsAvailableSettingsWidgetState createState() => _TagsAvailableSettingsWidgetState();
-}
-
-class _TagsAvailableSettingsWidgetState extends State<TagsAvailableSettingsWidget> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.tags.isEmpty) return _buildNoTags();
-    return Center(child: ResponsiveCardWidget(child: _buildLoaded()));
-  }
-
-  Widget _buildNoTags() {
-    return Center(
-      child: Text(
-        AppLocalizations.translateOf(context, "no_tags"),
-      ),
-    );
-  }
-
-  Widget _buildLoaded() {
-    final contacts = widget.tags.reversed;
-    return Column(
-      children: contacts.map((c) => TagListItem(c)).toList(),
-    );
-  }
-}
-
-class TagListItem extends StatelessWidget {
-  final Tag tag;
-
-  const TagListItem(this.tag, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: tag.colorAsColor,
-      ),
-      title: Text(tag.name),
-      onTap: (){
-        Navigator.of(context).pushNamed("/tagsSettings/tagDetails", arguments: tag);
-      },
-    );
+    Navigator.of(context).pushNamed("/tagsSettings/tagDetails", arguments: tag);
   }
 }

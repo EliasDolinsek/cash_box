@@ -48,7 +48,7 @@ void main() {
     when(addTagUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialTagsState(), TagsAvailableState(tagFixtures)];
+    final expect = [TagsLoadingState(), TagsAvailableState(tagFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -62,7 +62,7 @@ void main() {
 
     when(getTagUseCase.call(params)).thenAnswer((_) async => Right(tag));
 
-    final expect = [InitialTagsState(), TagAvailableState(tag)];
+    final expect = [TagsLoadingState(), TagAvailableState(tag)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -73,7 +73,7 @@ void main() {
   test("GetTagsEvent", () async {
     when(getTagsUseCase.call(any)).thenAnswer((_) async => Right(tagFixtures));
 
-    final expect = [InitialTagsState(), TagsAvailableState(tagFixtures)];
+    final expect = [TagsLoadingState(), TagsAvailableState(tagFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -90,7 +90,7 @@ void main() {
     when(removeTagUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialTagsState(), TagsAvailableState(tagFixtures)];
+    final expect = [TagsLoadingState(), TagsAvailableState(tagFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
@@ -110,7 +110,7 @@ void main() {
     when(updateTagUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expect = [InitialTagsState(), TagsAvailableState(tagFixtures)];
+    final expect = [TagsLoadingState(), TagsAvailableState(tagFixtures)];
 
     expectLater(bloc.state, emitsInOrder(expect));
 
