@@ -22,11 +22,10 @@ class _MobileNavigationPageState extends State<MobileNavigationPage> {
         ],
       ),
       body: config.page,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed("/addReceipt"),
-        icon: Icon(Icons.add),
-        label: Text(AppLocalizations.translateOf(context, "btn_add_receipt")),
+        child: Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: config.indexOfPage,

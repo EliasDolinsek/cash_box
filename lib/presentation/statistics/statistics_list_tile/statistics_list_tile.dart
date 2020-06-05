@@ -1,10 +1,17 @@
+import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
+import 'package:cash_box/app/accounts_bloc/accounts_state.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/constants.dart';
+import 'package:cash_box/core/platform/entetie_converter.dart';
+import 'package:cash_box/domain/account/enteties/currencies.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
+import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_total_amount_of_receipts_use_case.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BucketStatisticsListTile extends StatelessWidget {
   final Bucket bucket;
@@ -18,20 +25,49 @@ class BucketStatisticsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StatisticsListTile(
-      data: _getStatisticsListTileData(),
-      trailing: "10€",
-      title: bucket.name,
+    return BlocBuilder(
+      bloc: sl<AccountsBloc>(),
+      builder: (context, state) {
+        var currencySymbol = "";
+        if (state is AccountAvailableState) {
+          currencySymbol =
+              currencySymbolFromCode(state.account?.currencyCode) ?? "";
+        }
+
+        return StatisticsListTile(
+          data: _getStatisticsListTileData(currencySymbol),
+          trailing: "10€",
+          title: bucket.name,
+        );
+      },
     );
   }
 
-  List<StatisticsListTileData> _getStatisticsListTileData() {
+  List<StatisticsListTileData> _getStatisticsListTileData(
+      String currencySymbol) {
     final params =
         GetIncomesOutcomesUseCaseParams(bucket.receiptsIDs, receipts);
     final result = sl<GetIncomesOutcomesUseCase>().call(params);
 
+    final incomesAmount =
+        sl<GetTotalAmountOfReceiptsUseCase>()(result.incomeReceipts);
+    final outcomesAMount =
+        sl<GetTotalAmountOfReceiptsUseCase>()(result.outcomeReceipts);
+
+    final incomesAmountAsString = sl<FormatCurrencyUseCase>().call(
+        FormatCurrencyUseCaseParams(
+            amount: incomesAmount, symbol: currencySymbol));
+
+    final outcomesAmountAsString = sl<FormatCurrencyUseCase>().call(
+        FormatCurrencyUseCaseParams(
+            amount: incomesAmount, symbol: currencySymbol));
+
     return StatisticsListTileData.fromGetIncomesOutcomesOfBucketUseCaseResult(
-        result, "INCOMES TOOD", "OUTCOMES TODO", "0€TODO");
+      result,
+      incomesAmountAsString,
+      outcomesAmountAsString,
+      "",
+    );
   }
 }
 

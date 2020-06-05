@@ -73,6 +73,7 @@ import 'package:cash_box/domain/core/usecases/receipts/get_amount_of_receipts_us
 import 'package:cash_box/domain/core/usecases/receipts/get_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_total_amount_of_receipts_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/remove_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/update_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/tags/add_tag_use_case.dart';
@@ -265,6 +266,7 @@ Future init() async {
   sl.registerLazySingleton(() => GetReceiptsInReceiptMonthUseCase(sl()));
   sl.registerLazySingleton(() => RemoveReceiptUseCase(sl()));
   sl.registerLazySingleton(() => UpdateReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => GetTotalAmountOfReceiptsUseCase());
 
   sl.registerLazySingleton(() => GetAmountOfReceiptsUseCase());
   sl.registerLazySingleton(() => FilterReceiptByTypeUseCase());

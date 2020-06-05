@@ -65,14 +65,3 @@ String getReceiptTypeAsString(BuildContext context, ReceiptType type){
     default: throw Exception("Couldn't resolve receipt-type as string for receipt-type $type");
   }
 }
-
-double totalAmountOfReceipts(List<Receipt> receipts){
-  var totalAmount = 0.0;
-  receipts.forEach((element) {
-    element.allFieldsNotAsStorageOnly.forEach((element) {
-      if(element.type == FieldType.amount) totalAmount += element.value;
-    });
-  });
-
-  return totalAmount;
-}

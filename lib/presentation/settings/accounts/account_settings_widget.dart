@@ -8,10 +8,12 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/data_storage_location_selection_dialog.dart';
 import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
 import 'package:cash_box/presentation/settings/password_settings_widget.dart';
+import 'package:cash_box/presentation/settings/settings_list_tile.dart';
 import 'package:cash_box/presentation/settings/settings_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AccountSettingsWidget extends StatelessWidget {
   @override
@@ -54,18 +56,13 @@ class SubscriptionTile extends StatefulWidget {
 class _SubscriptionTileState extends State<SubscriptionTile> {
   @override
   Widget build(BuildContext context) {
-    final accountsBloc = sl<AccountsBloc>();
-    return StreamBuilder(
-      stream: accountsBloc.state,
-      builder: (_, AsyncSnapshot<AccountsState> snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is AccountAvailableState) {
-            if(data != null){
-              return _buildLoaded(data.account);
-            } else {
-              return LoadingWidget();
-            }
+    return BlocBuilder(
+      bloc: sl<AccountsBloc>(),
+      builder: (context, state) {
+        if (state is AccountAvailableState) {
+          final account = state.account;
+          if (account != null) {
+            return _buildLoaded(account);
           } else {
             return LoadingWidget();
           }
@@ -80,21 +77,13 @@ class _SubscriptionTileState extends State<SubscriptionTile> {
     String subscriptionAsString = getSubscriptionTypeAsString(
         account.subscriptionInfo.subscriptionType,
         AppLocalizations.of(context));
-    return ListTile(
-      title: Text(
-        AppLocalizations.translateOf(
-            context, "account_settings_widget_subscription"),
-      ),
-      subtitle: Text(subscriptionAsString),
-      leading: CircleAvatar(
-        child: Icon(Icons.payment),
-      ),
-      trailing: MaterialButton(
-        onPressed: () {},
-        child: Text(
-          AppLocalizations.translateOf(context, "btn_more"),
-        ),
-      ),
+
+    return SettingsListTile(
+      title: AppLocalizations.translateOf(
+          context, "account_settings_widget_subscription"),
+      subtitle: subscriptionAsString,
+      icon: Icons.payment,
+      onTap: null,
     );
   }
 }
@@ -108,29 +97,23 @@ class DataStorageLocationTile extends StatefulWidget {
 class _DataStorageLocationTileState extends State<DataStorageLocationTile> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(AppLocalizations.translateOf(
-          context, "account_settings_widget_data_storage_location")),
-      subtitle: FutureBuilder(
-          future: _getDataStorageLocationAsString(context),
-          builder: (_, AsyncSnapshot<String> data) {
-            if (data.hasData) {
-              return Text(data.data);
-            } else {
-              final text = AppLocalizations.translateOf(
-                  context, "account_settings_widget_loading");
-              return Text(text);
-            }
-          }),
-      leading: CircleAvatar(
-        child: Icon(Icons.storage),
-      ),
-      trailing: MaterialButton(
-        onPressed: _showDataStorageLocationSelectionDialog,
-        child: Text(
-          AppLocalizations.translateOf(context, "btn_more"),
-        ),
-      ),
+    return FutureBuilder(
+      future: _getDataStorageLocationAsString(context),
+      builder: (_, AsyncSnapshot<String> data) {
+        if (data.hasData) {
+          return SettingsListTile(
+            title: AppLocalizations.translateOf(
+                context, "account_settings_widget_data_storage_location"),
+            subtitle: data.data,
+            icon: Icons.storage,
+            onTap: _showDataStorageLocationSelectionDialog,
+          );
+        } else {
+          final text = AppLocalizations.translateOf(
+              context, "account_settings_widget_loading");
+          return Text(text);
+        }
+      },
     );
   }
 

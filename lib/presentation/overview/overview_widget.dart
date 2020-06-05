@@ -7,6 +7,7 @@ import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/account/enteties/currencies.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_total_amount_of_receipts_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
@@ -95,7 +96,7 @@ class OverviewWidget extends StatelessWidget {
           bloc: sl<AccountsBloc>(),
           builder: (context, state) {
             var currencySymbol = "";
-            if(state is AccountAvailableState){
+            if (state is AccountAvailableState) {
               final currencyCode = currencySymbol = state.account.currencyCode;
               currencySymbol = currencySymbolFromCode(currencyCode);
             }
@@ -104,7 +105,8 @@ class OverviewWidget extends StatelessWidget {
               children: [
                 SizedBox(width: 16.0),
                 _buildCardContainer(
-                  _buildResultCard(context, incomeReceipts, outcomeReceipts, currencySymbol),
+                  _buildResultCard(
+                      context, incomeReceipts, outcomeReceipts, currencySymbol),
                 ),
                 SizedBox(width: 16.0),
                 _buildCardContainer(
@@ -132,8 +134,9 @@ class OverviewWidget extends StatelessWidget {
 
   Widget _buildResultCard(BuildContext context, List<Receipt> incomeReceipts,
       List<Receipt> outcomeReceipts, String currencySymbol) {
-    final resultAmount = totalAmountOfReceipts(incomeReceipts) -
-        totalAmountOfReceipts(outcomeReceipts);
+    final useCase = sl<GetTotalAmountOfReceiptsUseCase>();
+    final resultAmount = useCase(incomeReceipts) - useCase(outcomeReceipts);
+
     final formattedAmount = sl<FormatCurrencyUseCase>().call(
         FormatCurrencyUseCaseParams(
             amount: resultAmount, symbol: currencySymbol));
@@ -148,7 +151,7 @@ class OverviewWidget extends StatelessWidget {
 
   Widget _buildOutcomesCard(BuildContext context, List<Receipt> outcomeReceipts,
       String currencySymbol) {
-    final resultAmount = totalAmountOfReceipts(outcomeReceipts);
+    final resultAmount = sl<GetTotalAmountOfReceiptsUseCase>()(outcomeReceipts);
     final formattedAmount = sl<FormatCurrencyUseCase>().call(
         FormatCurrencyUseCaseParams(
             amount: resultAmount, symbol: currencySymbol));
@@ -163,7 +166,7 @@ class OverviewWidget extends StatelessWidget {
 
   Widget _buildIncomesCard(BuildContext context, List<Receipt> incomeReceipts,
       String currencySymbol) {
-    final resultAmount = totalAmountOfReceipts(incomeReceipts);
+    final resultAmount = sl<GetTotalAmountOfReceiptsUseCase>()(incomeReceipts);
     final formattedAmount = sl<FormatCurrencyUseCase>().call(
         FormatCurrencyUseCaseParams(
             amount: resultAmount, symbol: currencySymbol));

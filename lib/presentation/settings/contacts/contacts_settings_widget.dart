@@ -2,72 +2,45 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/settings_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../settings_list_tile.dart';
+
 class ContactsSettingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return SettingsWidget(
       title: AppLocalizations.translateOf(
           context, "contacts_settings_widget_categories"),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _buildEditCategoryListTile(context),
+          SettingsListTile(
+            title: localizations.translate("contacts_settings_widget_edit_contacts"),
+            subtitle: localizations.translate("contacts_settings_widget_edit_contacts_hint"),
+            icon: Icons.contacts,
+            onTap: () {
+              Navigator.of(context).pushNamed("/contactsSettings");
+            },
+          ),
           SizedBox(height: 16.0),
-          _buildImportCategoriesListTile(context),
+          SettingsListTile(
+            title: localizations.translate("contacts_settings_widget_import_contacts"),
+            subtitle: localizations.translate("contacts_settings_widget_import_contacts_hint"),
+            icon: Icons.cloud_download,
+            onTap: () {
+
+            },
+          ),
           SizedBox(height: 16.0),
-          _buildExportCategoriesListTile(context)
+          SettingsListTile(
+            title: localizations.translate("contacts_settings_widget_export_contacts"),
+            subtitle: localizations.translate("contacts_settings_widget_export_contacts_hint"),
+            icon: Icons.cloud_upload,
+            onTap: () {
+
+            },
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildEditCategoryListTile(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
-    return ListTile(
-      leading: CircleAvatar(
-        child: Icon(Icons.category),
-      ),
-      title: Text(localizations.translate("contacts_settings_widget_edit_categories")),
-      subtitle: Text(localizations.translate("contacts_settings_widget_edit_categories_hint")),
-      trailing: MaterialButton(
-        child: Text(AppLocalizations.translateOf(context, "btn_more")),
-        onPressed: () {
-          Navigator.of(context).pushNamed("/contactsSettings");
-        },
-      ),
-    );
-  }
-
-  Widget _buildImportCategoriesListTile(BuildContext context){
-    final localizations = AppLocalizations.of(context);
-    return ListTile(
-      leading: CircleAvatar(
-        child: Icon(Icons.cloud_download),
-      ),
-      title: Text(localizations.translate("contacts_settings_widget_import_categories")),
-      subtitle: Text(localizations.translate("contacts_settings_widget_import_categories_hint")),
-      trailing: MaterialButton(
-        child: Text(AppLocalizations.translateOf(context, "btn_more")),
-        onPressed: () {
-          print("TODO"); //TODO
-        },
-      ),
-    );
-  }
-
-  Widget _buildExportCategoriesListTile(BuildContext context){
-    final localizations = AppLocalizations.of(context);
-    return ListTile(
-      leading: CircleAvatar(
-        child: Icon(Icons.cloud_upload),
-      ),
-      title: Text(localizations.translate("contacts_settings_widget_export_categories")),
-      subtitle: Text(localizations.translate("contacts_settings_widget_export_categories_hint")),
-      trailing: MaterialButton(
-        child: Text(AppLocalizations.translateOf(context, "btn_more")),
-        onPressed: () {
-          print("TODO"); //TODO
-        },
       ),
     );
   }

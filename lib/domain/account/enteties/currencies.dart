@@ -483,4 +483,4 @@ final currencies = {
   }
 };
 
-String currencySymbolFromCode(String currencyCode) => currencies[currencyCode]["symbol"];
+String currencySymbolFromCode(String currencyCode) => currencies[currencyCode ?? ""]["symbol"];

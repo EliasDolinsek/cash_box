@@ -1,7 +1,9 @@
+import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/constants.dart'
     show incomeColor, outcomeColor;
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
+import 'package:cash_box/domain/core/usecases/receipts/get_total_amount_of_receipts_use_case.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'dart:math' show pi;
@@ -19,8 +21,9 @@ class ReceiptsGaugePieChart extends StatelessWidget {
     List<Receipt> incomeReceipts,
     List<Receipt> outcomeReceipts,
   ) {
-    final incomesAmount = totalAmountOfReceipts(incomeReceipts);
-    final outcomesAmount = totalAmountOfReceipts(outcomeReceipts);
+
+    final incomesAmount = sl<GetTotalAmountOfReceiptsUseCase>().call(incomeReceipts);
+    final outcomesAmount = sl<GetTotalAmountOfReceiptsUseCase>().call(outcomeReceipts);
 
     final segments = [
       ReceiptSegment(ReceiptType.income, incomesAmount),
