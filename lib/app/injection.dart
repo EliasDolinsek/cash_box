@@ -107,6 +107,7 @@ Future setup() async {
   sl<BucketsBloc>().dispatch(GetBucketsEvent());
   sl<TemplatesBloc>().dispatch(GetTemplatesEvent());
   sl<TagsBloc>().dispatch(GetTagsEvent());
+  sl<ContactsBloc>().dispatch(GetContactsEvent());
 }
 
 Future init() async {

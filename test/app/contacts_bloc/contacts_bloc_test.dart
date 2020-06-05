@@ -52,7 +52,7 @@ void main() {
     when(addContactUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialContactsState(), ContactsAvailableState(contactFixtures)];
+    final expected = [ContactsLoadingState(), ContactsAvailableState(contactFixtures)];
 
     expectLater(contactsBloc.state, emitsInOrder(expected));
 
@@ -66,7 +66,7 @@ void main() {
     when(getContactUseCase.call(params))
         .thenAnswer((_) async => Right(contact));
 
-    final expected = [InitialContactsState(), ContactAvailableState(contact)];
+    final expected = [ContactsLoadingState(), ContactAvailableState(contact)];
 
     expectLater(contactsBloc.state, emitsInOrder(expected));
 
@@ -79,7 +79,7 @@ void main() {
         .thenAnswer((_) async => Right(contactFixtures));
 
     final expected = [
-      InitialContactsState(),
+      ContactsLoadingState(),
       ContactsAvailableState(contactFixtures)
     ];
 
@@ -98,7 +98,7 @@ void main() {
     final params = UpdateContactUseCaseParams(update.id, update.fields);
     when(updateContactUseCase.call(params)).thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialContactsState(), ContactsAvailableState(contactFixtures)];
+    final expected = [ContactsLoadingState(), ContactsAvailableState(contactFixtures)];
     expectLater(contactsBloc.state, emitsInOrder(expected));
 
     contactsBloc.dispatch(GetContactsEvent());
@@ -112,7 +112,7 @@ void main() {
     when(removeContactUseCase.call(params))
         .thenAnswer((_) async => Right(EmptyData()));
 
-    final expected = [InitialContactsState(), ContactsAvailableState(contactFixtures)];
+    final expected = [ContactsLoadingState(), ContactsAvailableState(contactFixtures)];
 
     expectLater(contactsBloc.state, emitsInOrder(expected));
 

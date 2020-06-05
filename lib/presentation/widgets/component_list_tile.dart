@@ -1,17 +1,22 @@
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
+import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/settings/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class ComponentListTile extends StatelessWidget {
-
   final String title;
   final String description;
   final Function onTap;
   final Color avatarBorderColor;
 
-  ComponentListTile({@required this.title, this.description, this.onTap, this.avatarBorderColor});
+  ComponentListTile(
+      {@required this.title,
+      this.description,
+      this.onTap,
+      this.avatarBorderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +62,13 @@ class ComponentListTile extends StatelessWidget {
 }
 
 class TitleOnlyComponentListTile extends StatelessWidget {
-
   final String title;
   final Function onTap;
   final Color avatarBorderColor;
 
-  const TitleOnlyComponentListTile({Key key, this.title, this.onTap, this.avatarBorderColor}) : super(key: key);
+  const TitleOnlyComponentListTile(
+      {Key key, this.title, this.onTap, this.avatarBorderColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,5 +129,36 @@ class TagListTile extends StatelessWidget {
       onTap: onTap,
       avatarBorderColor: tag.colorAsColor,
     );
+  }
+}
+
+class ContactListItem extends StatelessWidget {
+  final Contact contact;
+  final Function onTap;
+
+  const ContactListItem(this.contact, {Key key, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ComponentListTile(
+      title: contact.name,
+      description: _contactFieldsInfoAsString(context),
+      onTap: onTap,
+    );
+  }
+
+  String _contactFieldsInfoAsString(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    if (contact.fields.isEmpty) {
+      return localizations.translate("txt_no_fields");
+    } else {
+      return contact.fields.map((f) {
+        if (f.description.trim().isEmpty) {
+          return AppLocalizations.translateOf(context, "unnamed");
+        } else {
+          return f.description;
+        }
+      }).join(" · ");
+    }
   }
 }

@@ -24,33 +24,43 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       @required this.updateContactUseCase});
 
   @override
-  ContactsState get initialState => InitialContactsState();
+  ContactsState get initialState => ContactsLoadingState();
 
   @override
   Stream<ContactsState> mapEventToState(
     ContactsEvent event,
   ) async* {
     if (event is AddContactEvent) {
+      yield ContactsLoadingState();
+
       final params = AddContactParams(event.contact);
       await addContactUseCase(params);
+
       dispatch(GetContactsEvent());
     } else if (event is GetContactsEvent) {
+      yield ContactsLoadingState();
       yield await _getContacts();
     } else if (event is UpdateContactEvent) {
+      yield ContactsLoadingState();
+
       final params = UpdateContactUseCaseParams(event.contactID,
           name: event.name, fields: event.fields);
       await updateContactUseCase(params);
+
       dispatch(GetContactsEvent());
     } else if (event is RemoveContactEvent) {
+      yield ContactsLoadingState();
+
       final params = RemoveContactUseCaseParams(event.contactID);
       await removeContactUseCase(params);
+
       dispatch(GetContactsEvent());
     }
   }
 
   Future<ContactsState> _getContacts() async {
     final contactEither = await getContactsUseCase(NoParams());
-    return contactEither.fold((l) => ContactsErrorState(l.toString()),
+    return contactEither.fold((l) => ContactsAvailableState(null),
         (contacts) {
       return ContactsAvailableState(contacts);
     });
