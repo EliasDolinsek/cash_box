@@ -70,11 +70,10 @@ class GetIncomesOutcomesOfBucketUseCaseResult extends Equatable {
 }
 
 class GetIncomesOutcomesUseCaseParams extends Equatable {
-  final List<String> receiptIds;
   final List<Receipt> receipts;
 
-  GetIncomesOutcomesUseCaseParams(this.receiptIds, this.receipts);
+  GetIncomesOutcomesUseCaseParams(this.receipts);
 
   @override
-  List get props => [receiptIds, receipts];
+  List get props => [receipts];
 }

@@ -10,6 +10,7 @@ import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_total_amount_of_receipts_use_case.dart';
+import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,50 +26,15 @@ class BucketStatisticsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: sl<AccountsBloc>(),
-      builder: (context, state) {
-        var currencySymbol = "";
-        if (state is AccountAvailableState) {
-          currencySymbol =
-              currencySymbolFromCode(state.account?.currencyCode) ?? "";
-        }
-
-        return StatisticsListTile(
-          data: _getStatisticsListTileData(currencySymbol),
-          trailing: "10€",
-          title: bucket.name,
-        );
-      },
+    return ReceiptStatisticsListTile(
+      name: bucket.name,
+      receipts: _getReceipts(),
     );
   }
 
-  List<StatisticsListTileData> _getStatisticsListTileData(
-      String currencySymbol) {
-    final params =
-        GetIncomesOutcomesUseCaseParams(bucket.receiptsIDs, receipts);
-    final result = sl<GetIncomesOutcomesUseCase>().call(params);
-
-    final incomesAmount =
-        sl<GetTotalAmountOfReceiptsUseCase>()(result.incomeReceipts);
-    final outcomesAMount =
-        sl<GetTotalAmountOfReceiptsUseCase>()(result.outcomeReceipts);
-
-    final incomesAmountAsString = sl<FormatCurrencyUseCase>().call(
-        FormatCurrencyUseCaseParams(
-            amount: incomesAmount, symbol: currencySymbol));
-
-    final outcomesAmountAsString = sl<FormatCurrencyUseCase>().call(
-        FormatCurrencyUseCaseParams(
-            amount: incomesAmount, symbol: currencySymbol));
-
-    return StatisticsListTileData.fromGetIncomesOutcomesOfBucketUseCaseResult(
-      result,
-      incomesAmountAsString,
-      outcomesAmountAsString,
-      "",
-    );
-  }
+  List<Receipt> _getReceipts() => receipts
+      .where((element) => bucket.receiptsIDs.contains(element.id))
+      .toList();
 }
 
 class TagStatisticsListTile extends StatelessWidget {
@@ -81,29 +47,90 @@ class TagStatisticsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StatisticsListTile(
-      data: _getStatisticsListTileData(),
-      title: tag.name,
-      spacing: 8,
-      trailing: "10€",
+    return ReceiptStatisticsListTile(
+      name: tag.name,
+      receipts: _getReceipt(),
     );
   }
 
-  List<StatisticsListTileData> _getStatisticsListTileData() {
-    final tagReceipts =
-        receipts.where((element) => element.tagIDs.contains(tag.id)).toList();
+  List<Receipt> _getReceipt() =>
+      receipts.where((element) => element.tagIDs.contains(tag.id)).toList();
+}
 
-    final List<String> receiptIds = receipts
-        .where((element) => element.tagIDs.contains(tag.id))
-        .map((e) => e.id)
-        .toList();
+class ReceiptStatisticsListTile extends StatelessWidget {
+  final String name;
+  final List<Receipt> receipts;
 
-    final params = GetIncomesOutcomesUseCaseParams(receiptIds, tagReceipts);
-    final result = sl<GetIncomesOutcomesUseCase>().call(params);
+  const ReceiptStatisticsListTile(
+      {Key key, @required this.name, @required this.receipts})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: sl<AccountsBloc>(),
+      builder: (context, state) {
+        var currencySymbol = "";
+        if (state is AccountAvailableState) {
+          currencySymbol =
+              currencySymbolFromCode(state.account?.currencyCode) ?? "";
+        }
+
+        return StatisticsListTile(
+          title: name,
+          trailing: _getTrailingAmountAsFormattedString(currencySymbol),
+          data: _getStatisticsListTileData(currencySymbol),
+        );
+      },
+    );
+  }
+
+  String _getTrailingAmountAsFormattedString(String currencySymbol) {
+    final useCase = sl<GetTotalAmountOfReceiptsUseCase>();
+    final amount =
+        useCase.call(getIncomeReceipts()) - useCase.call(getOutcomeReceipts());
+
+    final params = FormatCurrencyUseCaseParams(
+      amount: amount,
+      symbol: currencySymbol,
+    );
+
+    return sl<FormatCurrencyUseCase>().call(params);
+  }
+
+  List<StatisticsListTileData> _getStatisticsListTileData(
+      String currencySymbol) {
+    final incomesAmount =
+        sl<GetTotalAmountOfReceiptsUseCase>()(getIncomeReceipts());
+    final outcomesAmount =
+        sl<GetTotalAmountOfReceiptsUseCase>()(getOutcomeReceipts());
+
+    final incomesAmountAsString = sl<FormatCurrencyUseCase>().call(
+        FormatCurrencyUseCaseParams(
+            amount: incomesAmount, symbol: currencySymbol));
+
+    final outcomesAmountAsString = sl<FormatCurrencyUseCase>().call(
+        FormatCurrencyUseCaseParams(
+            amount: outcomesAmount, symbol: currencySymbol));
 
     return StatisticsListTileData.fromGetIncomesOutcomesOfBucketUseCaseResult(
-        result, "INCOMES TOOD", "OUTCOMES TODO", "0€TODO");
+      getIncomesOutcomesOfBucketUseCaseResult(),
+      incomesAmountAsString,
+      outcomesAmountAsString,
+      "",
+    );
   }
+
+  GetIncomesOutcomesOfBucketUseCaseResult
+      getIncomesOutcomesOfBucketUseCaseResult() =>
+          sl<GetIncomesOutcomesUseCase>()
+              .call(GetIncomesOutcomesUseCaseParams(receipts));
+
+  List<Receipt> getIncomeReceipts() =>
+      getIncomesOutcomesOfBucketUseCaseResult().incomeReceipts;
+
+  List<Receipt> getOutcomeReceipts() =>
+      getIncomesOutcomesOfBucketUseCaseResult().outcomeReceipts;
 }
 
 class StatisticsListTile extends StatelessWidget {
@@ -127,7 +154,7 @@ class StatisticsListTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            title,
+            _getTitle(context),
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
@@ -217,6 +244,14 @@ class StatisticsListTile extends StatelessWidget {
     var count = 0.0;
     data.forEach((element) => count += element.count);
     return count;
+  }
+
+  String _getTitle(BuildContext context) {
+    if (title != null && title.isNotEmpty) {
+      return title;
+    } else {
+      return AppLocalizations.translateOf(context, "unnamed");
+    }
   }
 }
 
