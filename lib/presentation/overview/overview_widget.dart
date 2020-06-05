@@ -3,16 +3,15 @@ import 'package:cash_box/app/accounts_bloc/accounts_state.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/constants.dart';
-import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/account/enteties/currencies.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_total_amount_of_receipts_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/overview_statistics/receipts_gauge_pie_chart.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,7 +47,7 @@ class OverviewWidget extends StatelessWidget {
       return Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
-          child: ResponsiveWidget(
+          child: WidthConstrainedWidget(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [

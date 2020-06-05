@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AddComponentButton extends StatelessWidget {
+class ComponentActionButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  const AddComponentButton({Key key, this.text = "", this.onPressed})
+  const ComponentActionButton({Key key, this.text = "", this.onPressed})
       : super(key: key);
 
   @override

@@ -5,7 +5,7 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/add_component_button.dart';
+import 'package:cash_box/presentation/widgets/component_action_button.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +41,7 @@ class _TemplatesSettingsPageContentWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          AddComponentButton(
+          ComponentActionButton(
             text: AppLocalizations.translateOf(context, "btn_add_template"),
             onPressed: () => _addNewTemplate(context),
           ),

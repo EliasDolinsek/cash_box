@@ -5,7 +5,7 @@ import 'package:cash_box/presentation/buckets/buckets_selection_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
 import 'package:cash_box/presentation/receipts/add_receipt_template_selection_page.dart';
-import 'package:cash_box/presentation/search/search_page.dart';
+import 'package:cash_box/presentation/search/filter_page.dart';
 import 'package:cash_box/presentation/settings/buckets/bucket_details_page.dart';
 import 'package:cash_box/presentation/settings/buckets/bucket_settings_page.dart';
 import 'package:cash_box/presentation/settings/buckets/buckets_settings_widget.dart';

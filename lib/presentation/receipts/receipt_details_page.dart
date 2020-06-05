@@ -3,14 +3,13 @@ import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/buckets/widgets/bucket_selection_widget.dart';
 import 'package:cash_box/presentation/widgets/content_card_widget.dart';
 import 'package:cash_box/presentation/receipts/widgets/receipt_type_selection_widget.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:cash_box/presentation/tags/widgets/tags_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -166,7 +165,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveWidget(
+    return WidthConstrainedWidget(
       child: ListView(
         padding: EdgeInsets.all(16.0),
         shrinkWrap: true,

@@ -76,7 +76,6 @@ class _FilterWidgetState extends State<FilterWidget> {
       children: <Widget>[
         Text(
           AppLocalizations.translateOf(context, "txt_type"),
-          textAlign: TextAlign.start,
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 20,
@@ -132,7 +131,6 @@ class _FilterWidgetState extends State<FilterWidget> {
       children: <Widget>[
         Text(
           AppLocalizations.translateOf(context, "txt_tags"),
-          textAlign: TextAlign.start,
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 20,

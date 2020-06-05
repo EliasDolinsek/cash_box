@@ -1,10 +1,13 @@
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
+import 'package:cash_box/app/auth_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
+import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/auth/sign_out_toolbox.dart';
 import 'package:cash_box/presentation/settings/dialogs/data_storage_location_selection_dialog.dart';
 import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
 import 'package:cash_box/presentation/settings/password_settings_widget.dart';
@@ -27,11 +30,10 @@ class AccountSettingsWidget extends StatelessWidget {
           NameEmailSettingsWidget(),
           SizedBox(height: 16.0),
           PasswordSettingsWidget(),
-          SizedBox(
-            height: 16.0,
-          ),
+          SizedBox(height: 16.0),
           SubscriptionTile(),
-          _buildDataStorageLocationTile()
+          _buildDataStorageLocationTile(),
+          _buildSignOutTile(context)
         ],
       ),
     );
@@ -45,6 +47,20 @@ class AccountSettingsWidget extends StatelessWidget {
         children: <Widget>[SizedBox(height: 16.0), DataStorageLocationTile()],
       );
     }
+  }
+
+  Widget _buildSignOutTile(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12.0),
+      child: SettingsListTile(
+        title: AppLocalizations.translateOf(context, "navigation_sign_out"),
+        icon: Icons.exit_to_app,
+        onTap: () async {
+          showSigningOutSnackbar(context);
+          signOut();
+        },
+      ),
+    );
   }
 }
 

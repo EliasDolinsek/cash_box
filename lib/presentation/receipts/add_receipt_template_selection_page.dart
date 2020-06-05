@@ -2,9 +2,11 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/component_action_button.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,9 +23,17 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
         ],
         backgroundColor: Colors.white,
       ),
-      floatingActionButton: _buildFloatingActionButton(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Center(child: ResponsiveCardWidget(child: _buildContent(context))),
+      body: ScreenTypeLayout(
+          mobile: Align(
+            alignment: Alignment.topCenter,
+            child: WidthConstrainedWidget(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: _buildContent(context),
+              ),
+            ),
+          )
+      ),
     );
   }
 
@@ -44,16 +54,6 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
-    return FloatingActionButton.extended(
-      onPressed: () => Navigator.of(context)
-          .pushNamed("/addReceipt/detailsInput", arguments: []),
-      label: Text(
-        AppLocalizations.translateOf(context, "btn_skip"),
-      ),
-    );
-  }
-
   Widget _buildEditTemplatesButton(BuildContext context) {
     return MaterialButton(
       child: Text(AppLocalizations.translateOf(context, "btn_edit_templates")),
@@ -64,7 +64,7 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
 
   Widget _buildLoaded(BuildContext context, List<Template> templates) {
     if (templates.isNotEmpty) {
-      return _buildTemplatesList(context, templates);
+      return SingleChildScrollView(child: _buildTemplatesList(context, templates));
     } else {
       return Center(
         child: Text(
@@ -75,17 +75,26 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
   }
 
   Widget _buildTemplatesList(BuildContext context, List<Template> templates) {
-    return ListView(
-      children: templates.map((template) {
-        return TemplateListTile(
-          template: template,
-          onTap: () {
-            Navigator.of(context).pushReplacementNamed(
-                "/addReceipt/detailsInput",
-                arguments: template.fields);
-          },
-        );
-      }).toList(),
+    return Column(
+      children: [
+        ComponentActionButton(
+          text: AppLocalizations.translateOf(context, "btn_select_none"),
+          onPressed: () => Navigator.of(context)
+              .pushNamed("/addReceipt/detailsInput", arguments: []),
+        ),
+        Column(
+          children: templates.map((template) {
+            return TemplateListTile(
+              template: template,
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(
+                    "/addReceipt/detailsInput",
+                    arguments: template.fields);
+              },
+            );
+          }).toList(),
+        )
+      ],
     );
   }
 }

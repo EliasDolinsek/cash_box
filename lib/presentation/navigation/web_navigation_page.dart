@@ -5,6 +5,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/auth/sign_out_toolbox.dart';
 import 'package:cash_box/presentation/widgets/receipt_month_selection_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -120,7 +121,8 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
                 title: Text(AppLocalizations.translateOf(
                     context, "navigation_sign_out")),
                 onTap: () {
-                  _signOut(context);
+                  showSigningOutSnackbar(context);
+                  signOut();
                   Navigator.pop(context);
                 },
               )
@@ -157,20 +159,6 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
 
   Widget _buildUseChipWithText(String text) {
     return Chip(label: Text(text));
-  }
-
-  void _signOut(BuildContext context) {
-    final userCase = sl<SignOutUseCase>();
-    _showSigningOutSnackbar(context);
-    userCase(NoParams()).then((value) {
-      sl<AuthBloc>().dispatch(LoadAuthStateEvent());
-    });
-  }
-
-  void _showSigningOutSnackbar(BuildContext scaffoldContext) {
-    final text =
-        AppLocalizations.translateOf(context, "navigation_page_signing_out");
-    Scaffold.of(scaffoldContext).showSnackBar(SnackBar(content: Text(text)));
   }
 
   Widget _buildAddReceiptChip() {

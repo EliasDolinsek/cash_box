@@ -2,8 +2,9 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
+import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,7 +46,7 @@ class TagsSelectionWidget extends StatefulWidget {
   final List<String> initialSelectedTags;
 
   const TagsSelectionWidget(
-      {Key key, this.initialSelectedTags = const[], this.onChanged})
+      {Key key, this.initialSelectedTags = const [], this.onChanged})
       : super(key: key);
 
   @override
@@ -66,8 +67,8 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
     return BlocBuilder(
       bloc: sl<TagsBloc>(),
       builder: (context, state) {
-        if(state is TagsAvailableState){
-          if(state.tags != null){
+        if (state is TagsAvailableState) {
+          if (state.tags != null) {
             return _buildLoaded(state.tags);
           } else {
             return LoadingWidget();
@@ -80,15 +81,11 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
   }
 
   Widget _buildLoaded(List<Tag> tags) {
-    if (tags.isNotEmpty) {
-      return ResponsiveCardWidget(
-        child: SingleChildScrollView(child: _buildTagsList(tags)),
-      );
-    } else {
-      return Center(
-        child: Text(AppLocalizations.translateOf(context, "no_tags")),
-      );
-    }
+    return WidthConstrainedWidget(
+      child: SingleChildScrollView(
+        child: _buildTagsList(tags),
+      ),
+    );
   }
 
   Widget _buildTagsList(List<Tag> tags) {
@@ -98,13 +95,17 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
     );
   }
 
-  Widget _buildTagListTile(Tag tag){
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-      leading: CircleAvatar(backgroundColor: tag.colorAsColor),
-      title: Text(tag.name),
-      trailing: _buildTrailingForTag(tag),
+  Widget _buildTagListTile(Tag tag) {
+    return InkWell(
       onTap: () => _onTap(tag),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(child: TagListTile(tag: tag)),
+          _buildTrailingForTag(tag),
+          SizedBox(width: 24.0)
+        ],
+      ),
     );
   }
 

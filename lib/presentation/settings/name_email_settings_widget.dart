@@ -1,12 +1,14 @@
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
+import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/re_sign_in_dialog.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NameEmailSettingsWidget extends StatefulWidget {
   @override
@@ -23,17 +25,16 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final accountsBloc = sl<AccountsBloc>();
-    return StreamBuilder(
-      stream: accountsBloc.state,
-      builder: (_, AsyncSnapshot<AccountsState> snaphsot) {
-        if (snaphsot.hasData) {
-          final data = snaphsot.data;
-          if (data is AccountAvailableState) {
+    return BlocBuilder(
+      bloc: sl<AccountsBloc>(),
+      builder: (context, state) {
+        if(state is AccountAvailableState){
+          if(state.account != null){
             if (!_setup) {
-              _setDataFromAccountAvailableState(data);
+              _setData(state.account);
               _setup = true;
             }
+
             return _buildLoaded();
           } else {
             return LoadingWidget();
@@ -45,9 +46,9 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
     );
   }
 
-  void _setDataFromAccountAvailableState(AccountAvailableState state) {
-    _nameController.text = state.account.name;
-    _emailController.text = state.account.email;
+  void _setData(Account account) {
+    _nameController.text = account.name;
+    _emailController.text = account.email;
   }
 
   Widget _buildLoaded() {

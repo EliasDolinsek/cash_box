@@ -2,10 +2,11 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/default_card.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
+import 'package:cash_box/presentation/widgets/search_text_field.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -20,11 +21,18 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveCardWidget(
+    return WidthConstrainedWidget(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildSearchBar(),
-          SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 8.0,
+              top: 16.0,
+            ),
+            child: _buildFilterButton(),
+          ),
           Expanded(child: _buildSearchResult()),
         ],
       ),
@@ -32,28 +40,15 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   Widget _buildSearchBar() {
-    return _buildSearchTextField();
-  }
-
-  Widget _buildSearchTextField() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-      child: DefaultCard(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 8.0,
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: AppLocalizations.translateOf(context, "txt_search"),
-              suffixIcon: _buildFilterButton(),
-            ),
-            onChanged: (value) => setState(() => searchText = value),
-            onSubmitted: (_) => _search(),
-          ),
-        ),
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        top: 16.0,
+      ),
+      child: SearchTextField(
+        onSearch: (text) => _search(),
+        onChanged: (value) => setState(() => searchText = value),
       ),
     );
   }
@@ -75,7 +70,7 @@ class _SearchWidgetState extends State<SearchWidget> {
         },
       ),
       child: Text(
-        AppLocalizations.translateOf(context, "btn_filter"),
+        AppLocalizations.translateOf(context, "btn_apply_filters"),
       ),
     );
   }

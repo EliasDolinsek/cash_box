@@ -2,8 +2,8 @@ import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -103,7 +103,7 @@ class _BucketSelectionWidgetState extends State<_BucketSelectionWidget> {
   }
 
   Widget _buildContent() {
-    return ResponsiveWidget(
+    return WidthConstrainedWidget(
       child: ListView.separated(
         itemBuilder: (_, index) {
           final bucket = widget.buckets[index];

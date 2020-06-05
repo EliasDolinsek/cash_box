@@ -3,7 +3,6 @@ import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/settings/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class ComponentListTile extends StatelessWidget {
@@ -29,9 +28,11 @@ class ComponentListTile extends StatelessWidget {
           child: Builder(
             builder: (context) {
               final secureTitle = _getTitle(context);
-              return Text(secureTitle.length >= 2
-                  ? secureTitle.substring(0, 2)
-                  : secureTitle);
+              return Text(
+                secureTitle.length >= 2
+                    ? secureTitle.substring(0, 2)
+                    : secureTitle,
+              );
             },
           ),
           radius: 21,

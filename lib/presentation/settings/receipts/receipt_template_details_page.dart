@@ -4,9 +4,9 @@ import 'package:cash_box/app/templates_bloc/templates_event.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
-import 'package:cash_box/presentation/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptTemplateDetailsPage extends StatefulWidget {
@@ -50,7 +50,7 @@ class _ReceiptTemplateDetailsPageState
         backgroundColor: Colors.white,
         actions: <Widget>[_buildDeleteButton()],
       ),
-      body: Center(child: ResponsiveWidget(child: _buildListView())),
+      body: Center(child: WidthConstrainedWidget(child: _buildListView())),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _addEmptyField,
