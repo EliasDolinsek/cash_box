@@ -1,14 +1,16 @@
+import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
+import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
+import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/buckets/widgets/bucket_selection_widget.dart';
-import 'package:cash_box/presentation/widgets/content_card_widget.dart';
 import 'package:cash_box/presentation/receipts/widgets/receipt_type_selection_widget.dart';
 import 'package:cash_box/presentation/tags/widgets/tags_selection_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +27,14 @@ class AddReceiptPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.translateOf(context, "txt_new_receipt")),
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.check),
-          onPressed: () => Navigator.pop(context),
+        leading: Container(
+          width: 0,
+          height: 0,
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pop(context),
+        child: Icon(Icons.check),
       ),
       body: _buildContent(),
     );
@@ -39,9 +45,10 @@ class AddReceiptPage extends StatelessWidget {
     return BlocBuilder(
       bloc: sl<ReceiptsBloc>(),
       builder: (context, state) {
-        if(state is ReceiptsAvailableState){
-          if(state.receipts != null){
-            return _buildContentForReceiptFromReceiptsList(receiptID, state.receipts);
+        if (state is ReceiptsAvailableState) {
+          if (state.receipts != null) {
+            return _buildContentForReceiptFromReceiptsList(
+                receiptID, state.receipts);
           } else {
             return LoadingWidget();
           }
@@ -70,7 +77,7 @@ class AddReceiptPage extends StatelessWidget {
     final receipt = receipts.firstWhere((element) => element.id == receiptID,
         orElse: () => null);
     if (receipt != null) {
-      return Center(child: ReceiptDetailsWidget(receipt));
+      return ReceiptDetailsWidget(receipt);
     } else {
       return LoadingWidget();
     }
@@ -90,6 +97,24 @@ class EditReceiptPage extends StatelessWidget {
         title: Text(
           AppLocalizations.translateOf(context, "txt_edit_receipt"),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+            onPressed: () async {
+              final result = await showDialog(
+                context: context,
+                builder: (context) => DeleteDialog(),
+              );
+
+              if(result != null && result){
+                _deleteReceipt(context);
+              }
+            },
+          )
+        ],
       ),
       body: _buildContent(context),
     );
@@ -99,9 +124,10 @@ class EditReceiptPage extends StatelessWidget {
     return BlocBuilder(
       bloc: sl<ReceiptsBloc>(),
       builder: (context, state) {
-        if(state is ReceiptsAvailableState){
-          if(state.receipts != null){
-            return _buildContentForReceiptFromReceiptsList(context, receiptId, state.receipts);
+        if (state is ReceiptsAvailableState) {
+          if (state.receipts != null) {
+            return _buildContentForReceiptFromReceiptsList(
+                context, receiptId, state.receipts);
           } else {
             return LoadingWidget();
           }
@@ -109,7 +135,8 @@ class EditReceiptPage extends StatelessWidget {
           return LoadingWidget();
         }
       },
-    );  }
+    );
+  }
 
   Widget _buildContentForReceiptFromReceiptsList(
       BuildContext context, String receiptID, List<Receipt> receipts) {
@@ -131,6 +158,12 @@ class EditReceiptPage extends StatelessWidget {
       ),
     );
   }
+
+  void _deleteReceipt(BuildContext context) {
+    final event = RemoveReceiptEvent(receiptId);
+    sl<ReceiptsBloc>().dispatch(event);
+    Navigator.of(context).pop();
+  }
 }
 
 class ReceiptDetailsWidget extends StatefulWidget {
@@ -147,6 +180,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
   List<String> tagIds;
   ReceiptType receiptType;
   DateTime creationDate;
+  Bucket selectedBucket;
 
   @override
   void initState() {
@@ -161,125 +195,97 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
   void dispose() {
     super.dispose();
     _updateReceipt();
+    _updateSelectedBucket();
   }
 
   @override
   Widget build(BuildContext context) {
     return WidthConstrainedWidget(
-      child: ListView(
-        padding: EdgeInsets.all(16.0),
+      child: ListView.separated(
         shrinkWrap: true,
-        children: _receiptFieldsAsItems(),
+        itemBuilder: (context, index) => _receiptFieldsAsItems()[index],
+        separatorBuilder: (context, index) => Divider(),
+        itemCount: _receiptFieldsAsItems().length,
       ),
     );
   }
 
   List<Widget> _receiptFieldsAsItems() {
     final templateFields = widget.receipt.fields.map<Widget>((e) {
-      return FieldWidget(
-        e,
-        key: ValueKey(e),
-        deletable: false,
-        descriptionEditable: false,
-        typeEditable: false,
-        onFieldChanged: (update) {
-          final index = fields.indexWhere((element) => element.id == update.id);
-          fields.removeAt(index);
-          fields.insert(index, update);
-        },
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: FieldWidget(
+          e,
+          key: ValueKey(e),
+          deletable: false,
+          descriptionEditable: false,
+          typeEditable: false,
+          onFieldChanged: (update) {
+            final index =
+                fields.indexWhere((element) => element.id == update.id);
+            fields.removeAt(index);
+            fields.insert(index, update);
+          },
+        ),
       );
     }).toList();
 
-    return templateFields..insert(0, _defaultReceiptFields);
+    return templateFields..insertAll(0, _defaultReceiptFields);
   }
 
-  Widget get _defaultReceiptFields {
-    return TitledListContentWidget(
-      title: Text(
-        AppLocalizations.translateOf(context, "txt_receipt_details"),
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+  List<Widget> get _defaultReceiptFields {
+    return [
+      ReceiptTypeSelectionWidget(
+        initialReceiptType: widget.receipt.type,
+        onChange: (update) {
+          receiptType = update;
+        },
       ),
-      items: [
-        _receiptTypeSelection,
-        SizedBox(height: 8.0),
-        _receiptCreationDateSelection,
-        SizedBox(height: 8.0),
-        _tagSelection,
-        SizedBox(height: 8.0),
-        _bucketSelection
-      ],
-    );
-  }
-
-  Widget get _receiptCreationDateSelection {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          AppLocalizations.translateOf(context, "txt_date"),
-          style: _titleStyle,
-        ),
-        ReceiptCreationDateSelectionWidget(
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: ReceiptCreationDateSelectionWidget(
           initialDateTime: creationDate,
           onUpdate: (update) => creationDate = update,
-        )
-      ],
-    );
-  }
-
-  Widget get _tagSelection {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          AppLocalizations.translateOf(context, "txt_tags"),
-          style: _titleStyle,
         ),
-        SizedBox(height: 8.0),
-        TagsSelectionBarWidget(
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: TagsSelectionBarWidget(
           initialTagIds: tagIds,
           onChange: (updatedTagIds) => tagIds = updatedTagIds,
         ),
-      ],
-    );
-  }
-
-  Widget get _bucketSelection {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          AppLocalizations.translateOf(context, "txt_bucket"),
-          style: _titleStyle,
-        ),
-        SizedBox(height: 16.0),
-        BucketSelectionWidget(
-          receiptId: widget.receipt.id,
-        )
-      ],
-    );
-  }
-
-  Widget get _receiptTypeSelection {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          AppLocalizations.translateOf(context, "txt_type"),
-          style: _titleStyle,
-        ),
-        ReceiptTypeSelectionWidget(
-          initialReceiptType: widget.receipt.type,
-          onChange: (update) {
-            receiptType = update;
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: BlocBuilder(
+          bloc: sl<BucketsBloc>(),
+          builder: (context, state) {
+            if (state is BucketsAvailableState) {
+              if (state.buckets != null) {
+                return BucketSelectionWidget(
+                  initialSelectedBucket:
+                      selectedBucket ?? _getSelectedBucket(state.buckets),
+                  onUpdated: (oldBucket, newBucket) {
+                    _removeReceiptFromBucket(oldBucket);
+                    selectedBucket = newBucket;
+                  },
+                );
+              } else {
+                return LoadingWidget();
+              }
+            } else {
+              return LoadingWidget();
+            }
           },
         ),
-      ],
-    );
+      )
+    ];
   }
 
-  TextStyle get _titleStyle {
-    return TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+  Bucket _getSelectedBucket(List<Bucket> buckets) {
+    return buckets.firstWhere(
+        (element) => element.receiptsIDs.contains(widget.receipt.id),
+        orElse: () => null);
   }
 
   void _updateReceipt() {
@@ -292,6 +298,26 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
     );
 
     sl<ReceiptsBloc>().dispatch(event);
+  }
+
+  void _updateSelectedBucket() {
+    if (selectedBucket != null) {
+      final receiptIds = [widget.receipt.id]
+        ..addAll(selectedBucket.receiptsIDs ?? []);
+      final event =
+          UpdateBucketEvent(selectedBucket.id, receiptIDs: receiptIds);
+      sl<BucketsBloc>().dispatch(event);
+    }
+  }
+
+  void _removeReceiptFromBucket(Bucket bucket) {
+    if (bucket != null) {
+      final receiptIds = <String>[]
+        ..addAll(bucket.receiptsIDs)
+        ..remove(widget.receipt.id);
+      final event = UpdateBucketEvent(bucket.id, receiptIDs: receiptIds);
+      sl<BucketsBloc>().dispatch(event);
+    }
   }
 }
 
@@ -320,11 +346,18 @@ class _ReceiptCreationDateSelectionWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      child: Text(
-        InputConverter.dateFromValueAsReadableString(dateTime).toUpperCase(),
-      ),
-      onPressed: _showDateSelection,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          InputConverter.dateFromValueAsReadableString(dateTime).toUpperCase(),
+          style: TextStyle(fontWeight: FontWeight.w500),
+        ),
+        IconButton(
+          icon: Icon(Icons.edit),
+          onPressed: _showDateSelection,
+        ),
+      ],
     );
   }
 

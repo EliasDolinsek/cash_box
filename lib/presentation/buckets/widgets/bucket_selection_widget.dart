@@ -4,14 +4,18 @@ import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/error_text_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_text_widget.dart';
+import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BucketSelectionWidget extends StatefulWidget {
-  final String receiptId;
-  final Function(String selectedBucketId) onUpdated;
+
+  final Bucket initialSelectedBucket;
+  final Function(Bucket oldBucket, Bucket newBucket) onUpdated;
 
   const BucketSelectionWidget(
-      {Key key, @required this.receiptId, this.onUpdated})
+      {Key key, this.onUpdated, @required this.initialSelectedBucket})
       : super(key: key);
 
   @override
@@ -23,79 +27,55 @@ class _BucketSelectionWidgetState extends State<BucketSelectionWidget> {
   Bucket selectedBucket;
 
   @override
+  void initState() {
+    super.initState();
+    selectedBucket = widget.initialSelectedBucket;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: sl<BucketsBloc>().state,
-      builder: (_, AsyncSnapshot<BucketsState> snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is BucketsAvailableState) {
-            return _buildLoaded(context, data.buckets);
-          } else if (data is BucketsLoadingState) {
-            loadBuckets();
-            return ErrorTextWidget(
-              text: AppLocalizations.translateOf(
-                context,
-                "txt_could_not_load_bucket",
-              ),
-            );
+    return BlocBuilder(
+      bloc: sl<BucketsBloc>(),
+      builder: (context, state) {
+        if (state is BucketsAvailableState) {
+          if (state.buckets != null) {
+            return _buildLoaded(context, state.buckets);
           } else {
-            loadBuckets();
-            return LoadingTextWidget();
+            return LoadingWidget();
           }
         } else {
-          return LoadingTextWidget();
+          return LoadingWidget();
         }
       },
     );
   }
 
-  void loadBuckets() {
-    sl<BucketsBloc>().dispatch(GetBucketsEvent());
-  }
-
   Widget _buildLoaded(BuildContext context, List<Bucket> buckets) {
-    final bucket = buckets.firstWhere(
-        (element) => element.receiptsIDs.contains(widget.receiptId),
-        orElse: () => null);
-
-    selectedBucket = bucket;
-    return _buildBucketSelectionButton(context);
-  }
-
-  Widget _buildBucketSelectionButton(BuildContext context) {
-    return MaterialButton(
-      child: Builder(
-        builder: (context) {
-          if (selectedBucket != null) {
-            return Text(selectedBucket.name);
-          } else {
-            return Text(
-                AppLocalizations.translateOf(context, "btn_select_bucket"));
-          }
-        },
-      ),
-      onPressed: () => Navigator.of(context).pushNamed(
-        "/bucketSelection",
-        arguments: {
-          "initialSelectedBucketId": selectedBucket?.id,
-          "onChanged": (newBucket) {
-            _updateBucket(newBucket);
-            setState(() => selectedBucket = newBucket);
-          }
-        },
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Builder(
+          builder: (context) {
+            if (selectedBucket != null) {
+              return Flexible(child: BucketListTile(bucket: selectedBucket));
+            } else {
+              return Text("No bucket selected");
+            }
+          },
+        ),
+        IconButton(icon: Icon(Icons.edit), onPressed: () =>
+            Navigator.of(context).pushNamed(
+              "/bucketSelection",
+              arguments: {
+                "initialSelectedBucketId": selectedBucket?.id,
+                "onChanged": (newBucket) {
+                  widget.onUpdated(selectedBucket, newBucket);
+                  setState(() => selectedBucket = newBucket);
+                }
+              },
+            ),)
+      ],
     );
-  }
-
-  void _updateBucket(Bucket newBucket){
-    if(newBucket != null){
-      if(selectedBucket != null){
-        sl<BucketsBloc>().dispatch(RemoveReceiptFromBucketEvent(selectedBucket.id, widget.receiptId));
-      }
-      sl<BucketsBloc>().dispatch(AddReceiptToBucketEvent(newBucket.id, widget.receiptId));
-    } else {
-      sl<BucketsBloc>().dispatch(RemoveReceiptFromBucketEvent(selectedBucket.id, widget.receiptId));
-    }
   }
 }

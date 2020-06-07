@@ -3,11 +3,6 @@ import 'package:equatable/equatable.dart';
 
 abstract class SearchState extends Equatable {}
 
-class InitialSearchState extends SearchState {
-  @override
-  List<Object> get props => [];
-}
-
 class LoadingSearchState extends SearchState {}
 
 class ReceiptsSearchAvailableState extends SearchState {

@@ -108,6 +108,7 @@ Future setup() async {
   sl<TemplatesBloc>().dispatch(GetTemplatesEvent());
   sl<TagsBloc>().dispatch(GetTagsEvent());
   sl<ContactsBloc>().dispatch(GetContactsEvent());
+  sl<SearchBloc>().dispatch(ReceiptsSearchEvent());
 }
 
 Future init() async {
@@ -283,7 +284,7 @@ Future init() async {
         getReceiptsInReceiptMonthUseCase: sl(),
         updateReceiptUseCase: sl(),
         removeReceiptUseCase: sl(),
-    ),
+        searchBloc: sl()),
   );
 
   //

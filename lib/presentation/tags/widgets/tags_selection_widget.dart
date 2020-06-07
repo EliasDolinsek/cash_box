@@ -3,8 +3,8 @@ import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
-import 'package:cash_box/presentation/static_widgets/loading_text_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,44 +49,54 @@ class _TagsSelectionBarWidgetState extends State<TagsSelectionBarWidget> {
   Widget _buildLoaded(List<Tag> allTags) {
     final usableTags =
         allTags.where((element) => tagIds.contains(element.id)).toList();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Builder(builder: (_) {
-          if (usableTags.isNotEmpty) {
-            return _buildTags(usableTags);
-          } else {
-            return Container();
-          }
-        }),
-        MaterialButton(
-          child: Text(AppLocalizations.translateOf(context, "btn_edit_tags")),
-          onPressed: () => _showTagsSelectionPage(),
-        ),
-      ],
+
+    return Builder(builder: (_) {
+      if (usableTags.isNotEmpty) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildTags(usableTags),
+            _buildTrailingButton(),
+          ],
+        );
+      } else {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(AppLocalizations.translateOf(context, "txt_no_tags_selected")),
+            _buildTrailingButton(),
+          ],
+        );
+      }
+    });
+  }
+
+  Widget _buildTrailingButton(){
+    return Padding(
+      padding: const EdgeInsets.only(top: 2.0),
+      child: IconButton(
+        icon: Icon(Icons.edit),
+        onPressed: () => _showTagsSelectionPage(),
+      ),
     );
   }
 
   Widget _buildTags(List<Tag> tags) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
+    return Flexible(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: tags.map((tag) => _buildChipForTag(tag, () {})).toList(),
       ),
     );
   }
 
-  Widget _buildError(String errorMessage) {
-    return Center(child: Text(errorMessage));
-  }
-
   Widget _buildChipForTag(Tag tag, Function onDelete) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: Chip(
-        label: Text(tag.name),
-        backgroundColor: tag.colorAsColor,
-      ),
+      child: TagListTile(tag: tag),
     );
   }
 

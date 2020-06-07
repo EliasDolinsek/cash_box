@@ -6,12 +6,14 @@ import './bloc.dart';
 import 'package:meta/meta.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
+
   final FilterReceiptsUseCase filterReceiptsUseCase;
+  ReceiptsSearchEvent lastReceiptSearchEvent = ReceiptsSearchEvent();
 
   SearchBloc({@required this.filterReceiptsUseCase});
 
   @override
-  SearchState get initialState => InitialSearchState();
+  SearchState get initialState => LoadingSearchState();
 
   @override
   Stream<SearchState> mapEventToState(
@@ -19,7 +21,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async* {
     if (event is ReceiptsSearchEvent) {
       yield LoadingSearchState();
+      lastReceiptSearchEvent = event;
       yield await _searchReceipts(event);
+    } else if(event is ReloadSearchEvent){
+      yield LoadingSearchState();
+      yield await _searchReceipts(lastReceiptSearchEvent);
     }
   }
 

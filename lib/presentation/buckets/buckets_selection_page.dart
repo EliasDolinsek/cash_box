@@ -4,6 +4,7 @@ import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
+import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,10 +50,6 @@ class BucketSelectionPage extends StatelessWidget {
     );
   }
 
-  void _loadBuckets() {
-    sl<BucketsBloc>().dispatch(GetBucketsEvent());
-  }
-
   Widget _buildSelectNoBucketButton(BuildContext context) {
     return MaterialButton(
       child: Text(AppLocalizations.translateOf(context, "btn_select_none")),
@@ -64,7 +61,8 @@ class BucketSelectionPage extends StatelessWidget {
   }
 }
 
-class _BucketSelectionWidget extends StatefulWidget {
+class _BucketSelectionWidget extends StatelessWidget {
+
   final Function(Bucket bucket) onChanged;
   final List<Bucket> buckets;
   final String initialSelectedBucketId;
@@ -77,22 +75,9 @@ class _BucketSelectionWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BucketSelectionWidgetState createState() => _BucketSelectionWidgetState();
-}
-
-class _BucketSelectionWidgetState extends State<_BucketSelectionWidget> {
-  String _selectedBucketId;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedBucketId = widget.initialSelectedBucketId;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (widget.buckets.isNotEmpty) {
-      return _buildContent();
+    if (buckets.isNotEmpty) {
+      return _buildContent(context);
     } else {
       return Center(
         child: Text(
@@ -102,25 +87,38 @@ class _BucketSelectionWidgetState extends State<_BucketSelectionWidget> {
     }
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     return WidthConstrainedWidget(
       child: ListView.separated(
         itemBuilder: (_, index) {
-          final bucket = widget.buckets[index];
-          return RadioListTile(
-            title: Text(bucket.name),
-            subtitle: Text(bucket.description),
-            value: bucket.id,
-            groupValue: _selectedBucketId,
-            onChanged: (value) {
-              setState(() => _selectedBucketId = value);
-              widget.onChanged(bucket);
-            },
+          final bucket = buckets[index];
+          return InkWell(
+            onTap: () => onBucketSelected(context, bucket),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: BucketListTile(
+                    bucket: bucket,
+                  ),
+                ),
+                Radio(
+                  value: bucket.id,
+                  groupValue: initialSelectedBucketId,
+                  onChanged: (_) => onBucketSelected(context, bucket),
+                ),
+                SizedBox(width: 8)
+              ],
+            ),
           );
         },
         separatorBuilder: (_, __) => Divider(),
-        itemCount: widget.buckets.length,
+        itemCount: buckets.length,
       ),
     );
+  }
+
+  void onBucketSelected(BuildContext context, bucket) {
+    onChanged(bucket);
+    Navigator.pop(context);
   }
 }

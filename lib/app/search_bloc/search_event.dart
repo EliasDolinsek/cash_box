@@ -16,3 +16,5 @@ class ReceiptsSearchEvent extends SearchEvent {
   @override
   List get props => [text, tagIds, receiptType];
 }
+
+class ReloadSearchEvent extends SearchEvent {}

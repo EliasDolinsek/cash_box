@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/domain/core/usecases/receipts/add_receipt_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_in_receipt_month_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_receipts_use_case.dart';
@@ -9,11 +10,13 @@ import './bloc.dart';
 import 'package:meta/meta.dart';
 
 class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
+
   final AddReceiptUseCase addReceiptUseCase;
   final GetReceiptsUseCase getReceiptsUseCase;
   final GetReceiptsInReceiptMonthUseCase getReceiptsInReceiptMonthUseCase;
   final UpdateReceiptUseCase updateReceiptUseCase;
   final RemoveReceiptUseCase removeReceiptUseCase;
+  final SearchBloc searchBloc;
 
   DateTime receiptMonth = DateTime.now();
 
@@ -23,6 +26,7 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
     @required this.getReceiptsInReceiptMonthUseCase,
     @required this.updateReceiptUseCase,
     @required this.removeReceiptUseCase,
+    @required this.searchBloc,
   });
 
   @override
@@ -34,9 +38,12 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
   ) async* {
     if (event is AddReceiptEvent) {
       yield LoadingReceiptsState();
+
       final params = AddReceiptUseCaseParams(event.receipt);
       await addReceiptUseCase(params);
+
       dispatch(GetReceiptsOfMonthEvent());
+      searchBloc.dispatch(ReloadSearchEvent());
     } else if (event is GetReceiptsOfMonthEvent) {
       yield LoadingReceiptsState();
       receiptMonth = event.month ?? receiptMonth;
@@ -44,13 +51,16 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
     } else if (event is UpdateReceiptEvent) {
       yield LoadingReceiptsState();
       await _updateReceipt(event);
+
       dispatch(GetReceiptsOfMonthEvent());
+      searchBloc.dispatch(ReloadSearchEvent());
     } else if (event is RemoveReceiptEvent) {
       yield LoadingReceiptsState();
       final params = RemoveReceiptUseCaseParams(event.receiptID);
 
       await removeReceiptUseCase(params);
       dispatch(GetReceiptsOfMonthEvent());
+      searchBloc.dispatch(ReloadSearchEvent());
     }
   }
 

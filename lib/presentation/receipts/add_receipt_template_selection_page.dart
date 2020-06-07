@@ -25,15 +25,14 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
       ),
       body: ScreenTypeLayout(
           mobile: Align(
-            alignment: Alignment.topCenter,
-            child: WidthConstrainedWidget(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: _buildContent(context),
-              ),
-            ),
-          )
-      ),
+        alignment: Alignment.topCenter,
+        child: WidthConstrainedWidget(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: _buildContent(context),
+          ),
+        ),
+      )),
     );
   }
 
@@ -55,8 +54,8 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
   }
 
   Widget _buildEditTemplatesButton(BuildContext context) {
-    return MaterialButton(
-      child: Text(AppLocalizations.translateOf(context, "btn_edit_templates")),
+    return IconButton(
+      icon: Icon(Icons.edit),
       onPressed: () =>
           Navigator.of(context).pushNamed("/receiptTemplatesSettings"),
     );
@@ -64,7 +63,8 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
 
   Widget _buildLoaded(BuildContext context, List<Template> templates) {
     if (templates.isNotEmpty) {
-      return SingleChildScrollView(child: _buildTemplatesList(context, templates));
+      return SingleChildScrollView(
+          child: _buildTemplatesList(context, templates));
     } else {
       return Center(
         child: Text(

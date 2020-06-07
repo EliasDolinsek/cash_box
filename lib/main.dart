@@ -37,6 +37,7 @@ class CashBoxApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "CashBox",
       supportedLocales: [
         Locale("en", "EN"),

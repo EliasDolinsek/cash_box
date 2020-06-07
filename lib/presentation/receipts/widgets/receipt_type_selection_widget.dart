@@ -27,6 +27,34 @@ class _ReceiptTypeSelectionWidgetState
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        CheckboxListTile(
+          title: Text(
+            AppLocalizations.translateOf(context, "txt_income"),
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          onChanged: (value) {
+            if (value) {
+              _updateReceiptType(ReceiptType.income);
+            }
+          },
+          value: _receiptType == ReceiptType.income,
+        ),
+        CheckboxListTile(
+          title: Text(
+            AppLocalizations.translateOf(context, "txt_outcome"),
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          onChanged: (value) {
+            if (value) {
+              _updateReceiptType(ReceiptType.outcome);
+            }
+          },
+          value: _receiptType == ReceiptType.outcome,
+        ),
+      ],
+    );
     return Row(
       children: <Widget>[
         _incomeChip,
