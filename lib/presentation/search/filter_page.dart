@@ -1,6 +1,8 @@
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/receipts/widgets/receipt_type_selection_widget.dart';
 import 'package:cash_box/presentation/tags/tags_selection_page.dart';
+import 'package:cash_box/presentation/tags/widgets/tags_selection_widget.dart';
 import 'package:flutter/material.dart';
 
 class FilterPage extends StatelessWidget {
@@ -32,97 +34,67 @@ class FilterPage extends StatelessWidget {
 }
 
 class FilterWidget extends StatefulWidget {
-
   final List<String> selectedTagIds;
   final ReceiptType selectedReceiptType;
   final Function(ReceiptType receiptType, List<String> tagIds) onChanged;
 
-  const FilterWidget({Key key, this.onChanged, this.selectedTagIds, this.selectedReceiptType}) : super(key: key);
+  const FilterWidget(
+      {Key key, this.onChanged, this.selectedTagIds, this.selectedReceiptType})
+      : super(key: key);
 
   @override
   _FilterWidgetState createState() => _FilterWidgetState();
 }
 
 class _FilterWidgetState extends State<FilterWidget> {
-  List<ReceiptType> receiptTypes = [];
+  ReceiptType receiptType;
   List<String> selectedTagIds = [];
 
   @override
   void initState() {
     super.initState();
 
-    if(widget.selectedReceiptType != null){
-      receiptTypes.add(widget.selectedReceiptType);
-    } else {
-      receiptTypes.addAll(ReceiptType.values);
-    }
-
+    receiptType = widget.selectedReceiptType;
     selectedTagIds = widget.selectedTagIds ?? [];
   }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 16.0),
-        _buildReceiptTypeSelection(),
-        SizedBox(height: 16.0),
-        _buildTagsSelection(context),
-      ],
+    final items = [
+      _buildReceiptTypeSelection(),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: TagsSelectionBarWidget(
+          initialTagIds: selectedTagIds,
+          onChange: (update){
+            this.selectedTagIds = update;
+            widget.onChanged(receiptType, selectedTagIds);
+          },
+        ),
+      )
+    ];
+
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: items.length,
+      separatorBuilder: (context, index) => Divider(),
+      itemBuilder: (context, index) => items[index],
     );
   }
 
   Widget _buildReceiptTypeSelection() {
     return Column(
       children: <Widget>[
-        Text(
-          AppLocalizations.translateOf(context, "txt_type"),
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 20,
-          ),
-        ),
-        SizedBox(height: 8.0),
-        CheckboxListTile(
-          value: receiptTypes.contains(ReceiptType.income),
-          onChanged: (value) {
-            if (receiptTypes.contains(ReceiptType.outcome)) {
-              setState(() {
-                if (value) {
-                  receiptTypes.add(ReceiptType.income);
-                } else {
-                  receiptTypes.remove(ReceiptType.income);
-                }
-              });
-
-              onChanged();
-            }
+        ReceiptTypeSelectionWidget(
+          initialReceiptType: receiptType,
+          noneSelectable: true,
+          onChange: (type) {
+            receiptType = type;
+            widget.onChanged(receiptType, selectedTagIds);
           },
-          title: Text(AppLocalizations.translateOf(context, "txt_income")),
         ),
-        CheckboxListTile(
-          value: receiptTypes.contains(ReceiptType.outcome),
-          onChanged: (value) {
-            if (receiptTypes.contains(ReceiptType.income)) {
-              setState(() {
-                if (value) {
-                  receiptTypes.add(ReceiptType.outcome);
-                } else {
-                  receiptTypes.remove(ReceiptType.outcome);
-                }
-              });
-
-              onChanged();
-            }
-          },
-          title: Text(AppLocalizations.translateOf(context, "txt_outcome")),
-        )
       ],
     );
-  }
-
-  void onChanged() {
-    final receiptType = receiptTypes.length > 1 ? null : receiptTypes.first;
-    widget.onChanged(receiptType, selectedTagIds);
   }
 
   Widget _buildTagsSelection(BuildContext context) {
@@ -140,7 +112,7 @@ class _FilterWidgetState extends State<FilterWidget> {
         TagsSelectionWidget(
           onChanged: (tagIds) {
             this.selectedTagIds = tagIds;
-            onChanged();
+            widget.onChanged(receiptType, selectedTagIds);
           },
           initialSelectedTags: selectedTagIds,
         )

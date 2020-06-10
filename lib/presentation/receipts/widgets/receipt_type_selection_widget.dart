@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 class ReceiptTypeSelectionWidget extends StatefulWidget {
   final ReceiptType initialReceiptType;
   final Function(ReceiptType type) onChange;
+  final bool noneSelectable;
 
   const ReceiptTypeSelectionWidget(
-      {Key key, this.onChange, this.initialReceiptType = ReceiptType.income})
+      {Key key, this.onChange, this.initialReceiptType = ReceiptType.income, this.noneSelectable = false})
       : super(key: key);
 
   @override
@@ -28,6 +29,7 @@ class _ReceiptTypeSelectionWidgetState
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         CheckboxListTile(
           title: Text(
@@ -53,51 +55,23 @@ class _ReceiptTypeSelectionWidgetState
           },
           value: _receiptType == ReceiptType.outcome,
         ),
-      ],
-    );
-    return Row(
-      children: <Widget>[
-        _incomeChip,
-        SizedBox(width: 8.0),
-        _outcomeChip,
+        _buildNoneSelectable()
       ],
     );
   }
 
-  get _incomeChip {
-    return ChoiceChip(
-      label: Text(AppLocalizations.translateOf(context, "txt_income")),
-      selected: _receiptType == ReceiptType.income,
-      onSelected: (value) {
-        if (value) {
-          _updateReceiptType(ReceiptType.income);
-        }
-      },
-      backgroundColor: Colors.white,
-      labelStyle: TextStyle(color: Colors.black),
-      avatar: CircleAvatar(
-        child: Icon(Icons.file_download, color: Colors.black),
-        backgroundColor: Colors.white,
-      ),
-    );
-  }
-
-  get _outcomeChip {
-    return ChoiceChip(
-      label: Text(AppLocalizations.translateOf(context, "txt_outcome")),
-      selected: _receiptType == ReceiptType.outcome,
-      onSelected: (value) {
-        if (value) {
-          _updateReceiptType(ReceiptType.outcome);
-        }
-      },
-      backgroundColor: Colors.white,
-      labelStyle: TextStyle(color: Colors.black),
-      avatar: CircleAvatar(
-        child: Icon(Icons.file_upload, color: Colors.black),
-        backgroundColor: Colors.white,
-      ),
-    );
+  Widget _buildNoneSelectable(){
+    if(widget.noneSelectable){
+      return Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: MaterialButton(
+          onPressed: () => _updateReceiptType(null),
+          child: Text(AppLocalizations.translateOf(context, "btn_select_none")),
+        ),
+      );
+    } else {
+      return Container(width: 0, height: 0);
+    }
   }
 
   void _updateReceiptType(ReceiptType type) {

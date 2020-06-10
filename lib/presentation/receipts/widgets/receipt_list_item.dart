@@ -1,4 +1,3 @@
-import 'package:cash_box/core/platform/constants.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
@@ -8,8 +7,9 @@ import 'package:cash_box/core/platform/entetie_converter.dart' as converter;
 class ReceiptListItem extends StatelessWidget {
   final Receipt receipt;
   final Function onTap;
+  final String currencySymbol;
 
-  const ReceiptListItem({Key key, @required this.receipt, this.onTap})
+  const ReceiptListItem({Key key, @required this.receipt, this.onTap, this.currencySymbol = ""})
       : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class ReceiptListItem extends StatelessWidget {
     if(title != null && title.isNotEmpty){
       return title;
     } else {
-      return converter.getFieldValueFromFieldAsString(receipt.fields.first);
+      return converter.getFieldValueFromFieldAsString(receipt.fields.first, currencySymbol: currencySymbol);
     }
   }
 

@@ -80,7 +80,7 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
         ComponentActionButton(
           text: AppLocalizations.translateOf(context, "btn_select_none"),
           onPressed: () => Navigator.of(context)
-              .pushNamed("/addReceipt/detailsInput", arguments: []),
+              .pushReplacementNamed("/addReceipt/detailsInput", arguments: []),
         ),
         Column(
           children: templates.map((template) {

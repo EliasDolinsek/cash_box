@@ -5,7 +5,6 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
-import 'package:cash_box/presentation/widgets/default_card.dart';
 import 'package:cash_box/presentation/widgets/search_text_field.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +61,6 @@ class _SearchWidgetState extends State<SearchWidget> {
           "onChanged": (ReceiptType receiptType, List<String> tagIds) {
             this.receiptType = receiptType;
             this.tagIds = tagIds;
-
             _search();
           },
           "selectedTagIds": tagIds,
@@ -124,25 +122,23 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   Widget _buildNoSearchResults() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Text(
-        AppLocalizations.translateOf(context, "txt_no_search_result"),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Text(
+          AppLocalizations.translateOf(context, "txt_no_search_result"),
+        ),
       ),
     );
   }
 
   void _search() {
-    if (_isSearchTextInputValid() || tagIds.isNotEmpty) {
-      final text = searchText.isNotEmpty ? searchText : null;
-      final tags = tagIds.isNotEmpty ? tagIds : null;
+    final text = searchText.isNotEmpty ? searchText : null;
+    final tags = tagIds.isNotEmpty ? tagIds : null;
 
-      final event = ReceiptsSearchEvent(
-          text: text, tagIds: tags, receiptType: receiptType);
+    final event = ReceiptsSearchEvent(
+        text: text, tagIds: tags, receiptType: receiptType);
 
-      sl<SearchBloc>().dispatch(event);
-    }
+    sl<SearchBloc>().dispatch(event);
   }
-
-  bool _isSearchTextInputValid() => searchText.trim().isNotEmpty;
 }

@@ -1,7 +1,9 @@
+import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/domain/account/enteties/subscription.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
+import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -35,19 +37,24 @@ String getFieldTypeAsString(FieldType type, AppLocalizations localizations){
   }
 }
 
-String getFieldValueFromFieldAsString(Field field){
-  return getFieldValueAsString(field.value, field.type);
+String getFieldValueFromFieldAsString(Field field, {String currencySymbol}){
+  return getFieldValueAsString(field.value, field.type, currencySymbol: currencySymbol);
 }
 
-String getFieldValueAsString(dynamic value, FieldType fieldType){
+String getFieldValueAsString(dynamic value, FieldType fieldType, {String currencySymbol}){
   switch(fieldType){
     case FieldType.text: return value;
     case FieldType.file: return value.toString();
     case FieldType.date: return getMonthAsReadableReceiptMonth(value);
-    case FieldType.amount: return value.toString();
+    case FieldType.amount: return getAmountAsReadableString(value, currencySymbol);
     case FieldType.image: return value.toString();
     default: return value.toString();
   }
+}
+
+String getAmountAsReadableString(value, String currencySymbol) {
+  final params = FormatCurrencyUseCaseParams(amount: value, symbol: currencySymbol);
+  return sl<FormatCurrencyUseCase>().call(params);
 }
 
 String getMonthAsReadableReceiptMonth(DateTime dateTime){

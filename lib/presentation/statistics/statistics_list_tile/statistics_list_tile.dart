@@ -153,11 +153,15 @@ class StatisticsListTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            _getTitle(context),
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
+          Flexible(
+            child: Text(
+              _getTitle(context),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
           Text(
