@@ -19,9 +19,9 @@ class _BucketsOverviewWidgetState extends State<BucketsOverviewWidget> {
     return BlocBuilder(
       bloc: sl<BucketsBloc>(),
       builder: (context, state) {
-        if(state is BucketsAvailableState){
+        if (state is BucketsAvailableState) {
           final buckets = state.buckets;
-          if(buckets == null || buckets.isEmpty){
+          if (buckets == null || buckets.isEmpty) {
             return _buildNoBuckets();
           } else {
             return BucketsOverviewListWidget(buckets);
@@ -41,19 +41,24 @@ class _BucketsOverviewWidgetState extends State<BucketsOverviewWidget> {
 }
 
 class BucketsOverviewListWidget extends StatelessWidget {
-
   final List<Bucket> buckets;
 
   const BucketsOverviewListWidget(this.buckets, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return WidthConstrainedWidget(child: _buildContent());
+    return WidthConstrainedWidget(child: _buildContent(context));
   }
 
-  Widget _buildContent(){
+  Widget _buildContent(BuildContext context) {
     return Column(
-      children: buckets.map((bucket) => BucketListTile(bucket: bucket)).toList(),
+      children: buckets
+          .map((bucket) => BucketListTile(
+                bucket: bucket,
+                onTap: () => Navigator.of(context)
+                    .pushNamed("/bucketDetails", arguments: bucket),
+              ))
+          .toList(),
     );
   }
 }

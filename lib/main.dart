@@ -1,6 +1,7 @@
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
+import 'package:cash_box/presentation/buckets/bucket_receipts_overview_page.dart';
 import 'package:cash_box/presentation/buckets/buckets_selection_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
@@ -139,6 +140,10 @@ class CashBoxApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) => BucketDetailsPage(bucket: bucketId),
           );
+        } else if (settings.name == "/bucketDetails") {
+          final bucket = settings.arguments;
+          return MaterialPageRoute(
+              builder: (context) => BucketReceiptsOverviewPage(bucket: bucket));
         } else {
           return MaterialPageRoute(
               builder: (_) => FailurePage("main_failure_no_route"));

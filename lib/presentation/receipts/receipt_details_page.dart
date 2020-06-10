@@ -143,19 +143,17 @@ class EditReceiptPage extends StatelessWidget {
     final receipt = receipts.firstWhere((element) => element.id == receiptID,
         orElse: () => null);
 
-    return Center(
-      child: Builder(
-        builder: (_) {
-          if (receipt != null) {
-            return ReceiptDetailsWidget(receipt);
-          } else {
-            return ErrorWidget(
-              AppLocalizations.translateOf(
-                  context, "txt_could_not_load_receipt"),
-            );
-          }
-        },
-      ),
+    return Builder(
+      builder: (_) {
+        if (receipt != null) {
+          return ReceiptDetailsWidget(receipt);
+        } else {
+          return ErrorWidget(
+            AppLocalizations.translateOf(
+                context, "txt_could_not_load_receipt"),
+          );
+        }
+      },
     );
   }
 

@@ -164,5 +164,6 @@
   "btn_add_template": "ADD TEMPLATE",
   "btn_add_tag": "ADD TAG",
   "txt_no_tags_selected": "No tags selected",
-  "btn_add": "ADD"
+  "btn_add": "ADD",
+  "txt_no_receipts": "No receipts"
 }
