@@ -61,11 +61,9 @@ class _ReceiptTemplateDetailsPageState
   }
 
   void _addEmptyField() {
-    setState(() {
-      final field = Field.newField(
-          type: FieldType.text, description: "", value: "", storageOnly: true);
-      _fields.add(field);
-    });
+    final field = Field.newField(
+        type: FieldType.text, description: "", value: "", storageOnly: true);
+    Navigator.of(context).pushNamed("/fieldDetails", arguments: field);
   }
 
   Widget _buildListView() {
