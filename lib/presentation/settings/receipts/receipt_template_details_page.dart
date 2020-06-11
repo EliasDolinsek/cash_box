@@ -21,7 +21,6 @@ class ReceiptTemplateDetailsPage extends StatefulWidget {
 
 class _ReceiptTemplateDetailsPageState
     extends State<ReceiptTemplateDetailsPage> {
-
   bool _delete = false;
   String _name;
   List<Field> _fields;
@@ -36,8 +35,9 @@ class _ReceiptTemplateDetailsPageState
   @override
   void dispose() {
     super.dispose();
-    if(!_delete){
-      final event = UpdateTemplateEvent(widget.template.id, name: _name, fields: _fields);
+    if (!_delete) {
+      final event =
+          UpdateTemplateEvent(widget.template.id, name: _name, fields: _fields);
       sl<TemplatesBloc>().dispatch(event);
     }
   }
@@ -60,10 +60,15 @@ class _ReceiptTemplateDetailsPageState
     );
   }
 
-  void _addEmptyField() {
+  void _addEmptyField() async {
     final field = Field.newField(
         type: FieldType.text, description: "", value: "", storageOnly: true);
-    Navigator.of(context).pushNamed("/fieldDetails", arguments: field);
+
+    final result = await Navigator.of(context)
+        .pushNamed("/fieldDetails", arguments: field);
+    if(result != null) {
+      setState(() => _fields.add(result));
+    }
   }
 
   Widget _buildListView() {
@@ -100,12 +105,11 @@ class _ReceiptTemplateDetailsPageState
     }).toList();
   }
 
-  Widget _buildFieldWidget(Field field){
+  Widget _buildFieldWidget(Field field) {
     return FieldWidget(
       field,
       onFieldChanged: (update) {
-        final index = _fields.indexWhere((element) =>
-        element.id == update.id);
+        final index = _fields.indexWhere((element) => element.id == update.id);
         _fields.removeAt(index);
         _fields.insert(index, update);
       },
@@ -126,8 +130,11 @@ class _ReceiptTemplateDetailsPageState
   }
 
   Widget _buildNameFieldCardWidget() {
-    final field =
-    Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
+    final field = Field.newField(
+        type: FieldType.text,
+        description: "Name",
+        value: _name,
+        storageOnly: true);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: FieldWidget(

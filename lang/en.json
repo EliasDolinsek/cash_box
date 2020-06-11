@@ -165,5 +165,9 @@
   "btn_add_tag": "ADD TAG",
   "txt_no_tags_selected": "No tags selected",
   "btn_add": "ADD",
-  "txt_no_receipts": "No receipts"
+  "txt_no_receipts": "No receipts",
+  "txt_title": "Title",
+  "txt_usage": "Usage",
+  "btn_next": "NEXT",
+  "btn_back": "BACK"
 }
