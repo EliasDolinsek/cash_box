@@ -7,6 +7,7 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
+import 'package:cash_box/presentation/widgets/text_input_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptTemplateDetailsPage extends StatefulWidget {
@@ -36,8 +37,12 @@ class _ReceiptTemplateDetailsPageState
   void dispose() {
     super.dispose();
     if (!_delete) {
-      final event =
-          UpdateTemplateEvent(widget.template.id, name: _name, fields: _fields);
+      final event = UpdateTemplateEvent(
+        widget.template.id,
+        name: _name,
+        fields: _fields,
+      );
+
       sl<TemplatesBloc>().dispatch(event);
     }
   }
@@ -66,7 +71,8 @@ class _ReceiptTemplateDetailsPageState
 
     final result = await Navigator.of(context)
         .pushNamed("/fieldDetails", arguments: field);
-    if(result != null) {
+
+    if (result != null) {
       setState(() => _fields.add(result));
     }
   }
@@ -91,16 +97,9 @@ class _ReceiptTemplateDetailsPageState
 
   List<Widget> _getFieldsAsFieldCardWidgetList() {
     return _fields.map((field) {
-      return Column(
+      return Container(
         key: ValueKey(field),
-        children: [
-          SizedBox(height: 8.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: _buildFieldWidget(field),
-          ),
-          Divider()
-        ],
+        child: _buildFieldWidget(field),
       );
     }).toList();
   }
@@ -108,15 +107,23 @@ class _ReceiptTemplateDetailsPageState
   Widget _buildFieldWidget(Field field) {
     return FieldWidget(
       field,
-      onFieldChanged: (update) {
-        final index = _fields.indexWhere((element) => element.id == update.id);
-        _fields.removeAt(index);
-        _fields.insert(index, update);
-      },
-      onDelete: () {
-        setState(() {
-          _fields.remove(field);
-        });
+      onTap: () async {
+        final result = await Navigator.pushNamed(
+          context,
+          "/fieldDetails",
+          arguments: field,
+        );
+
+        if (result != null && result is Field) {
+          final index = _fields.indexWhere(
+            (element) => element.id == result.id,
+          );
+
+          setState(() {
+            _fields.removeAt(index);
+            _fields.insert(index, result);
+          });
+        }
       },
     );
   }
@@ -130,21 +137,14 @@ class _ReceiptTemplateDetailsPageState
   }
 
   Widget _buildNameFieldCardWidget() {
-    final field = Field.newField(
-        type: FieldType.text,
-        description: "Name",
-        value: _name,
-        storageOnly: true);
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: FieldWidget(
-        field,
-        deletable: false,
-        descriptionEditable: false,
-        typeEditable: false,
-        onFieldChanged: (Field field) {
-          _name = field.value;
+      child: TextInputWidget(
+        title: AppLocalizations.translateOf(context, "txt_name"),
+        onChanged: (value) {
+          _name = value;
         },
+        initialValue: _name,
       ),
     );
   }

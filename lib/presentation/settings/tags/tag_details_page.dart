@@ -6,6 +6,7 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
+import 'package:cash_box/presentation/widgets/text_input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -79,23 +80,14 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
   }
 
   Widget _buildNameFieldWidget() {
-    final field = Field.newField(
-      type: FieldType.text,
-      description: "Name",
-      value: _name,
-      storageOnly: true
-    );
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.0),
-      child: FieldWidget(
-        field,
-        deletable: false,
-        descriptionEditable: false,
-        typeEditable: false,
-        onFieldChanged: (update) {
-          _name = update.value;
+      child: TextInputWidget(
+        initialValue: _name,
+        onChanged: (value) {
+          _name = value;
         },
+        title: AppLocalizations.translateOf(context, "txt_name"),
       ),
     );
   }

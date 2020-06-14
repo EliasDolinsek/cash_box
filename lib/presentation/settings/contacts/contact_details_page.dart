@@ -6,6 +6,7 @@ import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/fields/field_card_widget.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
+import 'package:cash_box/presentation/widgets/text_input_widget.dart';
 import 'package:flutter/material.dart';
 
 class ContactDetailsPage extends StatefulWidget {
@@ -18,7 +19,6 @@ class ContactDetailsPage extends StatefulWidget {
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
-
   bool _delete = false;
   String _name;
   List _fields;
@@ -32,13 +32,13 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   @override
   void dispose() {
-   if(!_delete) _updateContact();
+    if (!_delete) _updateContact();
     super.dispose();
   }
 
   void _updateContact() {
-    final event = UpdateContactEvent(
-        widget.contact.id, name: _name, fields: _fields);
+    final event =
+        UpdateContactEvent(widget.contact.id, name: _name, fields: _fields);
     sl<ContactsBloc>().dispatch(event);
   }
 
@@ -86,17 +86,13 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   Widget _buildNameFieldCardWidget() {
-    final field =
-    Field.newField(type: FieldType.text, description: "Name", value: _name, storageOnly: true);
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: FieldWidget(
-        field,
-        deletable: false,
-        descriptionEditable: false,
-        typeEditable: false,
-        onFieldChanged: (Field field) {
-          _name = field.value;
+      child: TextInputWidget(
+        title: AppLocalizations.translateOf(context, "txt_name"),
+        initialValue: _name,
+        onChanged: (value) {
+          _name = value;
         },
       ),
     );
@@ -104,30 +100,27 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   List<Widget> _getFieldsAsFieldCardWidgetList() {
     return _fields.map((field) {
-      return Column(
+      return Container(
         key: ValueKey(field),
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 8.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: _buildFieldCardForField(field),
-          ),
-          SizedBox(height: 8.0),
-          Divider(),
-        ],
+        child: _buildFieldCardForField(field),
       );
     }).toList();
   }
 
-  Widget _buildFieldCardForField(Field field){
+  Widget _buildFieldCardForField(Field field) {
     return FieldWidget(
       field,
-      onFieldChanged: (update) {
-        final index = _fields.indexWhere((element) =>
-        element.id == update.id);
-        _fields.removeAt(index);
-        _fields.insert(index, update);
+      onTap: () async {
+        final result = await Navigator.of(context)
+            .pushNamed("/fieldDetails", arguments: field);
+
+        if(result != null && result is Field){
+          final index = _fields.indexWhere((element) => element.id == result.id);
+          setState(() {
+            _fields.removeAt(index);
+            _fields.insert(index, result);
+          });
+        }
       },
       onDelete: () {
         setState(() {
@@ -156,8 +149,9 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   void _showDeleteConfirmationDialog() async {
-    final result = await showDialog(context: context, builder: (_) => DeleteDialog());
-    if(result != null && result){
+    final result =
+        await showDialog(context: context, builder: (_) => DeleteDialog());
+    if (result != null && result) {
       _removeContact(context);
     }
   }

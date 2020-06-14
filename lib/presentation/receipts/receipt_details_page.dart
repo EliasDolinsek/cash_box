@@ -109,7 +109,7 @@ class EditReceiptPage extends StatelessWidget {
                 builder: (context) => DeleteDialog(),
               );
 
-              if(result != null && result){
+              if (result != null && result) {
                 _deleteReceipt(context);
               }
             },
@@ -149,8 +149,7 @@ class EditReceiptPage extends StatelessWidget {
           return ReceiptDetailsWidget(receipt);
         } else {
           return ErrorWidget(
-            AppLocalizations.translateOf(
-                context, "txt_could_not_load_receipt"),
+            AppLocalizations.translateOf(context, "txt_could_not_load_receipt"),
           );
         }
       },
@@ -215,14 +214,14 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
         child: FieldWidget(
           e,
           key: ValueKey(e),
-          deletable: false,
-          descriptionEditable: false,
-          typeEditable: false,
-          onFieldChanged: (update) {
-            final index =
-                fields.indexWhere((element) => element.id == update.id);
-            fields.removeAt(index);
-            fields.insert(index, update);
+          onTap: () async {
+            final result = await Navigator.pushNamed(context, "/fieldDetails");
+            if (result != null && result is Field) {
+              final index =
+                  fields.indexWhere((element) => element.id == result.id);
+              fields.removeAt(index);
+              fields.insert(index, result);
+            }
           },
         ),
       );

@@ -25,6 +25,8 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
     currentStep = 0;
     type = widget.field.type;
     storageOnly = widget.field.storageOnly;
+
+    description = widget.field.description;
     descriptionController.text = description;
   }
 
