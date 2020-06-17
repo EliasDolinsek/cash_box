@@ -260,6 +260,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     result.fold((failure) => _displayRegisterFailure(), (userID) {
       _createAccount(userID);
       sl<AuthBloc>().dispatch(LoadAuthStateEvent());
+      Navigator.of(context).pushNamed("/tutorial", arguments: _name);
     });
   }
 

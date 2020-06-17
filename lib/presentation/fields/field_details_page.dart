@@ -84,7 +84,8 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
   List<Step> get steps => [
         Step(
           title: Text(AppLocalizations.translateOf(context, "txt_type")),
-          subtitle: Text("What type of content should be stored?"),
+          subtitle: Text(AppLocalizations.translateOf(
+              context, "txt_field_details_page_type_description")),
           content: _buildTypeSelection(),
           isActive: currentStep == 0,
           state: currentStep >= 0 && type != null
@@ -93,7 +94,8 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
         ),
         Step(
           title: Text(AppLocalizations.translateOf(context, "txt_title")),
-          subtitle: Text("What should this field store?"),
+          subtitle: Text(AppLocalizations.translateOf(
+              context, "txt_field_details_page_title_description")),
           content: _buildDescriptionTextField(),
           isActive: currentStep == 1,
           state: currentStep >= 1 && description != null
@@ -102,7 +104,8 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
         ),
         Step(
           title: Text(AppLocalizations.translateOf(context, "txt_usage")),
-          subtitle: Text("Should this field be used as information only"),
+          subtitle: Text(AppLocalizations.translateOf(
+              context, "txt_field_details_page_usage_description")),
           content: Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: _buildUsageCheckbox(),
@@ -127,8 +130,8 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
             items: FieldType.values.map((e) {
               return DropdownMenuItem<FieldType>(
                 value: e,
-                child: Text(
-                    getFieldTypeAsString(e, AppLocalizations.of(context))),
+                child:
+                    Text(getFieldTypeAsString(e, AppLocalizations.of(context))),
               );
             }).toList(),
             style: TextStyle(
@@ -155,21 +158,21 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
 
   Widget _buildUsageCheckbox() {
     return CheckboxListTile(
-      title: Text("Use as information"),
+      title: Text(AppLocalizations.translateOf(context, "txt_use_as_information")),
       subtitle: Text(
-          "The value of this field will not be used for calculations or text"),
+        AppLocalizations.translateOf(
+            context, "txt_use_as_information_description"),
+      ),
       value: storageOnly,
       onChanged: (value) => setState(() => storageOnly = value),
     );
   }
 
   Field getFieldOfValues() {
-    return Field(
-      widget.field.id,
-      description: description,
-      storageOnly: storageOnly,
-      type: type,
-      value: null
-    );
+    return Field(widget.field.id,
+        description: description,
+        storageOnly: storageOnly,
+        type: type,
+        value: null);
   }
 }

@@ -169,5 +169,22 @@
   "txt_title": "Title",
   "txt_usage": "Usage",
   "btn_next": "NEXT",
-  "btn_back": "BACK"
+  "btn_back": "BACK",
+  "txt_field_details_page_type_description": "What type of content should be stored?",
+  "txt_field_details_page_title_description": "What should this field store?",
+  "txt_field_details_page_usage_description": "Should this field be used as information only",
+  "txt_use_as_information": "Use as information",
+  "txt_use_as_information_description": "The value of this field will not be used for calculations or text",
+  "txt_tutorial_hi": "Hi, %{name}",
+  "txt_tutorial_description": "Let’s get started! This short tutorial will help you understand the core features of CashBox.",
+  "txt_swipe_right": "Swipe Right",
+  "txt_receipts": "Receipts",
+  "txt_receipts_tutorial_description": "All expenses, incomes and investments are stored in CashBox using receipts. Receipts consist out of fields, where you can enter things like the amount or the title of the receipt",
+  "txt_templates": "Templates",
+  "txt_templates_tutorial_description": "Templates are the blueprint for receipts and contacts. Templates store which fields receipts or contacts will have. ",
+  "txt_tags_tutorial_description": "Tags are used to categorize receipts. You can select in each receipt which tags belong to it.",
+  "txt_buckets_tutorial_description": "Receipts are stored in buckets to provide a better overview.",
+  "txt_done": "Done",
+  "txt_tutorial_done_description": "Default tags, templates and buckets have already been created. However, it's possible to change them any time in the settings.",
+  "btn_close_tutorial": "CLOSE TUTORIAL"
 }

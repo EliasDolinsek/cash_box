@@ -96,6 +96,12 @@ dev_dependencies:
   # Unit tests
   mockito: ^4.1.1
 
+  # Launcher icon generator
+  flutter_launcher_icons: any
+
+  # Tutorial page
+  flutter_swiper: ^1.1.6
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -142,3 +148,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  image_path: 'res/imgs/launcher.png'
+  android: true
+  ios: true

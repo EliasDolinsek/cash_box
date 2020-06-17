@@ -21,6 +21,7 @@ import 'package:cash_box/presentation/settings/tags/tags_settings_page.dart';
 import 'package:cash_box/presentation/static_widgets/failure_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/tags/tags_selection_page.dart';
+import 'package:cash_box/presentation/tutorial/tutorial_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/auth_bloc/auth_bloc.dart';
@@ -149,6 +150,11 @@ class CashBoxApp extends StatelessWidget {
           final field = settings.arguments;
           return MaterialPageRoute(
             builder: (context) => FieldDetailsPage(field: field),
+          );
+        } else if(settings.name == "/tutorial") {
+          final firstName = settings.arguments ?? "";
+          return MaterialPageRoute(
+            builder: (context) => TutorialPage(name: firstName),
           );
         } else {
           return MaterialPageRoute(
