@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 
 class FieldDetailsPage extends StatefulWidget {
   final Field field;
+  final bool storageOnlySelectable;
 
-  const FieldDetailsPage({Key key, @required this.field}) : super(key: key);
+  const FieldDetailsPage(
+      {Key key, @required this.field, this.storageOnlySelectable = true})
+      : super(key: key);
 
   @override
   _FieldDetailsPageState createState() => _FieldDetailsPageState();
@@ -81,41 +84,62 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
     );
   }
 
-  List<Step> get steps => [
-        Step(
-          title: Text(AppLocalizations.translateOf(context, "txt_type")),
-          subtitle: Text(AppLocalizations.translateOf(
-              context, "txt_field_details_page_type_description")),
-          content: _buildTypeSelection(),
-          isActive: currentStep == 0,
-          state: currentStep >= 0 && type != null
-              ? StepState.complete
-              : StepState.indexed,
-        ),
-        Step(
-          title: Text(AppLocalizations.translateOf(context, "txt_title")),
-          subtitle: Text(AppLocalizations.translateOf(
-              context, "txt_field_details_page_title_description")),
-          content: _buildDescriptionTextField(),
-          isActive: currentStep == 1,
-          state: currentStep >= 1 && description != null
-              ? StepState.complete
-              : StepState.indexed,
-        ),
-        Step(
-          title: Text(AppLocalizations.translateOf(context, "txt_usage")),
-          subtitle: Text(AppLocalizations.translateOf(
-              context, "txt_field_details_page_usage_description")),
-          content: Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: _buildUsageCheckbox(),
-          ),
-          isActive: currentStep == 2,
-          state: currentStep >= 2 && storageOnly != null
-              ? StepState.complete
-              : StepState.indexed,
-        ),
+  List<Step> get steps {
+    if(widget.storageOnlySelectable){
+      return [
+        _buildTypeStep(),
+        _buildTitleStep(),
+        _buildUsageStep(),
       ];
+    } else {
+      return [
+        _buildTypeStep(),
+        _buildTitleStep(),
+      ];
+    }
+  }
+
+  Step _buildTypeStep(){
+    return Step(
+      title: Text(AppLocalizations.translateOf(context, "txt_type")),
+      subtitle: Text(AppLocalizations.translateOf(
+          context, "txt_field_details_page_type_description")),
+      content: _buildTypeSelection(),
+      isActive: currentStep == 0,
+      state: currentStep >= 0 && type != null
+          ? StepState.complete
+          : StepState.indexed,
+    );
+  }
+
+  Step _buildTitleStep(){
+    return Step(
+      title: Text(AppLocalizations.translateOf(context, "txt_title")),
+      subtitle: Text(AppLocalizations.translateOf(
+          context, "txt_field_details_page_title_description")),
+      content: _buildDescriptionTextField(),
+      isActive: currentStep == 1,
+      state: currentStep >= 1 && description != null
+          ? StepState.complete
+          : StepState.indexed,
+    );
+  }
+
+  Step _buildUsageStep(){
+    return Step(
+      title: Text(AppLocalizations.translateOf(context, "txt_usage")),
+      subtitle: Text(AppLocalizations.translateOf(
+          context, "txt_field_details_page_usage_description")),
+      content: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: _buildUsageCheckbox(),
+      ),
+      isActive: currentStep == 2,
+      state: currentStep >= 2 && storageOnly != null
+          ? StepState.complete
+          : StepState.indexed,
+    );
+  }
 
   Widget _buildTypeSelection() {
     return Container(
@@ -158,7 +182,8 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
 
   Widget _buildUsageCheckbox() {
     return CheckboxListTile(
-      title: Text(AppLocalizations.translateOf(context, "txt_use_as_information")),
+      title:
+          Text(AppLocalizations.translateOf(context, "txt_use_as_information")),
       subtitle: Text(
         AppLocalizations.translateOf(
             context, "txt_use_as_information_description"),

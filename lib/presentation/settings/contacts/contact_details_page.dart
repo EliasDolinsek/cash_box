@@ -62,12 +62,21 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     );
   }
 
-  void _addEmptyField() {
-    setState(() {
-      final field = Field.newField(
-          type: FieldType.text, description: "", value: "", storageOnly: true);
-      _fields.add(field);
-    });
+  void _addEmptyField() async {
+    final field = Field.newField(
+        type: FieldType.text, description: "", value: "", storageOnly: true);
+    _fields.add(field);
+
+    final result = await Navigator.of(context).pushNamed("/fieldDetails",
+        arguments: {"field": field, "storageOnlySelectable": false});
+
+    if (result != null && result is Field) {
+      setState(() {
+        final index = _fields.indexWhere((element) => element.id == result.id);
+        _fields.removeAt(index);
+        _fields.insert(index, result);
+      });
+    }
   }
 
   Widget _buildContent() {
@@ -177,8 +186,11 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     return MaterialButton(
       child: Text(AppLocalizations.translateOf(context, "btn_edit")),
       onPressed: () async {
-        final result = await Navigator.of(context)
-            .pushNamed("/fieldDetails", arguments: field);
+        final result =
+            await Navigator.of(context).pushNamed("/fieldDetails", arguments: {
+          "field": field,
+          "storageOnlySelectable": false,
+        });
 
         if (result != null && result is Field) {
           setState(() {

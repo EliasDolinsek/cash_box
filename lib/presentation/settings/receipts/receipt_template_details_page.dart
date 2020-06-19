@@ -111,7 +111,7 @@ class _ReceiptTemplateDetailsPageState
         final result = await Navigator.pushNamed(
           context,
           "/fieldDetails",
-          arguments: field,
+          arguments: {"field":field},
         );
 
         if (result != null && result is Field) {

@@ -146,12 +146,18 @@ class CashBoxApp extends StatelessWidget {
           final bucket = settings.arguments;
           return MaterialPageRoute(
               builder: (context) => BucketReceiptsOverviewPage(bucket: bucket));
-        } else if(settings.name == "/fieldDetails") {
-          final field = settings.arguments;
+        } else if (settings.name == "/fieldDetails") {
+          final map = settings.arguments as Map;
+          final field = map["field"];
+          final storageOnlySelectable = map["storageOnlySelectable"] ?? true;
+
           return MaterialPageRoute(
-            builder: (context) => FieldDetailsPage(field: field),
+            builder: (context) => FieldDetailsPage(
+              field: field,
+              storageOnlySelectable: storageOnlySelectable,
+            ),
           );
-        } else if(settings.name == "/tutorial") {
+        } else if (settings.name == "/tutorial") {
           final firstName = settings.arguments ?? "";
           return MaterialPageRoute(
             builder: (context) => TutorialPage(name: firstName),
