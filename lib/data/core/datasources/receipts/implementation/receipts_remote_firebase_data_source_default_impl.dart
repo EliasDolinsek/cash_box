@@ -56,8 +56,18 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
         .where("creationYear", isEqualTo: receiptMonth.yearAsInt)
         .getDocuments();
 
-    final receipts =
-        query.documents.map((ds) => Receipt.fromJson(ds.data)).toList();
+    final receipts = query.documents.map((ds) {
+      final map = ds.data;
+
+      (map["fields"] as List).forEach((element) {
+        final value = element["value"];
+        if (value is Timestamp) {
+          element["value"] = value.toDate();
+        }
+      });
+
+      return Receipt.fromJson(map);
+    }).toList();
 
     _receiptsCollection.receipts = receipts;
     _receiptsCollection.receiptsMonth = receiptMonth;

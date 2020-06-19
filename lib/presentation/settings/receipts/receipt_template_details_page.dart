@@ -105,7 +105,7 @@ class _ReceiptTemplateDetailsPageState
   }
 
   Widget _buildFieldWidget(Field field) {
-    return FieldWidget(
+    return FieldDetailWidget(
       field,
       onTap: () async {
         final result = await Navigator.pushNamed(

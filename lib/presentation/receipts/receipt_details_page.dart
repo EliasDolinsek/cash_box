@@ -1,6 +1,7 @@
 import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
+import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
@@ -208,20 +209,20 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
   }
 
   List<Widget> _receiptFieldsAsItems() {
-    final templateFields = widget.receipt.fields.map<Widget>((e) {
+    final templateFields = fields.map<Widget>((e) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: FieldWidget(
-          e,
-          key: ValueKey(e),
-          onTap: () async {
-            final result = await Navigator.pushNamed(context, "/fieldDetails");
-            if (result != null && result is Field) {
-              final index =
-                  fields.indexWhere((element) => element.id == result.id);
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: FieldInputWidget(
+          field: e,
+          onChanged: (field) {
+            setState(() {
+              final index = fields.indexWhere(
+                (element) => element.id == field.id,
+              );
+
               fields.removeAt(index);
-              fields.insert(index, result);
-            }
+              fields.insert(index, field);
+            });
           },
         ),
       );
@@ -347,7 +348,8 @@ class _ReceiptCreationDateSelectionWidgetState
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          InputConverter.dateFromValueAsReadableString(dateTime).toUpperCase(),
+          getMonthAsReadableReceiptMonth(dateTime)
+              .toUpperCase(),
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
         IconButton(

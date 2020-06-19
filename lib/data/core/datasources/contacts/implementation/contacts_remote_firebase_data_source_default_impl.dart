@@ -32,7 +32,18 @@ class ContactsRemoteFirebaseDataSourceDefaultImpl implements ContactsRemoteFireb
 
   Future _loadContacts() async {
     final snapshot = await baseCollection.getDocuments();
-    contacts = snapshot.documents.map((ds) => Contact.fromJson(ds.data)).toList();
+    contacts = snapshot.documents.map((ds) {
+      final map = ds.data;
+
+      (map["fields"] as List).forEach((element) {
+        final value = element["value"];
+        if(value is Timestamp){
+          element["value"] = value.toDate();
+        }
+      });
+
+      return Contact.fromJson(map);
+    }).toList();
   }
 
   @override

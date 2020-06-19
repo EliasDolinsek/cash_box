@@ -8,7 +8,7 @@ class GetTotalAmountOfReceiptsUseCase extends SecureSyncUseCase<double, List<Rec
     var totalAmount = 0.0;
     receipts.forEach((element) {
       element.allFieldsNotAsStorageOnly.forEach((element) {
-        if(element.type == FieldType.amount) totalAmount += element.value;
+        if(element.type == FieldType.amount) totalAmount += element.value ?? 0;
       });
     });
 

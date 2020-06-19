@@ -108,7 +108,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   Widget _buildFieldCardForField(Field field) {
-    return FieldWidget(
+    return FieldDetailWidget(
       field,
       onTap: () async {
         final result = await Navigator.of(context)

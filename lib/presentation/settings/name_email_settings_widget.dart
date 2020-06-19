@@ -129,7 +129,8 @@ class _NameEmailSettingsWidgetState extends State<NameEmailSettingsWidget> {
         _emailError = emailError;
       });
     } else {
-      if (await _showReSignInDialog()) {
+      final result = await _showReSignInDialog();
+      if (result is bool && result) {
         _clearErrors();
         _updateDetails();
       }
