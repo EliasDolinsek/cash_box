@@ -19,6 +19,7 @@ class _MobileNavigationPageState extends State<MobileNavigationPage> {
         centerTitle: false,
         actions: <Widget>[
           ReceiptMonthSelectionWidget(),
+          SizedBox(width: 8.0)
         ],
       ),
       body: config.page,

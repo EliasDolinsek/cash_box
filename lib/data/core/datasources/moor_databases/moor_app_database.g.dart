@@ -154,7 +154,7 @@ class $BucketsMoorTable extends BucketsMoor
       _description ??= _constructDescription();
   GeneratedTextColumn _constructDescription() {
     return GeneratedTextColumn('description', $tableName, false,
-        maxTextLength: 10000, defaultValue: Constant(""));
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _nameMeta = const VerificationMeta('name');
@@ -163,7 +163,7 @@ class $BucketsMoorTable extends BucketsMoor
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
     return GeneratedTextColumn('name', $tableName, false,
-        maxTextLength: 50, defaultValue: Constant(""));
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _receiptsIDsMeta =
@@ -559,12 +559,10 @@ class FieldsMoorCompanion extends UpdateCompanion<FieldsMoorData> {
   FieldsMoorCompanion.insert({
     @required String id,
     this.description = const Value.absent(),
-    @required String type,
-    @required String value,
+    this.type = const Value.absent(),
+    this.value = const Value.absent(),
     @required bool storageOnly,
   })  : id = Value(id),
-        type = Value(type),
-        value = Value(value),
         storageOnly = Value(storageOnly);
   FieldsMoorCompanion copyWith(
       {Value<String> id,
@@ -607,7 +605,7 @@ class $FieldsMoorTable extends FieldsMoor
       _description ??= _constructDescription();
   GeneratedTextColumn _constructDescription() {
     return GeneratedTextColumn('description', $tableName, false,
-        maxTextLength: 50000, defaultValue: Constant(""));
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _typeMeta = const VerificationMeta('type');
@@ -615,11 +613,8 @@ class $FieldsMoorTable extends FieldsMoor
   @override
   GeneratedTextColumn get type => _type ??= _constructType();
   GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn(
-      'type',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('type', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _valueMeta = const VerificationMeta('value');
@@ -627,11 +622,8 @@ class $FieldsMoorTable extends FieldsMoor
   @override
   GeneratedTextColumn get value => _value ??= _constructValue();
   GeneratedTextColumn _constructValue() {
-    return GeneratedTextColumn(
-      'value',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('value', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _storageOnlyMeta =
@@ -673,14 +665,10 @@ class $FieldsMoorTable extends FieldsMoor
     if (d.type.present) {
       context.handle(
           _typeMeta, type.isAcceptableValue(d.type.value, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
     }
     if (d.value.present) {
       context.handle(
           _valueMeta, value.isAcceptableValue(d.value.value, _valueMeta));
-    } else if (isInserting) {
-      context.missing(_valueMeta);
     }
     if (d.storageOnly.present) {
       context.handle(_storageOnlyMeta,
@@ -853,15 +841,12 @@ class ReceiptsMoorCompanion extends UpdateCompanion<ReceiptsMoorData> {
   });
   ReceiptsMoorCompanion.insert({
     @required String id,
-    @required String type,
+    this.type = const Value.absent(),
     @required DateTime creationDate,
-    @required String fieldIDs,
-    @required String tagIDs,
+    this.fieldIDs = const Value.absent(),
+    this.tagIDs = const Value.absent(),
   })  : id = Value(id),
-        type = Value(type),
-        creationDate = Value(creationDate),
-        fieldIDs = Value(fieldIDs),
-        tagIDs = Value(tagIDs);
+        creationDate = Value(creationDate);
   ReceiptsMoorCompanion copyWith(
       {Value<String> id,
       Value<String> type,
@@ -900,11 +885,8 @@ class $ReceiptsMoorTable extends ReceiptsMoor
   @override
   GeneratedTextColumn get type => _type ??= _constructType();
   GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn(
-      'type',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('type', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _creationDateMeta =
@@ -926,11 +908,8 @@ class $ReceiptsMoorTable extends ReceiptsMoor
   @override
   GeneratedTextColumn get fieldIDs => _fieldIDs ??= _constructFieldIDs();
   GeneratedTextColumn _constructFieldIDs() {
-    return GeneratedTextColumn(
-      'field_i_ds',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('field_i_ds', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _tagIDsMeta = const VerificationMeta('tagIDs');
@@ -938,11 +917,8 @@ class $ReceiptsMoorTable extends ReceiptsMoor
   @override
   GeneratedTextColumn get tagIDs => _tagIDs ??= _constructTagIDs();
   GeneratedTextColumn _constructTagIDs() {
-    return GeneratedTextColumn(
-      'tag_i_ds',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('tag_i_ds', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   @override
@@ -966,8 +942,6 @@ class $ReceiptsMoorTable extends ReceiptsMoor
     if (d.type.present) {
       context.handle(
           _typeMeta, type.isAcceptableValue(d.type.value, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
     }
     if (d.creationDate.present) {
       context.handle(
@@ -980,14 +954,10 @@ class $ReceiptsMoorTable extends ReceiptsMoor
     if (d.fieldIDs.present) {
       context.handle(_fieldIDsMeta,
           fieldIDs.isAcceptableValue(d.fieldIDs.value, _fieldIDsMeta));
-    } else if (isInserting) {
-      context.missing(_fieldIDsMeta);
     }
     if (d.tagIDs.present) {
       context.handle(
           _tagIDsMeta, tagIDs.isAcceptableValue(d.tagIDs.value, _tagIDsMeta));
-    } else if (isInserting) {
-      context.missing(_tagIDsMeta);
     }
     return context;
   }
@@ -1111,11 +1081,9 @@ class TagsMoorCompanion extends UpdateCompanion<TagsMoorData> {
   });
   TagsMoorCompanion.insert({
     @required String id,
-    @required String name,
-    @required String color,
-  })  : id = Value(id),
-        name = Value(name),
-        color = Value(color);
+    this.name = const Value.absent(),
+    this.color = const Value.absent(),
+  }) : id = Value(id);
   TagsMoorCompanion copyWith(
       {Value<String> id, Value<String> name, Value<String> color}) {
     return TagsMoorCompanion(
@@ -1148,7 +1116,8 @@ class $TagsMoorTable extends TagsMoor
   @override
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false, maxTextLength: 50);
+    return GeneratedTextColumn('name', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _colorMeta = const VerificationMeta('color');
@@ -1156,11 +1125,8 @@ class $TagsMoorTable extends TagsMoor
   @override
   GeneratedTextColumn get color => _color ??= _constructColor();
   GeneratedTextColumn _constructColor() {
-    return GeneratedTextColumn(
-      'color',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('color', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   @override
@@ -1183,14 +1149,10 @@ class $TagsMoorTable extends TagsMoor
     if (d.name.present) {
       context.handle(
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
     }
     if (d.color.present) {
       context.handle(
           _colorMeta, color.isAcceptableValue(d.color.value, _colorMeta));
-    } else if (isInserting) {
-      context.missing(_colorMeta);
     }
     return context;
   }
@@ -1312,9 +1274,8 @@ class TemplatesMoorCompanion extends UpdateCompanion<TemplatesMoorData> {
   TemplatesMoorCompanion.insert({
     @required String id,
     this.name = const Value.absent(),
-    @required String fields,
-  })  : id = Value(id),
-        fields = Value(fields);
+    this.fields = const Value.absent(),
+  }) : id = Value(id);
   TemplatesMoorCompanion copyWith(
       {Value<String> id, Value<String> name, Value<String> fields}) {
     return TemplatesMoorCompanion(
@@ -1348,7 +1309,7 @@ class $TemplatesMoorTable extends TemplatesMoor
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
     return GeneratedTextColumn('name', $tableName, false,
-        maxTextLength: 50, defaultValue: Constant(""));
+        defaultValue: Constant(""));
   }
 
   final VerificationMeta _fieldsMeta = const VerificationMeta('fields');
@@ -1356,11 +1317,8 @@ class $TemplatesMoorTable extends TemplatesMoor
   @override
   GeneratedTextColumn get fields => _fields ??= _constructFields();
   GeneratedTextColumn _constructFields() {
-    return GeneratedTextColumn(
-      'fields',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('fields', $tableName, false,
+        defaultValue: Constant(""));
   }
 
   @override
@@ -1387,8 +1345,6 @@ class $TemplatesMoorTable extends TemplatesMoor
     if (d.fields.present) {
       context.handle(
           _fieldsMeta, fields.isAcceptableValue(d.fields.value, _fieldsMeta));
-    } else if (isInserting) {
-      context.missing(_fieldsMeta);
     }
     return context;
   }

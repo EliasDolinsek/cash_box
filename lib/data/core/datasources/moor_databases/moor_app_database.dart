@@ -6,10 +6,9 @@ part 'moor_app_database.g.dart';
 class BucketsMoor extends Table {
   TextColumn get id => text()();
 
-  TextColumn get description =>
-      text().withDefault(Constant("")).withLength(max: 10000)();
+  TextColumn get description => text().withDefault(Constant(""))();
 
-  TextColumn get name => text().withDefault(Constant("")).withLength(max: 50)();
+  TextColumn get name => text().withDefault(Constant(""))();
 
   TextColumn get receiptsIDs => text().withDefault(Constant(""))();
 
@@ -31,12 +30,11 @@ class ContactsMoor extends Table {
 class FieldsMoor extends Table {
   TextColumn get id => text()();
 
-  TextColumn get description =>
-      text().withDefault(Constant("")).withLength(max: 50000)();
+  TextColumn get description => text().withDefault(Constant(""))();
 
-  TextColumn get type => text()();
+  TextColumn get type => text().withDefault(Constant(""))();
 
-  TextColumn get value => text()();
+  TextColumn get value => text().withDefault(Constant(""))();
 
   BoolColumn get storageOnly => boolean()();
 
@@ -47,13 +45,13 @@ class FieldsMoor extends Table {
 class ReceiptsMoor extends Table {
   TextColumn get id => text()();
 
-  TextColumn get type => text()();
+  TextColumn get type => text().withDefault(Constant(""))();
 
   DateTimeColumn get creationDate => dateTime()();
 
-  TextColumn get fieldIDs => text()();
+  TextColumn get fieldIDs => text().withDefault(Constant(""))();
 
-  TextColumn get tagIDs => text()();
+  TextColumn get tagIDs => text().withDefault(Constant(""))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -62,9 +60,9 @@ class ReceiptsMoor extends Table {
 class TagsMoor extends Table {
   TextColumn get id => text()();
 
-  TextColumn get name => text().withLength(max: 50)();
+  TextColumn get name => text().withDefault(Constant(""))();
 
-  TextColumn get color => text()();
+  TextColumn get color => text().withDefault(Constant(""))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -73,9 +71,9 @@ class TagsMoor extends Table {
 class TemplatesMoor extends Table {
   TextColumn get id => text()();
 
-  TextColumn get name => text().withDefault(Constant("")).withLength(max: 50)();
+  TextColumn get name => text().withDefault(Constant(""))();
 
-  TextColumn get fields => text()();
+  TextColumn get fields => text().withDefault(Constant(""))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -164,12 +162,6 @@ class MoorAppDatabase extends _$MoorAppDatabase {
 
   Future<List<ReceiptsMoorData>> getAllReceipts() => select(receiptsMoor).get();
 
-  Future<ReceiptsMoorData> getReceipts(String id) async {
-    final selectStatement = select(receiptsMoor)
-      ..where((tbl) => tbl.id.equals(id));
-    return (await selectStatement.get()).first;
-  }
-
   Future<ReceiptsMoorData> getReceipt(String id) async {
     final selectStatement = select(receiptsMoor)
       ..where((tbl) => tbl.id.equals(id));
@@ -177,15 +169,18 @@ class MoorAppDatabase extends _$MoorAppDatabase {
   }
 
   Future deleteReceipt(String id) async =>
-      delete(receiptsMoor).delete(await getReceipts(id));
+      delete(receiptsMoor).delete(await getReceipt(id));
 
   Future updateReceipt(ReceiptsMoorData receipt) =>
       update(receiptsMoor).replace(receipt);
 
-  Future getReceiptsInReceiptMonth(ReceiptMonth receiptMonth) {
-    select(receiptsMoor)
+  Future<List<ReceiptsMoorData>> getReceiptsInReceiptMonth(
+      ReceiptMonth receiptMonth) async {
+    final selectStatement = select(receiptsMoor)
       ..where((tbl) => tbl.creationDate.month.equals(receiptMonth.monthAsInt))
       ..where((tbl) => tbl.creationDate.year.equals(receiptMonth.yearAsInt));
+
+    return selectStatement.get();
   }
 
   //

@@ -206,7 +206,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   String _getAppBarTitle() {
-    if (widget.contact.name.isEmpty) {
+    if (widget.contact.name == null || widget.contact.name.isEmpty) {
       return AppLocalizations.translateOf(context, "unnamed");
     } else {
       return widget.contact.name;

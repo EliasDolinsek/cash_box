@@ -40,12 +40,13 @@ Bucket bucketFromBucketsMoorData(BucketsMoorData bucketsMoorData) {
 ContactsMoorData contactsMoorDataFromContact(Contact contact) {
   final fieldIDs = json.encode(contact.fields.map((f) => f.id).toList());
 
-  return ContactsMoorData(id: contact.id, fieldIDs: fieldIDs);
+  return ContactsMoorData(
+      id: contact.id, fieldIDs: fieldIDs, name: contact.name);
 }
 
 Contact contactFromContactsMoorData(
     ContactsMoorData contactsMoorData, List<Field> fields) {
-  return Contact(contactsMoorData.id, fields: fields);
+  return Contact(contactsMoorData.id, fields: fields, name: contactsMoorData.name);
 }
 
 //

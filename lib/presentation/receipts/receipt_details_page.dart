@@ -16,6 +16,7 @@ import 'package:cash_box/presentation/receipts/widgets/receipt_type_selection_wi
 import 'package:cash_box/presentation/tags/widgets/tags_selection_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class AddReceiptPage extends StatelessWidget {
   final List<Field> fields;
@@ -361,7 +362,7 @@ class _ReceiptCreationDateSelectionWidgetState
   }
 
   void _showDateSelection() async {
-    final result = await showDatePicker(
+    final result = await showMonthPicker(
       context: context,
       initialDate: dateTime,
       firstDate: DateTime(1900),

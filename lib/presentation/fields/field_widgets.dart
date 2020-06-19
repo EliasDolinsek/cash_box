@@ -65,7 +65,8 @@ class _FieldInputWidgetState extends State<FieldInputWidget> {
 
     this.value = widget.field.value;
     if (widget.field.type == FieldType.text) {
-      textController = TextEditingController(text: widget.field.value ?? "");
+      final value = widget.field.value ?? "";
+      textController = TextEditingController(text: value);
     }
   }
 

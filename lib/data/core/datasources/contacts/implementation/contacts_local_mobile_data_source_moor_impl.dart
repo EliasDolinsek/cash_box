@@ -27,6 +27,7 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
     for(ContactsMoorData contactsMoorData in allContactsMoorData) {
       final List<String> fieldIDs = json.decode(contactsMoorData.fieldIDs).cast<String>();
       final fieldsOfContact = await fieldsDataSource.getFieldsWithIDs(fieldIDs);
+
       final contact = contactFromContactsMoorData(contactsMoorData, fieldsOfContact);
       contacts.add(contact);
     }
@@ -49,7 +50,7 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
     final fieldIDsAsList = originalContact.fields.map((e) => e.id).toList();
     await fieldsDataSource.removeAllFieldsWithIDs(fieldIDsAsList);
 
-    final update = Contact(id, fields: contact.fields);
+    final update = Contact(id, fields: contact.fields, name: contact.name);
     await fieldsDataSource.addAllFields(update.fields);
 
     await database.updateContact(contactsMoorDataFromContact(update));

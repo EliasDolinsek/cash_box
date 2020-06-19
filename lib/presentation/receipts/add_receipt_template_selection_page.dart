@@ -62,19 +62,6 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
   }
 
   Widget _buildLoaded(BuildContext context, List<Template> templates) {
-    if (templates.isNotEmpty) {
-      return SingleChildScrollView(
-          child: _buildTemplatesList(context, templates));
-    } else {
-      return Center(
-        child: Text(
-          AppLocalizations.translateOf(context, "txt_no_templates"),
-        ),
-      );
-    }
-  }
-
-  Widget _buildTemplatesList(BuildContext context, List<Template> templates) {
     return Column(
       children: [
         ComponentActionButton(
@@ -82,19 +69,39 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
           onPressed: () => Navigator.of(context)
               .pushReplacementNamed("/addReceipt/detailsInput", arguments: []),
         ),
-        Column(
-          children: templates.map((template) {
-            return TemplateListTile(
-              template: template,
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(
-                    "/addReceipt/detailsInput",
-                    arguments: template.fields);
-              },
-            );
-          }).toList(),
+        Builder(
+          builder: (context) {
+            if (templates.isNotEmpty) {
+              return SingleChildScrollView(
+                  child: _buildTemplatesList(context, templates));
+            } else {
+              return Expanded(
+                child: Center(
+                  child: Text(
+                    AppLocalizations.translateOf(context, "txt_no_templates"),
+                  ),
+                ),
+              );
+            }
+          },
         )
       ],
+    );
+  }
+
+  Widget _buildTemplatesList(BuildContext context, List<Template> templates) {
+    return Column(
+      children: templates.map((template) {
+        return TemplateListTile(
+          template: template,
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed(
+              "/addReceipt/detailsInput",
+              arguments: template.fields.map((e) => e.cloneWithNewId()).toList(),
+            );
+          },
+        );
+      }).toList(),
     );
   }
 }
