@@ -644,6 +644,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.22.6"
+  separated_column:
+    dependency: "direct dev"
+    description:
+      name: separated_column
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1+2"
   shared_preferences:
     dependency: "direct main"
     description:

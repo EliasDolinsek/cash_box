@@ -5,7 +5,7 @@ import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
-import 'package:cash_box/presentation/fields/field_card_widget.dart';
+import 'package:cash_box/presentation/fields/field_widgets.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/widgets/text_input_widget.dart';
 import 'package:flutter/material.dart';

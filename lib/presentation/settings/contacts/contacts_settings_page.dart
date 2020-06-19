@@ -51,7 +51,7 @@ class _ContactSettingsPageContentWidgetState
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           ComponentActionButton(
-            text: AppLocalizations.translateOf(context, "btn_add_bucket"),
+            text: AppLocalizations.translateOf(context, "btn_add_contact"),
             onPressed: () => _addNewContact(context),
           ),
           BlocBuilder(

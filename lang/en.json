@@ -187,5 +187,7 @@
   "txt_done": "Done",
   "txt_tutorial_done_description": "Default tags, templates and buckets have already been created. However, it's possible to change them any time in the settings.",
   "btn_close_tutorial": "CLOSE TUTORIAL",
-  "txt_no_date_selected": "No date selected"
+  "txt_no_date_selected": "No date selected",
+  "btn_edit": "EDIT",
+  "btn_add_contact": "ADD CONTACT"
 }

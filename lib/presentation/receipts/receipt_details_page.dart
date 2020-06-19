@@ -8,7 +8,7 @@ import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
-import 'package:cash_box/presentation/fields/field_card_widget.dart';
+import 'package:cash_box/presentation/fields/field_widgets.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/buckets/widgets/bucket_selection_widget.dart';

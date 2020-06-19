@@ -4,10 +4,11 @@ import 'package:cash_box/domain/core/enteties/contacts/contact.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
-import 'package:cash_box/presentation/fields/field_card_widget.dart';
+import 'package:cash_box/presentation/fields/field_widgets.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/widgets/text_input_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:separated_column/separated_column.dart';
 
 class ContactDetailsPage extends StatefulWidget {
   final Contact contact;
@@ -50,12 +51,13 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
         backgroundColor: Colors.white,
         actions: <Widget>[_buildDeleteButton(context)],
       ),
-      body: Center(child: WidthConstrainedWidget(child: _buildListView())),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _addEmptyField,
-        label: Text(AppLocalizations.translateOf(context, "btn_add_field")),
-        icon: Icon(Icons.add),
+      body: Center(
+        child: WidthConstrainedWidget(
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: _buildContent(),
+          ),
+        ),
       ),
     );
   }
@@ -68,20 +70,33 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     });
   }
 
-  Widget _buildListView() {
-    return ReorderableListView(
-      header: _buildNameFieldCardWidget(),
-      onReorder: (oldIndex, newIndex) {
-        setState(() {
-          if (newIndex > oldIndex) {
-            newIndex -= 1;
-          }
+  Widget _buildContent() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Column(
+          children: <Widget>[
+            _buildNameFieldCardWidget(),
+            _buildAddFieldButton(),
+            SeparatedColumn(
+              children: _getFieldsAsFieldCardWidgetList()
+                  .map((e) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: e,
+                      ))
+                  .toList(),
+              separatorBuilder: (context, index) => Divider(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-          final field = _fields.removeAt(oldIndex);
-          _fields.insert(newIndex, field);
-        });
-      },
-      children: _getFieldsAsFieldCardWidgetList(),
+  Widget _buildAddFieldButton() {
+    return MaterialButton(
+      child: Text(AppLocalizations.translateOf(context, "btn_add_field")),
+      onPressed: _addEmptyField,
     );
   }
 
@@ -108,24 +123,72 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   Widget _buildFieldCardForField(Field field) {
-    return FieldDetailWidget(
-      field,
-      onTap: () async {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: FieldInputWidget(
+            onChanged: (field) {
+              final index =
+                  _fields.indexWhere((element) => element.id == field.id);
+              _fields.removeAt(index);
+              _fields.insert(index, field);
+            },
+            field: field,
+          ),
+        ),
+        _buildButtonsBarForField(field)
+      ],
+    );
+  }
+
+  Widget _buildButtonsBarForField(Field field) {
+    return Row(
+      children: <Widget>[
+        _buildEditButtonForField(field),
+        _buildDeleteButtonForField(field)
+      ],
+    );
+  }
+
+  Widget _buildDeleteButtonForField(Field field) {
+    return IconButton(
+      icon: Icon(
+        Icons.delete,
+        color: Colors.red,
+      ),
+      onPressed: () async {
+        final result = await showDialog(
+          context: context,
+          builder: (context) => DeleteDialog(),
+        );
+
+        if (result != null && result) {
+          setState(() {
+            _fields.remove(field);
+          });
+        }
+      },
+    );
+  }
+
+  Widget _buildEditButtonForField(Field field) {
+    return MaterialButton(
+      child: Text(AppLocalizations.translateOf(context, "btn_edit")),
+      onPressed: () async {
         final result = await Navigator.of(context)
             .pushNamed("/fieldDetails", arguments: field);
 
-        if(result != null && result is Field){
-          final index = _fields.indexWhere((element) => element.id == result.id);
+        if (result != null && result is Field) {
           setState(() {
+            final index =
+                _fields.indexWhere((element) => element.id == field.id);
+
             _fields.removeAt(index);
             _fields.insert(index, result);
           });
         }
-      },
-      onDelete: () {
-        setState(() {
-          _fields.remove(field);
-        });
       },
     );
   }

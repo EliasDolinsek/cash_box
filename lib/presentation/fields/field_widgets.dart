@@ -56,30 +56,43 @@ class FieldInputWidget extends StatefulWidget {
 }
 
 class _FieldInputWidgetState extends State<FieldInputWidget> {
-
   TextEditingController textController;
+  dynamic value;
 
   @override
   void initState() {
     super.initState();
-    if(widget.field.type == FieldType.text){
+
+    this.value = widget.field.value;
+    if (widget.field.type == FieldType.text) {
       textController = TextEditingController(text: widget.field.value ?? "");
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          widget.field.description,
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-        ),
         SizedBox(height: 8.0),
+        Text(
+          _getDescription(),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+        ),
+        SizedBox(height: 24.0),
         _buildValueInput(context),
       ],
     );
+  }
+
+  String _getDescription() {
+    final description = widget.field.description;
+    if (description != null && description.isNotEmpty) {
+      return description;
+    } else {
+      return AppLocalizations.translateOf(context, "unnamed");
+    }
   }
 
   Widget _buildValueInput(BuildContext context) {
@@ -148,35 +161,40 @@ class _FieldInputWidgetState extends State<FieldInputWidget> {
   }
 
   Widget _buildValueDateInput(BuildContext context) {
-    final textChange = AppLocalizations.translateOf(context, "btn_change");
-    return Center(
-      child: MaterialButton(
-        child: Text(
-          _getDateForDateInput(context) + " - " + textChange,
+    return ActionChip(
+      avatar: CircleAvatar(
+        child: Icon(
+          Icons.date_range,
+          size: 18,
         ),
-        onPressed: () async {
-          final date = await _getDateTimeFromDatePicker(context);
-          if (date != null) {
-            widget.onChanged(_getFieldFromValue(date));
-          }
-        },
       ),
+      label: Text(_getDateForDateInput(context)),
+      onPressed: () async {
+        final date = await _getDateTimeFromDatePicker(context);
+        if (date != null) {
+          setState(() {
+            value = date;
+          });
+
+          widget.onChanged(_getFieldFromValue(date));
+        }
+      },
     );
   }
 
   String _getDateForDateInput(BuildContext context) {
-    if (widget.field.value != null) {
-      final usableDate = widget.field.value is Timestamp ? widget.field.value.toDate() : widget.field.value;
-      return getDateAsReadableDate(usableDate);
+    if (value != null) {
+      return getDateAsReadableDate(value);
     } else {
       return AppLocalizations.translateOf(context, "txt_no_date_selected");
     }
   }
 
   Future<DateTime> _getDateTimeFromDatePicker(BuildContext context) async {
-    final initialDate = widget.field.value is DateTime && widget.field.value != null
-        ? widget.field.value
-        : DateTime.now();
+    final initialDate =
+        widget.field.value is DateTime && widget.field.value != null
+            ? widget.field.value
+            : DateTime.now();
 
     return await showDatePicker(
       context: context,
