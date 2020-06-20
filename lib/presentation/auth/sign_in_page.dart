@@ -1,20 +1,16 @@
-
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/auth/sign_in_widget.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth > 800) {
-            return _buildDesktop(context);
-          } else {
-            return _buildMobile();
-          }
-        },
+      body: ScreenTypeLayout(
+        mobile: _buildMobile(),
+        desktop: _buildDesktop(context),
+        tablet: _buildDesktop(context),
       ),
     );
   }
@@ -47,7 +43,12 @@ class SignInPage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _buildLogoImage(),
+              Container(
+                child: _buildLogoImage(),
+                constraints: BoxConstraints(
+                  maxWidth: 200
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(right: 32.0),
                 child: _buildBackButton(context),
