@@ -1,0 +1,3 @@
+Settings -> Tags -> Add tag -> Change color clickable
+Settings -> Contacts -> Add -> No default contact name
+Account doesn't load after first login

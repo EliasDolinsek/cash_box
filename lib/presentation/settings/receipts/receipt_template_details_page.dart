@@ -70,7 +70,7 @@ class _ReceiptTemplateDetailsPageState
         type: FieldType.text, description: "", value: "", storageOnly: true);
 
     final result = await Navigator.of(context)
-        .pushNamed("/fieldDetails", arguments: {"field":field});
+        .pushNamed("/fieldDetails", arguments: {"field": field});
 
     if (result != null) {
       setState(() => _fields.add(result));

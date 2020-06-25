@@ -1,6 +1,11 @@
+import 'dart:io' show Platform;
+
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
+import 'package:cash_box/presentation/base/sizing_information.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:flutter/material.dart';
 
 class FieldDetailsPage extends StatefulWidget {
@@ -35,57 +40,87 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(description == null || description.isEmpty
-            ? AppLocalizations.translateOf(context, "unnamed")
-            : description),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, getFieldOfValues());
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            description == null || description.isEmpty
+                ? AppLocalizations.translateOf(context, "unnamed")
+                : description,
+          ),
+          leading: IconButton(
+            icon: Icon(
+              Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            ),
+            onPressed: () {
+              Navigator.pop(context, getFieldOfValues());
+            },
+          ),
+        ),
+        body: ScreenTypeBuilder(
+          builder: (screenType) {
+            final stepperType = screenType != DeviceScreenType.mobile
+                ? StepperType.horizontal
+                : StepperType.vertical;
+
+            return Stepper(
+              currentStep: currentStep,
+              type: stepperType,
+              steps: steps,
+              onStepContinue: () {
+                if (currentStep != steps.length - 1) {
+                  setState(() => currentStep++);
+                } else {
+                  Navigator.pop(context, getFieldOfValues());
+                }
+              },
+              onStepTapped: (value) {
+                setState(() => currentStep = value);
+              },
+              onStepCancel: () {
+                if (currentStep != 0) {
+                  setState(() => currentStep--);
+                } else {
+                  Navigator.pop(context, getFieldOfValues());
+                }
+              },
+              controlsBuilder: _buildControls,
+            );
+          },
+        ),
       ),
-      body: Stepper(
-        currentStep: currentStep,
-        type: StepperType.vertical,
-        steps: steps,
-        onStepContinue: () {
-          if (currentStep != steps.length - 1) {
-            setState(() => currentStep++);
-          } else {
-            Navigator.of(context).pop(getFieldOfValues());
-          }
-        },
-        onStepTapped: (value) {
-          setState(() => currentStep = value);
-        },
-        onStepCancel: () {
-          if (currentStep != 0) {
-            setState(() => currentStep--);
-          } else {
-            Navigator.pop(context);
-          }
-        },
-        controlsBuilder: (context, {onStepCancel, onStepContinue}) {
-          return Row(
-            children: <Widget>[
-              OutlineButton(
-                onPressed: onStepContinue,
-                child: Text(
-                  AppLocalizations.translateOf(context, "btn_next"),
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ),
+    );
+  }
+
+  Widget _buildControls(context, {onStepCancel, onStepContinue}) {
+    return Center(
+      child: WidthConstrainedWidget(
+        child: Row(
+          children: <Widget>[
+            OutlineButton(
+              onPressed: onStepContinue,
+              child: Text(
+                AppLocalizations.translateOf(context, "btn_next"),
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ),
-              SizedBox(width: 16.0),
-              MaterialButton(
-                onPressed: onStepCancel,
-                child: Text(AppLocalizations.translateOf(context, "btn_back")),
-              )
-            ],
-          );
-        },
+            ),
+            SizedBox(width: 16.0),
+            MaterialButton(
+              onPressed: onStepCancel,
+              child: Text(AppLocalizations.translateOf(context, "btn_back")),
+            )
+          ],
+        ),
       ),
     );
   }
 
   List<Step> get steps {
-    if(widget.storageOnlySelectable){
+    if (widget.storageOnlySelectable) {
       return [
         _buildTypeStep(),
         _buildTitleStep(),
@@ -99,12 +134,23 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
     }
   }
 
-  Step _buildTypeStep(){
+  Widget _buildStepContentContainer({@required Widget child}) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: WidthConstrainedWidget(
+        child: child,
+      ),
+    );
+  }
+
+  Step _buildTypeStep() {
     return Step(
       title: Text(AppLocalizations.translateOf(context, "txt_type")),
       subtitle: Text(AppLocalizations.translateOf(
           context, "txt_field_details_page_type_description")),
-      content: _buildTypeSelection(),
+      content: _buildStepContentContainer(
+        child: _buildTypeSelection(),
+      ),
       isActive: currentStep == 0,
       state: currentStep >= 0 && type != null
           ? StepState.complete
@@ -112,12 +158,14 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
     );
   }
 
-  Step _buildTitleStep(){
+  Step _buildTitleStep() {
     return Step(
       title: Text(AppLocalizations.translateOf(context, "txt_title")),
       subtitle: Text(AppLocalizations.translateOf(
           context, "txt_field_details_page_title_description")),
-      content: _buildDescriptionTextField(),
+      content: _buildStepContentContainer(
+        child: _buildDescriptionTextField(),
+      ),
       isActive: currentStep == 1,
       state: currentStep >= 1 && description != null
           ? StepState.complete
@@ -125,14 +173,16 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
     );
   }
 
-  Step _buildUsageStep(){
+  Step _buildUsageStep() {
     return Step(
       title: Text(AppLocalizations.translateOf(context, "txt_usage")),
       subtitle: Text(AppLocalizations.translateOf(
           context, "txt_field_details_page_usage_description")),
-      content: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: _buildUsageCheckbox(),
+      content: _buildStepContentContainer(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: _buildUsageCheckbox(),
+        ),
       ),
       isActive: currentStep == 2,
       state: currentStep >= 2 && storageOnly != null

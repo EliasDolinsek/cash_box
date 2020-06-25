@@ -30,3 +30,18 @@ class ScreenTypeLayout extends StatelessWidget {
     });
   }
 }
+
+class ScreenTypeBuilder extends StatelessWidget {
+  final Function(DeviceScreenType screenType) builder;
+
+  const ScreenTypeBuilder({Key key, @required this.builder}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenTypeLayout(
+      mobile: builder(DeviceScreenType.mobile),
+      tablet: builder(DeviceScreenType.tablet),
+      desktop: builder(DeviceScreenType.desktop),
+    );
+  }
+}

@@ -20,20 +20,23 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return WidthConstrainedWidget(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildSearchBar(),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-              top: 16.0,
+    return Align(
+      alignment: Alignment.topCenter,
+      child: WidthConstrainedWidget(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildSearchBar(),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                top: 16.0,
+              ),
+              child: _buildFilterButton(),
             ),
-            child: _buildFilterButton(),
-          ),
-          Expanded(child: _buildSearchResult()),
-        ],
+            Expanded(child: _buildSearchResult()),
+          ],
+        ),
       ),
     );
   }

@@ -7,10 +7,13 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScreenTypeLayout(
-        mobile: _buildMobile(),
-        desktop: _buildDesktop(context),
-        tablet: _buildDesktop(context),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: ScreenTypeLayout(
+          mobile: _buildMobile(),
+          desktop: _buildDesktop(context),
+          tablet: _buildDesktop(context),
+        ),
       ),
     );
   }

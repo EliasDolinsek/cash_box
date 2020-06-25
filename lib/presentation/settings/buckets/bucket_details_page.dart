@@ -15,7 +15,9 @@ class BucketDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.translateOf(context, "txt_bucket_details")),
+        title:
+            Text(AppLocalizations.translateOf(context, "txt_bucket_details")),
+        actions: <Widget>[_buildDeleteButton(context)],
       ),
       body: Align(
         alignment: Alignment.topCenter,
@@ -25,6 +27,28 @@ class BucketDetailsPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDeleteButton(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.delete,
+        color: Colors.red,
+      ),
+      onPressed: () async {
+        final result = await showDialog(
+          context: context,
+          builder: (context) => DeleteDialog(),
+        );
+
+        if (result == true) {
+          final event = RemoveBucketEvent(bucket.id);
+          sl<BucketsBloc>().dispatch(event);
+
+          Navigator.pop(context);
+        }
+      },
     );
   }
 }
@@ -41,7 +65,6 @@ class BucketDetailsEditWidget extends StatefulWidget {
 }
 
 class _BucketDetailsEditWidgetState extends State<BucketDetailsEditWidget> {
-  bool _delete = false;
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -58,19 +81,14 @@ class _BucketDetailsEditWidgetState extends State<BucketDetailsEditWidget> {
     final updatedNameText = nameController.text;
     final updatedDescriptionText = descriptionController.text;
 
-    if (!_delete &&
-        (widget.bucket.name != updatedNameText ||
-            widget.bucket.description != updatedDescriptionText)) {
+    if (widget.bucket.name != updatedNameText ||
+        widget.bucket.description != updatedDescriptionText) {
       final event = UpdateBucketEvent(
         widget.bucket.id,
         name: updatedNameText,
         description: updatedDescriptionText,
       );
 
-      sl<BucketsBloc>().dispatch(event);
-    }
-    if (_delete) {
-      final event = RemoveBucketEvent(widget.bucket.id);
       sl<BucketsBloc>().dispatch(event);
     }
   }
@@ -97,29 +115,9 @@ class _BucketDetailsEditWidgetState extends State<BucketDetailsEditWidget> {
               hintText: AppLocalizations.translateOf(
                   context, "field_input_description"),
             ),
-          ),
-          SizedBox(height: 8.0),
-          FlatButton(
-            onPressed: _onDeletePressed,
-            child: Text(
-              AppLocalizations.translateOf(context, "btn_delete"),
-              style: TextStyle(color: Colors.red),
-            ),
           )
         ],
       ),
     );
-  }
-
-  void _onDeletePressed() async {
-    final result = await showDialog(
-      context: context,
-      builder: (context) => DeleteDialog(),
-    );
-
-    if (result == true) {
-      _delete = true;
-      Navigator.pop(context);
-    }
   }
 }
