@@ -17,4 +17,12 @@ class ReceiptsSearchEvent extends SearchEvent {
   List get props => [text, tagIds, receiptType];
 }
 
-class ReloadSearchEvent extends SearchEvent {}
+class ReloadSearchEvent extends SearchEvent {
+
+  final DateTime newMonth;
+
+  ReloadSearchEvent({this.newMonth});
+
+  @override
+  List get props => [newMonth];
+}

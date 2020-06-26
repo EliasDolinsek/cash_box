@@ -49,7 +49,7 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
       receiptMonth = event.month ?? receiptMonth;
 
       yield await _getReceiptsOfReceiptMonth();
-      searchBloc.dispatch(ReloadSearchEvent());
+      searchBloc.dispatch(ReloadSearchEvent(newMonth: receiptMonth));
     } else if (event is UpdateReceiptEvent) {
       yield LoadingReceiptsState();
       await _updateReceipt(event);

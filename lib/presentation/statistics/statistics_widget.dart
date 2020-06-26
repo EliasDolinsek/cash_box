@@ -85,7 +85,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget>
       builder: (_, __) {
         return CustomChip(
           text: AppLocalizations.translateOf(context, "btn_buckets"),
-          selected: tabController.index == 0,
+          selected: true,
           icon: Icons.folder_open,
           selectedColor: Theme.of(context)
               .primaryColor
@@ -104,7 +104,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget>
       builder: (_, __) {
         return CustomChip(
           text: AppLocalizations.translateOf(context, "btn_tags"),
-          selected: tabController.index == 1,
+          selected: true,
           icon: Icons.label_outline,
           selectedColor: Theme.of(context)
               .primaryColor

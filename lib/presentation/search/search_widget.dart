@@ -2,7 +2,6 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
@@ -10,6 +9,7 @@ import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/search_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchWidget extends StatefulWidget {
   @override
@@ -82,21 +82,15 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   Widget _buildSearchResult() {
-    final searchBloc = sl<SearchBloc>();
-    return StreamBuilder(
-      stream: searchBloc.state,
-      builder: (_, AsyncSnapshot<SearchState> snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          if (data is ReceiptsSearchAvailableState) {
-            return SingleChildScrollView(child: _buildLoaded(data.receipts));
-          } else if (data is LoadingSearchState) {
-            return _buildLoading();
-          } else {
-            return _buildSearch();
-          }
-        } else {
+    return BlocBuilder(
+      bloc: sl<SearchBloc>(),
+      builder: (context, state) {
+        if (state is ReceiptsSearchAvailableState) {
+          return SingleChildScrollView(child: _buildLoaded(state.receipts));
+        } else if (state is LoadingSearchState) {
           return _buildLoading();
+        } else {
+          return _buildSearch();
         }
       },
     );

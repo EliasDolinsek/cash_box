@@ -94,12 +94,10 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
       children: templates.map((template) {
         return TemplateListTile(
           template: template,
-          onTap: () {
-            Navigator.of(context).pushReplacementNamed(
+          onTap: () => Navigator.of(context).pushReplacementNamed(
               "/addReceipt/detailsInput",
               arguments: template.fields.map((e) => e.cloneWithNewId()).toList(),
-            );
-          },
+            ),
         );
       }).toList(),
     );
