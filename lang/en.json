@@ -177,7 +177,7 @@
   "txt_use_as_information_description": "The value of this field will not be used for calculations or text",
   "txt_tutorial_hi": "Hi, %{name}",
   "txt_tutorial_description": "Let’s get started! This short tutorial will help you understand the core features of CashBox.",
-  "txt_swipe_right": "Swipe Right",
+  "txt_swipe_left": "Swipe Left",
   "txt_receipts": "Receipts",
   "txt_receipts_tutorial_description": "All expenses, incomes and investments are stored in CashBox using receipts. Receipts consist out of fields, where you can enter things like the amount or the title of the receipt",
   "txt_templates": "Templates",

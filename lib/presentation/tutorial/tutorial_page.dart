@@ -12,15 +12,33 @@ class TutorialPage extends StatefulWidget {
 }
 
 class _TutorialPageState extends State<TutorialPage> {
-  final PageController pageController = PageController(initialPage: 0);
 
+  final PageController pageController = PageController(initialPage: 0);
+  double pageProgress = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController.addListener(() {
+      setState(() => pageProgress = pageController.page);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final pages = _getPages();
     return Scaffold(
-      body: PageView(
-        children: pages,
-        controller: pageController,
+      body: Column(
+        children: <Widget>[
+          LinearProgressIndicator(
+            value: pageProgress / (pages.length - 1),
+          ),
+          Expanded(
+            child: PageView(
+              children: pages,
+              controller: pageController,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -85,7 +103,7 @@ class _HiWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 42.0),
                     child: Text(AppLocalizations.translateOf(
-                        context, "txt_swipe_right")),
+                        context, "txt_swipe_left")),
                   ),
                 ),
               ),
@@ -164,20 +182,22 @@ class _BucketsTutorialWidget extends StatelessWidget {
 class _TutorialFinishedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: <Widget>[
-        Expanded(
-          flex: 8,
-          child: _ComponentTutorialMobilePortrait(
-            icon: Icons.done_outline,
-            title: AppLocalizations.translateOf(context, "txt_done"),
-            description: AppLocalizations.translateOf(
-                context, "txt_tutorial_done_description"),
+        Center(
+          child: WidthConstrainedWidget(
+            child: _ComponentTutorialMobilePortrait(
+              icon: Icons.done,
+              title: AppLocalizations.translateOf(context, "txt_done"),
+              description: AppLocalizations.translateOf(
+                  context, "txt_tutorial_done_description"),
+            ),
           ),
         ),
-        Expanded(
-          flex: 2,
-          child: Center(
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 64.0),
             child: OutlineButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
