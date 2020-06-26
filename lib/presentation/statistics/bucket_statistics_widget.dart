@@ -3,6 +3,8 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
+import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/statistics_list_tile/statistics_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class BucketStatisticsWidget extends StatelessWidget {
       bloc: sl<BucketsBloc>(),
       builder: (context, state) {
         if (state is BucketsAvailableState) {
-          return _buildLoaded(state.buckets);
+          return _buildLoaded(context, state.buckets);
         } else {
           return LoadingWidget();
         }
@@ -28,16 +30,24 @@ class BucketStatisticsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLoaded(List<Bucket> buckets) {
-    return ListView.separated(
-      itemBuilder: (context, index) => BucketStatisticsListTile(
-        bucket: buckets[index],
-        receipts: receipts,
-      ),
-      separatorBuilder: (context, index) => SizedBox(
-        height: 8.0,
-      ),
-      itemCount: buckets.length,
-    );
+  Widget _buildLoaded(BuildContext context, List<Bucket> buckets) {
+    if (buckets.isNotEmpty) {
+      return ListView.separated(
+        itemBuilder: (context, index) => BucketStatisticsListTile(
+          bucket: buckets[index],
+          receipts: receipts,
+        ),
+        separatorBuilder: (context, index) => SizedBox(
+          height: 8.0,
+        ),
+        itemCount: buckets.length,
+      );
+    } else {
+      return Center(
+        child: Text(
+          AppLocalizations.translateOf(context, "txt_no_data"),
+        ),
+      );
+    }
   }
 }

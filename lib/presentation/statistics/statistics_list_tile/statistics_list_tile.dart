@@ -152,6 +152,7 @@ class StatisticsListTile extends StatelessWidget {
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
             child: Text(

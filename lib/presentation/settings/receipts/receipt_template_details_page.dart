@@ -111,7 +111,7 @@ class _ReceiptTemplateDetailsPageState
         final result = await Navigator.pushNamed(
           context,
           "/fieldDetails",
-          arguments: {"field":field},
+          arguments: {"field": field},
         );
 
         if (result != null && result is Field) {
@@ -122,6 +122,18 @@ class _ReceiptTemplateDetailsPageState
           setState(() {
             _fields.removeAt(index);
             _fields.insert(index, result);
+          });
+        }
+      },
+      onDelete: () async {
+        final result = await showDialog(
+          context: context,
+          builder: (context) => DeleteDialog(),
+        );
+
+        if(result != null && result){
+          setState(() {
+            _fields.remove(field);
           });
         }
       },

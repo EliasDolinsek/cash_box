@@ -2,6 +2,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
@@ -26,9 +27,16 @@ class TagsSelectionPage extends StatelessWidget {
         actions: <Widget>[_buildEditTagsButton(context)],
         backgroundColor: Colors.white,
       ),
-      body: TagsSelectionWidget(
-        initialSelectedTags: selectedTags,
-        onChanged: onChanged,
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: SpacedScreenTypeLayout(
+          mobile: WidthConstrainedWidget(
+            child: TagsSelectionWidget(
+              initialSelectedTags: selectedTags,
+              onChanged: onChanged,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -81,10 +89,8 @@ class _TagsSelectionWidgetState extends State<TagsSelectionWidget> {
   }
 
   Widget _buildLoaded(List<Tag> tags) {
-    return WidthConstrainedWidget(
-      child: SingleChildScrollView(
-        child: _buildTagsList(tags),
-      ),
+    return SingleChildScrollView(
+      child: _buildTagsList(tags),
     );
   }
 

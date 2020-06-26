@@ -11,7 +11,7 @@ class GetAmountOfReceiptsUseCase
 
     params.receipts.forEach((receipt) {
       receipt.allFieldsNotAsStorageOnly.forEach((field) {
-        if (field.type == FieldType.amount) {
+        if (field.type == FieldType.amount && field.value != null) {
           if (receipt.type == ReceiptType.income) {
             amount += field.value;
           } else {

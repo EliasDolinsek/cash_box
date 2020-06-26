@@ -40,23 +40,15 @@ class SignInPage extends StatelessWidget {
 
   Widget _buildDesktop(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 32.0, top: 16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                child: _buildLogoImage(),
-                constraints: BoxConstraints(
-                  maxWidth: 200
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 32.0),
-                child: _buildBackButton(context),
-              ),
-            ],
+          child: Container(
+            child: _buildLogoImage(),
+            constraints: BoxConstraints(
+              maxWidth: 200
+            ),
           ),
         ),
         Expanded(
@@ -78,16 +70,6 @@ class SignInPage extends StatelessWidget {
   Widget _buildLogoImage() {
     return Image(
       image: AssetImage("res/imgs/logo.png"),
-    );
-  }
-
-  Widget _buildBackButton(BuildContext context) {
-    final text = AppLocalizations.translateOf(context, "sign_in_page_btn_home");
-    return MaterialButton(
-      onPressed: () {
-        //js.context.callMethod("open", ["https://eliasdolinsek.com"]);
-      },
-      child: Text(text),
     );
   }
 }

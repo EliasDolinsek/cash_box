@@ -45,3 +45,28 @@ class ScreenTypeBuilder extends StatelessWidget {
     );
   }
 }
+
+class SpacedScreenTypeLayout extends StatelessWidget {
+  final Widget mobile;
+  final Widget tablet;
+  final Widget desktop;
+
+  const SpacedScreenTypeLayout(
+      {Key key, @required this.mobile, this.tablet, this.desktop})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenTypeLayout(
+      mobile: mobile,
+      tablet:  Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: tablet ?? mobile,
+      ),
+      desktop: Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: desktop ?? mobile,
+      ),
+    );
+  }
+}

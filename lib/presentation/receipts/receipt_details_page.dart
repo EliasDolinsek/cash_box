@@ -2,11 +2,11 @@ import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
-import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/fields/field_widgets.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
@@ -38,7 +38,16 @@ class AddReceiptPage extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
         child: Icon(Icons.check),
       ),
-      body: _buildContent(),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: WidthConstrainedWidget(
+          child: SpacedScreenTypeLayout(
+            mobile: _buildContent(),
+            tablet: _buildContent(),
+            desktop: _buildContent(),
+          ),
+        ),
+      ),
     );
   }
 
@@ -118,7 +127,16 @@ class EditReceiptPage extends StatelessWidget {
           )
         ],
       ),
-      body: _buildContent(context),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: WidthConstrainedWidget(
+          child: SpacedScreenTypeLayout(
+            mobile: _buildContent(context),
+            tablet: _buildContent(context),
+            desktop: _buildContent(context),
+          ),
+        ),
+      ),
     );
   }
 
@@ -150,8 +168,10 @@ class EditReceiptPage extends StatelessWidget {
         if (receipt != null) {
           return ReceiptDetailsWidget(receipt);
         } else {
-          return ErrorWidget(
-            AppLocalizations.translateOf(context, "txt_could_not_load_receipt"),
+          return Center(
+            child: Text(
+              AppLocalizations.translateOf(context, "txt_could_not_load_receipt"),
+            ),
           );
         }
       },
@@ -199,13 +219,11 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return WidthConstrainedWidget(
-      child: ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (context, index) => _receiptFieldsAsItems()[index],
-        separatorBuilder: (context, index) => Divider(),
-        itemCount: _receiptFieldsAsItems().length,
-      ),
+    return ListView.separated(
+      shrinkWrap: true,
+      itemBuilder: (context, index) => _receiptFieldsAsItems()[index],
+      separatorBuilder: (context, index) => Divider(),
+      itemCount: _receiptFieldsAsItems().length,
     );
   }
 
@@ -349,8 +367,7 @@ class _ReceiptCreationDateSelectionWidgetState
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          getMonthAsReadableReceiptMonth(dateTime)
-              .toUpperCase(),
+          getMonthAsReadableReceiptMonth(dateTime).toUpperCase(),
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
         IconButton(

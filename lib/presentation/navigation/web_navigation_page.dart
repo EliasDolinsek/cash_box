@@ -1,9 +1,5 @@
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
-import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
-import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/injection.dart';
-import 'package:cash_box/domain/core/usecases/use_case.dart';
-import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/auth/sign_out_toolbox.dart';
 import 'package:cash_box/presentation/widgets/receipt_month_selection_widget.dart';
@@ -25,8 +21,9 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
         backgroundColor: Colors.white,
         actions: <Widget>[
           _buildAddReceiptChip(),
-          SizedBox(width: 8.0),
+          SizedBox(width: 16.0),
           ReceiptMonthSelectionWidget(),
+          SizedBox(width: 16.0),
         ],
       ),
       body: Container(

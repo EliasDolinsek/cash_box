@@ -8,6 +8,8 @@ import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_total_amount_of_receipts_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
+import 'package:cash_box/presentation/base/sizing_information.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/buckets/buckets_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
@@ -47,15 +49,17 @@ class OverviewWidget extends StatelessWidget {
       return Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
-          child: WidthConstrainedWidget(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                _buildChart(month, incomeReceipts, outcomeReceipts),
-                _buildCards(context, incomeReceipts, outcomeReceipts),
-                SizedBox(height: 16.0),
-                BucketsOverviewWidget()
-              ],
+          child: SpacedScreenTypeLayout(
+            mobile: WidthConstrainedWidget(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  _buildChart(month, incomeReceipts, outcomeReceipts),
+                  _buildCards(context, incomeReceipts, outcomeReceipts),
+                  SizedBox(height: 16.0),
+                  BucketsOverviewWidget()
+                ],
+              ),
             ),
           ),
         ),
@@ -105,15 +109,27 @@ class OverviewWidget extends StatelessWidget {
                 SizedBox(width: 16.0),
                 _buildCardContainer(
                   _buildResultCard(
-                      context, incomeReceipts, outcomeReceipts, currencySymbol),
+                    context,
+                    incomeReceipts,
+                    outcomeReceipts,
+                    currencySymbol,
+                  ),
                 ),
                 SizedBox(width: 16.0),
                 _buildCardContainer(
-                  _buildIncomesCard(context, incomeReceipts, currencySymbol),
+                  _buildIncomesCard(
+                    context,
+                    incomeReceipts,
+                    currencySymbol,
+                  ),
                 ),
                 SizedBox(width: 16.0),
                 _buildCardContainer(
-                  _buildOutcomesCard(context, outcomeReceipts, currencySymbol),
+                  _buildOutcomesCard(
+                    context,
+                    outcomeReceipts,
+                    currencySymbol,
+                  ),
                 ),
                 SizedBox(width: 16.0),
               ],
@@ -125,9 +141,11 @@ class OverviewWidget extends StatelessWidget {
   }
 
   Widget _buildCardContainer(Widget card) {
-    return Container(
-      constraints: BoxConstraints(minWidth: 200),
-      child: card,
+    return ScreenTypeBuilder(
+      builder: (screenType) => Container(
+        constraints: BoxConstraints(minWidth: screenType == DeviceScreenType.mobile ? 200 : 245),
+        child: card,
+      ),
     );
   }
 

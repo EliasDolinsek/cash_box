@@ -1,10 +1,8 @@
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
-import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
-import 'package:cash_box/presentation/fields/field_widgets.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/widgets/text_input_widget.dart';
 import 'package:flutter/material.dart';
@@ -55,13 +53,15 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
           _buildDeleteButton(),
         ],
       ),
-      body: Center(
+      body: Align(
+        alignment: Alignment.topCenter,
         child: WidthConstrainedWidget(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Column(
               children: <Widget>[
                 _buildNameFieldWidget(),
+                SizedBox(height: 16.0),
                 _buildColorSelectionWidget(),
               ],
             ),
@@ -105,6 +105,7 @@ class _TagDetailsPageState extends State<TagDetailsPage> {
           child: Text(localizations.translate("btn_change")),
           onPressed: _showPickColorDialog,
         ),
+        onTap: _showPickColorDialog,
       ),
     );
   }

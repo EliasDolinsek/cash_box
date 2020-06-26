@@ -2,6 +2,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/bucket_statistics_widget.dart';
 import 'package:cash_box/presentation/statistics/tags_statistics_widget.dart';
@@ -53,9 +54,9 @@ class _StatisticsWidgetState extends State<StatisticsWidget>
   Widget _buildContent() {
     return BlocBuilder(
       bloc: sl<ReceiptsBloc>(),
-      builder: (_, state){
-        if(state is ReceiptsAvailableState){
-          if(state.receipts != null){
+      builder: (_, state) {
+        if (state is ReceiptsAvailableState) {
+          if (state.receipts != null) {
             return _buildLoaded(state.receipts);
           } else {
             return LoadingWidget();
@@ -67,7 +68,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget>
     );
   }
 
-  Widget _buildLoaded(List<Receipt> receipts){
+  Widget _buildLoaded(List<Receipt> receipts) {
     return Expanded(
       child: TabBarView(
         controller: tabController,

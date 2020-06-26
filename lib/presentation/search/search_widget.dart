@@ -2,6 +2,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/search/receipts_overview_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
@@ -22,20 +23,22 @@ class _SearchWidgetState extends State<SearchWidget> {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topCenter,
-      child: WidthConstrainedWidget(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildSearchBar(),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                top: 16.0,
+      child: SpacedScreenTypeLayout(
+        mobile: WidthConstrainedWidget(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildSearchBar(),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  top: 16.0,
+                ),
+                child: _buildFilterButton(),
               ),
-              child: _buildFilterButton(),
-            ),
-            Expanded(child: _buildSearchResult()),
-          ],
+              Expanded(child: _buildSearchResult()),
+            ],
+          ),
         ),
       ),
     );
@@ -103,13 +106,21 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   Widget _buildLoaded(List<Receipt> receipts) {
     if (receipts.isNotEmpty) {
-      return ReceiptsOverviewWidget(
-        receipts: receipts,
-        onTap: (receipt) => Navigator.pushNamed(
-          context,
-          "/editReceipt",
-          arguments: receipt.id,
-        ),
+      return Column(
+        children: <Widget>[
+          ReceiptsOverviewWidget(
+            receipts: receipts,
+            onTap: (receipt) => Navigator.pushNamed(
+              context,
+              "/editReceipt",
+              arguments: receipt.id,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: Text(AppLocalizations.translateOf(context, "txt_change_month_to_see_earlier_receipts")),
+          )
+        ],
       );
     } else {
       return _buildNoSearchResults();

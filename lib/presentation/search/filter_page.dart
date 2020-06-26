@@ -96,27 +96,4 @@ class _FilterWidgetState extends State<FilterWidget> {
       ],
     );
   }
-
-  Widget _buildTagsSelection(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Text(
-          AppLocalizations.translateOf(context, "txt_tags"),
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 20,
-          ),
-        ),
-        SizedBox(height: 8.0),
-        TagsSelectionWidget(
-          onChanged: (tagIds) {
-            this.selectedTagIds = tagIds;
-            widget.onChanged(receiptType, selectedTagIds);
-          },
-          initialSelectedTags: selectedTagIds,
-        )
-      ],
-    );
-  }
 }

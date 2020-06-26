@@ -2,6 +2,7 @@ import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
@@ -47,7 +48,11 @@ class BucketsOverviewListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WidthConstrainedWidget(child: _buildContent(context));
+    return SpacedScreenTypeLayout(
+      mobile: WidthConstrainedWidget(
+        child: _buildContent(context),
+      ),
+    );
   }
 
   Widget _buildContent(BuildContext context) {

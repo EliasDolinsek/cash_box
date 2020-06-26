@@ -17,6 +17,8 @@ class SettingsOverviewWidget extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: 600),
           child: Column(
             children: <Widget>[
+              AccountSettingsWidget(),
+              SizedBox(height: 8.0),
               BucketsSettingsWidget(),
               SizedBox(height: 8.0),
               ReceiptsSettingsWidget(),
@@ -26,8 +28,6 @@ class SettingsOverviewWidget extends StatelessWidget {
               ContactsSettingsWidget(),
               SizedBox(height: 8.0),
               CurrencySettingsWidget(),
-              SizedBox(height: 8.0),
-              AccountSettingsWidget(),
             ],
           ),
         ),

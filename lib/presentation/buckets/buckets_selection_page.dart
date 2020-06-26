@@ -2,6 +2,7 @@ import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
+import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
@@ -31,10 +32,11 @@ class BucketSelectionPage extends StatelessWidget {
         builder: (context, state) {
           if (state is BucketsAvailableState) {
             if (state.buckets != null) {
-              return _BucketSelectionWidget(
-                buckets: state.buckets,
-                initialSelectedBucketId: initialSelectedBucketId,
-                onChanged: onChanged,
+              return Align(
+                alignment: Alignment.topCenter,
+                child: SpacedScreenTypeLayout(
+                  mobile: _buildContent(state.buckets),
+                ),
               );
             } else {
               return ErrorWidget(
@@ -46,6 +48,16 @@ class BucketSelectionPage extends StatelessWidget {
             return LoadingWidget();
           }
         },
+      ),
+    );
+  }
+
+  Widget _buildContent(List<Bucket> buckets) {
+    return WidthConstrainedWidget(
+      child: _BucketSelectionWidget(
+        buckets: buckets,
+        initialSelectedBucketId: initialSelectedBucketId,
+        onChanged: onChanged,
       ),
     );
   }
@@ -62,7 +74,6 @@ class BucketSelectionPage extends StatelessWidget {
 }
 
 class _BucketSelectionWidget extends StatelessWidget {
-
   final Function(Bucket bucket) onChanged;
   final List<Bucket> buckets;
   final String initialSelectedBucketId;
@@ -88,32 +99,30 @@ class _BucketSelectionWidget extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    return WidthConstrainedWidget(
-      child: ListView.separated(
-        itemBuilder: (_, index) {
-          final bucket = buckets[index];
-          return InkWell(
-            onTap: () => onBucketSelected(context, bucket),
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  child: BucketListTile(
-                    bucket: bucket,
-                  ),
+    return ListView.separated(
+      itemBuilder: (_, index) {
+        final bucket = buckets[index];
+        return InkWell(
+          onTap: () => onBucketSelected(context, bucket),
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                child: BucketListTile(
+                  bucket: bucket,
                 ),
-                Radio(
-                  value: bucket.id,
-                  groupValue: initialSelectedBucketId,
-                  onChanged: (_) => onBucketSelected(context, bucket),
-                ),
-                SizedBox(width: 8)
-              ],
-            ),
-          );
-        },
-        separatorBuilder: (_, __) => Divider(),
-        itemCount: buckets.length,
-      ),
+              ),
+              Radio(
+                value: bucket.id,
+                groupValue: initialSelectedBucketId,
+                onChanged: (_) => onBucketSelected(context, bucket),
+              ),
+              SizedBox(width: 8)
+            ],
+          ),
+        );
+      },
+      separatorBuilder: (_, __) => Divider(),
+      itemCount: buckets.length,
     );
   }
 

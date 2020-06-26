@@ -1,9 +1,6 @@
 import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
-import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/static_widgets/error_text_widget.dart';
-import 'package:cash_box/presentation/static_widgets/loading_text_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
