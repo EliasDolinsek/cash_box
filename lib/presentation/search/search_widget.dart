@@ -1,6 +1,8 @@
 import 'package:cash_box/app/injection.dart';
+import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
@@ -118,7 +120,8 @@ class _SearchWidgetState extends State<SearchWidget> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 32.0),
-            child: Text(AppLocalizations.translateOf(context, "txt_change_month_to_see_earlier_receipts")),
+            child: Text(AppLocalizations.translateOf(
+                context, "txt_change_month_to_see_earlier_receipts")),
           )
         ],
       );
@@ -146,12 +149,22 @@ class _SearchWidgetState extends State<SearchWidget> {
     );
   }
 
-  void _search() {
+  void _search() async {
     final text = searchText.isNotEmpty ? searchText : null;
     final tags = tagIds.isNotEmpty ? tagIds : null;
+    var month = DateTime.now();
+
+    final receiptsState = await sl<ReceiptsBloc>().state.first;
+    if(receiptsState is ReceiptsAvailableState){
+      month = receiptsState.month;
+    }
 
     final event = ReceiptsSearchEvent(
-        text: text, tagIds: tags, receiptType: receiptType);
+      month,
+      text: text,
+      tagIds: tags,
+      receiptType: receiptType
+    );
 
     sl<SearchBloc>().dispatch(event);
   }

@@ -47,7 +47,9 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
     } else if (event is GetReceiptsOfMonthEvent) {
       yield LoadingReceiptsState();
       receiptMonth = event.month ?? receiptMonth;
+
       yield await _getReceiptsOfReceiptMonth();
+      searchBloc.dispatch(ReloadSearchEvent());
     } else if (event is UpdateReceiptEvent) {
       yield LoadingReceiptsState();
       await _updateReceipt(event);
@@ -80,9 +82,7 @@ class ReceiptsBloc extends Bloc<ReceiptsEvent, ReceiptsState> {
     final params = GetReceiptsInReceiptMonthUseCaseParams(receiptMonth);
     final receiptEither = await getReceiptsInReceiptMonthUseCase(params);
 
-    print("OK");
     return receiptEither.fold((l) {
-      print("FUCK $l");
       return ReceiptsAvailableState(null, null);
     },
         (receipts) => ReceiptsAvailableState(receipts, receiptMonth));

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt_month.dart';
 import 'package:cash_box/domain/core/usecases/receipts/filter_receipts_use_case.dart';
 import './bloc.dart';
 
@@ -8,7 +9,7 @@ import 'package:meta/meta.dart';
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final FilterReceiptsUseCase filterReceiptsUseCase;
-  ReceiptsSearchEvent lastReceiptSearchEvent = ReceiptsSearchEvent();
+  ReceiptsSearchEvent lastReceiptSearchEvent = ReceiptsSearchEvent(DateTime.now());
 
   SearchBloc({@required this.filterReceiptsUseCase});
 
@@ -33,7 +34,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final params = FilterReceiptsUseCaseParams(
       text: event.text,
       tagIds: event.tagIds,
-      receiptMonth: event.receiptMonth,
+      receiptMonth: ReceiptMonth(event.month),
       receiptType: event.receiptType
     );
 

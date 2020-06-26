@@ -2,7 +2,6 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/base/width_constrained_widget.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/statistics/bucket_statistics_widget.dart';
 import 'package:cash_box/presentation/statistics/tags_statistics_widget.dart';

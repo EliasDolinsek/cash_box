@@ -108,7 +108,7 @@ Future setup() async {
   sl<TemplatesBloc>().dispatch(GetTemplatesEvent());
   sl<TagsBloc>().dispatch(GetTagsEvent());
   sl<ContactsBloc>().dispatch(GetContactsEvent());
-  sl<SearchBloc>().dispatch(ReceiptsSearchEvent());
+  sl<SearchBloc>().dispatch(ReceiptsSearchEvent(DateTime.now()));
 }
 
 Future init() async {

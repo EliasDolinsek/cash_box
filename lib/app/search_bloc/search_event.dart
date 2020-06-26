@@ -8,10 +8,10 @@ class ReceiptsSearchEvent extends SearchEvent {
 
   final String text;
   final List<String> tagIds;
-  final ReceiptMonth receiptMonth;
+  final DateTime month;
   final ReceiptType receiptType;
 
-  ReceiptsSearchEvent({this.text, this.tagIds, this.receiptMonth, this.receiptType});
+  ReceiptsSearchEvent(this.month, {this.text, this.tagIds, this.receiptType});
 
   @override
   List get props => [text, tagIds, receiptType];

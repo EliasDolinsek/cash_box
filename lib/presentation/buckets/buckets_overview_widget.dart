@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BucketsOverviewWidget extends StatefulWidget {
+  final bool showNoBuckets;
+
+  const BucketsOverviewWidget({Key key, this.showNoBuckets = true})
+      : super(key: key);
+
   @override
   _BucketsOverviewWidgetState createState() => _BucketsOverviewWidgetState();
 }
@@ -23,7 +28,11 @@ class _BucketsOverviewWidgetState extends State<BucketsOverviewWidget> {
         if (state is BucketsAvailableState) {
           final buckets = state.buckets;
           if (buckets == null || buckets.isEmpty) {
-            return _buildNoBuckets();
+            if(widget.showNoBuckets){
+              return _buildNoBuckets();
+            } else {
+              return Container();
+            }
           } else {
             return BucketsOverviewListWidget(buckets);
           }

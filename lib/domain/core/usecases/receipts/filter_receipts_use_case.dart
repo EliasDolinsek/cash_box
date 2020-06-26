@@ -15,7 +15,7 @@ class FilterReceiptsUseCase extends AsyncUseCase<List<Receipt>, FilterReceiptsUs
 
   @override
   Future<Either<Failure, List<Receipt>>> call(FilterReceiptsUseCaseParams params) async {
-    if(params.receiptMonth != null){
+    if(params.receiptMonth?.month != null){
       final result = await repository.getReceiptsInReceiptMonth(params.receiptMonth);
       return result.fold((l) => Left(l), (receipts){
         final filteredReceipts = _filterReceipts(receipts, params.text, params.tagIds, params.receiptType);

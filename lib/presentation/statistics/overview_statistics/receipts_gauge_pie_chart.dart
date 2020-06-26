@@ -17,18 +17,22 @@ class ReceiptsGaugePieChart extends StatelessWidget {
       : super(key: key);
 
   factory ReceiptsGaugePieChart.fromReceipts(
-      DateTime receiptMonth,
+    DateTime receiptMonth,
     List<Receipt> incomeReceipts,
     List<Receipt> outcomeReceipts,
   ) {
+    final incomesAmount =
+        sl<GetTotalAmountOfReceiptsUseCase>().call(incomeReceipts);
+    final outcomesAmount =
+        sl<GetTotalAmountOfReceiptsUseCase>().call(outcomeReceipts);
 
-    final incomesAmount = sl<GetTotalAmountOfReceiptsUseCase>().call(incomeReceipts);
-    final outcomesAmount = sl<GetTotalAmountOfReceiptsUseCase>().call(outcomeReceipts);
-
-    final segments = [
-      ReceiptSegment(ReceiptType.income, incomesAmount),
-      ReceiptSegment(ReceiptType.outcome, outcomesAmount)
-    ];
+    var segments = [ReceiptSegment.empty()];
+    if (incomesAmount != 0.0 || outcomesAmount != 0.0) {
+      segments = [
+        ReceiptSegment(ReceiptType.income, incomesAmount),
+        ReceiptSegment(ReceiptType.outcome, outcomesAmount)
+      ];
+    }
 
     return ReceiptsGaugePieChart(
       month: receiptMonth,
@@ -42,7 +46,7 @@ class ReceiptsGaugePieChart extends StatelessWidget {
       children: <Widget>[
         charts.PieChart(
           getSeries(context),
-          animate: true,
+          animate: false,
           defaultRenderer: charts.ArcRendererConfig(
             arcWidth: 30,
             startAngle: 4 / 5 * pi,
@@ -67,7 +71,7 @@ class ReceiptsGaugePieChart extends StatelessWidget {
             id: "",
             data: segments,
             domainFn: (segment, _) => segment.receiptTypeAsString(context),
-            measureFn: (segment, _) => segment.amount,
+            measureFn: (segment, _) => segment.amount ?? 1,
             colorFn: (segment, _) => segment.color)
       ];
 }
@@ -79,9 +83,14 @@ class ReceiptSegment {
   ReceiptSegment(this.receiptType, this.amount);
 
   String receiptTypeAsString(BuildContext context) =>
-      getReceiptTypeAsString(context, receiptType);
+      receiptType != null ? getReceiptTypeAsString(context, receiptType) : "";
 
-  charts.Color get color => receiptType == ReceiptType.income
-      ? charts.ColorUtil.fromDartColor(incomeColor)
-      : charts.ColorUtil.fromDartColor(outcomeColor);
+  charts.Color get color {
+    if (receiptType == null) return charts.ColorUtil.fromDartColor(Colors.grey);
+    return receiptType == ReceiptType.income
+        ? charts.ColorUtil.fromDartColor(incomeColor)
+        : charts.ColorUtil.fromDartColor(outcomeColor);
+  }
+
+  factory ReceiptSegment.empty() => ReceiptSegment(null, null);
 }

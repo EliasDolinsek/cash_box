@@ -57,7 +57,7 @@ class OverviewWidget extends StatelessWidget {
                   _buildChart(month, incomeReceipts, outcomeReceipts),
                   _buildCards(context, incomeReceipts, outcomeReceipts),
                   SizedBox(height: 16.0),
-                  BucketsOverviewWidget()
+                  BucketsOverviewWidget(showNoBuckets: false)
                 ],
               ),
             ),
