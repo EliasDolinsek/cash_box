@@ -16,13 +16,9 @@ class ReceiptsLocalMobileDataSourceMoorImpl
 
   @override
   Future<void> addType(Receipt type) async {
-    try {
-      final receiptsMoorData = receiptsMoorDataFromReceipt(type);
-      await fieldsDataSource.addAllFields(type.fields);
-      return database.addReceipt(receiptsMoorData);
-    } catch (e,m){
-      print(e);
-    }
+    final receiptsMoorData = receiptsMoorDataFromReceipt(type);
+    await fieldsDataSource.addAllFields(type.fields);
+    return database.addReceipt(receiptsMoorData);
   }
 
   @override

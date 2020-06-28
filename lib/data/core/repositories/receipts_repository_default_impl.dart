@@ -34,6 +34,7 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository {
     } on DataStorageLocationException {
       return Left(DataStorageLocationFailure());
     } on Exception {
+      print("OK2");
       return Left(RepositoryFailure());
     }
   }

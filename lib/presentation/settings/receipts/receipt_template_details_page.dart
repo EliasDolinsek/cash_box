@@ -67,7 +67,11 @@ class _ReceiptTemplateDetailsPageState
 
   void _addEmptyField() async {
     final field = Field.newField(
-        type: FieldType.text, description: "", value: "", storageOnly: true);
+      type: FieldType.text,
+      description: "",
+      value: "",
+      storageOnly: false,
+    );
 
     final result = await Navigator.of(context)
         .pushNamed("/fieldDetails", arguments: {"field": field});
@@ -131,7 +135,7 @@ class _ReceiptTemplateDetailsPageState
           builder: (context) => DeleteDialog(),
         );
 
-        if(result != null && result){
+        if (result != null && result) {
           setState(() {
             _fields.remove(field);
           });

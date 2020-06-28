@@ -231,23 +231,59 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
   }
 
   Widget _buildUsageCheckbox() {
-    return CheckboxListTile(
-      title:
-          Text(AppLocalizations.translateOf(context, "txt_use_as_information")),
-      subtitle: Text(
-        AppLocalizations.translateOf(
-            context, "txt_use_as_information_description"),
-      ),
-      value: storageOnly,
-      onChanged: (value) => setState(() => storageOnly = value),
+    return Column(
+      children: <Widget>[
+        CheckboxListTile(
+          title: Text(AppLocalizations.translateOf(
+              context, "txt_use_as_information_only")),
+          subtitle: Text(
+            AppLocalizations.translateOf(
+                context, "txt_use_as_information_only_description"),
+          ),
+          value: storageOnly,
+          onChanged: type == FieldType.amount || type == FieldType.text
+              ? _getOnChangedForUsageCheckbox
+              : null,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: _getNotAvailableInformationForUsageCheckboxIfNecessary(),
+        )
+      ],
     );
   }
 
   Field getFieldOfValues() {
-    return Field(widget.field.id,
-        description: description,
-        storageOnly: storageOnly,
-        type: type,
-        value: null);
+    return Field(
+      widget.field.id,
+      description: description,
+      storageOnly: storageOnly,
+      type: type,
+      value: null,
+    );
+  }
+
+  void _getOnChangedForUsageCheckbox(bool value) =>
+      setState(() => storageOnly = value);
+
+  Widget _getNotAvailableInformationForUsageCheckboxIfNecessary() {
+    if (type == FieldType.amount || type == FieldType.text) {
+      return Container();
+    } else {
+      final localizations = AppLocalizations.of(context);
+      return Row(
+        children: <Widget>[
+          Icon(
+            Icons.info_outline,
+            color: Theme.of(context).primaryColor,
+          ),
+          SizedBox(width: 8.0),
+          Text(
+            "The field type ${getFieldTypeAsString(type, localizations)} is only available as information",
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          )
+        ],
+      );
+    }
   }
 }
