@@ -81,7 +81,7 @@ class _FieldInputWidgetState extends State<FieldInputWidget> {
           _getDescription(),
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
         ),
-        SizedBox(height: 24.0),
+        SizedBox(height: 12.0),
         _buildValueInput(context),
       ],
     );

@@ -10,7 +10,7 @@ import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddReceiptTemplateSelectionPage extends StatelessWidget {
+class TemplateSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +66,7 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
       children: [
         ComponentActionButton(
           text: AppLocalizations.translateOf(context, "btn_select_none"),
-          onPressed: () => Navigator.of(context)
-              .pushReplacementNamed("/addReceipt/detailsInput", arguments: []),
+          onPressed: () => Navigator.of(context).pop([]),
         ),
         Builder(
           builder: (context) {
@@ -94,10 +93,7 @@ class AddReceiptTemplateSelectionPage extends StatelessWidget {
       children: templates.map((template) {
         return TemplateListTile(
           template: template,
-          onTap: () => Navigator.of(context).pushReplacementNamed(
-              "/addReceipt/detailsInput",
-              arguments: template.fields.map((e) => e.cloneWithNewId()).toList(),
-            ),
+          onTap: () => Navigator.of(context).pop(template.fields),
         );
       }).toList(),
     );

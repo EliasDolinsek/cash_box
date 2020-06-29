@@ -1,12 +1,14 @@
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
+import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
+import 'package:cash_box/presentation/buckets/add_receipt_bucket_selection_page.dart';
 import 'package:cash_box/presentation/buckets/bucket_receipts_overview_page.dart';
 import 'package:cash_box/presentation/buckets/buckets_selection_page.dart';
 import 'package:cash_box/presentation/fields/field_details_page.dart';
 import 'package:cash_box/presentation/navigation/navigation_page.dart';
 import 'package:cash_box/presentation/receipts/receipt_details_page.dart';
-import 'package:cash_box/presentation/receipts/add_receipt_template_selection_page.dart';
+import 'package:cash_box/presentation/templates/template_selection_page.dart';
 import 'package:cash_box/presentation/search/filter_page.dart';
 import 'package:cash_box/presentation/settings/buckets/bucket_details_page.dart';
 import 'package:cash_box/presentation/settings/buckets/bucket_settings_page.dart';
@@ -79,9 +81,10 @@ class CashBoxApp extends StatelessWidget {
         "/tagsSettings": (context) => TagsSettingsPage(),
         "/receiptTemplatesSettings": (context) =>
             ReceiptTemplatesSettingsWidget(),
-        "/addReceipt": (context) => AddReceiptTemplateSelectionPage(),
+        "/addReceipt": (context) => AddReceiptBucketSelectionPage(),
         "/currencySettings": (context) => CurrencySettingsPage(),
         "/bucketSettings": (context) => BucketsSettingsPage(),
+        "/templateSelection": (context) => TemplateSelectionPage()
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == "/contactsSettings/contactDetails") {
@@ -96,9 +99,9 @@ class CashBoxApp extends StatelessWidget {
           return MaterialPageRoute(
               builder: (_) => ReceiptTemplateDetailsPage(template));
         } else if (settings.name == "/addReceipt/detailsInput") {
-          final fields = (settings.arguments as List).cast<Field>();
+          final receipt = settings.arguments as Receipt;
           return MaterialPageRoute(
-              builder: (_) => AddReceiptPage(fields: fields));
+              builder: (_) => AddReceiptPage(receipt: receipt));
         } else if (settings.name == "/editReceipt") {
           final receiptId = settings.arguments;
           return MaterialPageRoute(

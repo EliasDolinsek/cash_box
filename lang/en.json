@@ -190,5 +190,6 @@
   "txt_no_date_selected": "No date selected",
   "btn_edit": "EDIT",
   "btn_add_contact": "ADD CONTACT",
-  "txt_change_month_to_see_earlier_receipts": "Change month to see earlier receipts"
+  "txt_change_month_to_see_earlier_receipts": "Change month to see earlier receipts",
+  "btn_select_template": "SELECT TEMPLATE"
 }
