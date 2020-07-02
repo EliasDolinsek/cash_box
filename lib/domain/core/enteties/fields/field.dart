@@ -34,6 +34,16 @@ class Field extends UniqueComponent {
 
   factory Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
 
+  factory Field.copyWithNewId(Field field) {
+    return Field(
+      Uuid().v4(),
+      type: field.type,
+      description: field.description,
+      value: field.value,
+      storageOnly: field.storageOnly,
+    );
+  }
+
   Field cloneWithNewId() => Field(
         Uuid().v4(),
         type: type,

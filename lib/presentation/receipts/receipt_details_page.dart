@@ -1,23 +1,19 @@
 import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/receipts_bloc/bloc.dart';
-import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
-import 'package:cash_box/domain/core/enteties/templates/template.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:cash_box/presentation/base/width_constrained_widget.dart';
-import 'package:cash_box/presentation/fields/field_widgets.dart';
 import 'package:cash_box/presentation/settings/dialogs/delete_dialog.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/buckets/widgets/bucket_selection_widget.dart';
 import 'package:cash_box/presentation/receipts/widgets/receipt_type_selection_widget.dart';
 import 'package:cash_box/presentation/tags/widgets/tags_selection_widget.dart';
 import 'package:cash_box/presentation/templates/template_selection_widget.dart';
-import 'package:cash_box/presentation/widgets/component_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -127,15 +123,18 @@ class EditReceiptPage extends StatelessWidget {
     );
   }
 
-  Widget _buildContentForReceiptFromReceiptsList(BuildContext context,
-      String receiptID, List<Receipt> receipts) {
+  Widget _buildContentForReceiptFromReceiptsList(
+      BuildContext context, String receiptID, List<Receipt> receipts) {
     final receipt = receipts.firstWhere((element) => element.id == receiptID,
         orElse: () => null);
 
     return Builder(
       builder: (_) {
         if (receipt != null) {
-          return ReceiptDetailsWidget(receipt);
+          return ReceiptDetailsWidget(
+            receipt,
+            editMode: true,
+          );
         } else {
           return Center(
             child: Text(
@@ -157,8 +156,10 @@ class EditReceiptPage extends StatelessWidget {
 
 class ReceiptDetailsWidget extends StatefulWidget {
   final Receipt receipt;
+  final bool editMode;
 
-  const ReceiptDetailsWidget(this.receipt, {Key key}) : super(key: key);
+  const ReceiptDetailsWidget(this.receipt, {Key key, this.editMode = false})
+      : super(key: key);
 
   @override
   _ReceiptDetailsWidgetState createState() => _ReceiptDetailsWidgetState();
@@ -229,7 +230,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
               if (state.buckets != null) {
                 return BucketSelectionWidget(
                   initialSelectedBucket:
-                  selectedBucket ?? _getSelectedBucket(state.buckets),
+                      selectedBucket ?? _getSelectedBucket(state.buckets),
                   onUpdated: (oldBucket, newBucket) {
                     _removeReceiptFromBucket(oldBucket);
                     selectedBucket = newBucket;
@@ -248,6 +249,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: TemplateSelectionWidget(
           initialFields: fields,
+          templateSelectable: !widget.editMode,
           onFieldsChanged: (fields) {
             setState(() => this.fields = fields);
           },
@@ -258,7 +260,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
 
   Bucket _getSelectedBucket(List<Bucket> buckets) {
     return buckets.firstWhere(
-          (element) => element.receiptsIDs.contains(widget.receipt.id),
+      (element) => element.receiptsIDs.contains(widget.receipt.id),
       orElse: () => null,
     );
   }
@@ -280,7 +282,7 @@ class _ReceiptDetailsWidgetState extends State<ReceiptDetailsWidget> {
       final receiptIds = [widget.receipt.id]
         ..addAll(selectedBucket.receiptsIDs ?? []);
       final event =
-      UpdateBucketEvent(selectedBucket.id, receiptIDs: receiptIds);
+          UpdateBucketEvent(selectedBucket.id, receiptIDs: receiptIds);
       sl<BucketsBloc>().dispatch(event);
     }
   }

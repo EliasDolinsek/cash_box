@@ -2,8 +2,7 @@ import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/domain/core/enteties/tags/tag.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/base/screen_type_layout.dart';
-import 'package:cash_box/presentation/base/width_constrained_widget.dart';
+import 'package:cash_box/presentation/components/component_selection_page.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -19,31 +18,20 @@ class TagsSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.translateOf(context, "txt_tags_selection"),
-        ),
-        actions: <Widget>[_buildEditTagsButton(context)],
-        backgroundColor: Colors.white,
-      ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: SpacedScreenTypeLayout(
-          mobile: WidthConstrainedWidget(
-            child: TagsSelectionWidget(
-              initialSelectedTags: selectedTags,
-              onChanged: onChanged,
-            ),
-          ),
-        ),
+    return ComponentSelectionPage(
+      title: AppLocalizations.translateOf(context, "txt_tags_selection"),
+      actions: [_buildEditTagsButton(context)],
+      onNoneSelected: null,
+      content: TagsSelectionWidget(
+        initialSelectedTags: selectedTags,
+        onChanged: onChanged,
       ),
     );
   }
 
   Widget _buildEditTagsButton(BuildContext context) {
-    return MaterialButton(
-      child: Text(AppLocalizations.translateOf(context, "btn_edit_tags")),
+    return IconButton(
+      icon: Icon(Icons.edit),
       onPressed: () => Navigator.of(context).pushNamed("/tagsSettings"),
     );
   }

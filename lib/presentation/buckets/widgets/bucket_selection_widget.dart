@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BucketSelectionWidget extends StatefulWidget {
-
   final Bucket initialSelectedBucket;
   final Function(Bucket oldBucket, Bucket newBucket) onUpdated;
 
@@ -20,7 +19,6 @@ class BucketSelectionWidget extends StatefulWidget {
 }
 
 class _BucketSelectionWidgetState extends State<BucketSelectionWidget> {
-
   Bucket selectedBucket;
 
   @override
@@ -61,17 +59,19 @@ class _BucketSelectionWidgetState extends State<BucketSelectionWidget> {
             }
           },
         ),
-        IconButton(icon: Icon(Icons.edit), onPressed: () =>
-            Navigator.of(context).pushNamed(
-              "/bucketSelection",
-              arguments: {
-                "initialSelectedBucketId": selectedBucket?.id,
-                "onChanged": (newBucket) {
-                  widget.onUpdated(selectedBucket, newBucket);
-                  setState(() => selectedBucket = newBucket);
-                }
-              },
-            ),)
+        IconButton(
+          icon: Icon(Icons.edit),
+          onPressed: () => Navigator.of(context).pushNamed(
+            "/bucketSelection",
+            arguments: {
+              "initialSelectedBucketId": selectedBucket?.id,
+              "onChanged": (newBucket) {
+                widget.onUpdated(selectedBucket, newBucket);
+                selectedBucket = newBucket;
+              }
+            },
+          ),
+        )
       ],
     );
   }

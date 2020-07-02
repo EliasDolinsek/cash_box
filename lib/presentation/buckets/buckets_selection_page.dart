@@ -2,8 +2,7 @@ import 'package:cash_box/app/buckets_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/base/screen_type_layout.dart';
-import 'package:cash_box/presentation/base/width_constrained_widget.dart';
+import 'package:cash_box/presentation/components/component_selection_page.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:cash_box/presentation/widgets/component_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -19,30 +18,21 @@ class BucketSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          AppLocalizations.translateOf(context, "txt_bucket_selection"),
-        ),
-        actions: <Widget>[_buildSelectNoBucketButton(context)],
-      ),
-      body: BlocBuilder(
+    return ComponentSelectionPage(
+      title: AppLocalizations.translateOf(context, "txt_bucket_selection"),
+      actions: [_buildEditBucketsAction(context)],
+      onNoneSelected: () {
+        onChanged(null);
+        Navigator.pop(context);
+      },
+      content: BlocBuilder(
         bloc: sl<BucketsBloc>(),
         builder: (context, state) {
           if (state is BucketsAvailableState) {
             if (state.buckets != null) {
-              return Align(
-                alignment: Alignment.topCenter,
-                child: SpacedScreenTypeLayout(
-                  mobile: _buildContent(state.buckets),
-                ),
-              );
+              return _buildContent(context, state.buckets);
             } else {
-              return ErrorWidget(
-                AppLocalizations.translateOf(
-                    context, "txt_default_error_message"),
-              );
+              return _buildError(context);
             }
           } else {
             return LoadingWidget();
@@ -52,23 +42,29 @@ class BucketSelectionPage extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(List<Bucket> buckets) {
-    return WidthConstrainedWidget(
-      child: _BucketSelectionWidget(
-        buckets: buckets,
-        initialSelectedBucketId: initialSelectedBucketId,
-        onChanged: onChanged,
+  Widget _buildError(BuildContext context) {
+    return Center(
+      child: Text(
+        AppLocalizations.translateOf(
+          context,
+          "txt_default_error_message",
+        ),
       ),
     );
   }
 
-  Widget _buildSelectNoBucketButton(BuildContext context) {
-    return MaterialButton(
-      child: Text(AppLocalizations.translateOf(context, "btn_select_none")),
-      onPressed: () {
-        onChanged(null);
-        Navigator.pop(context);
-      },
+  Widget _buildContent(BuildContext context, List<Bucket> buckets) {
+    return _BucketSelectionWidget(
+      buckets: buckets,
+      initialSelectedBucketId: initialSelectedBucketId,
+      onChanged: onChanged,
+    );
+  }
+
+  Widget _buildEditBucketsAction(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.edit),
+      onPressed: () => Navigator.of(context).pushNamed("/bucketSettings"),
     );
   }
 }

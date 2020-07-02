@@ -5,11 +5,13 @@ import 'package:cash_box/presentation/widgets/component_action_button.dart';
 import 'package:flutter/material.dart';
 
 class TemplateSelectionWidget extends StatefulWidget {
+
   final List<Field> initialFields;
   final Function(List<Field> fields) onFieldsChanged;
+  final bool templateSelectable;
 
   const TemplateSelectionWidget(
-      {Key key, @required this.onFieldsChanged, this.initialFields = const []})
+      {Key key, @required this.onFieldsChanged, this.initialFields = const [], this.templateSelectable = true})
       : super(key: key);
 
   @override
@@ -29,21 +31,30 @@ class _TemplateSelectionWidgetState extends State<TemplateSelectionWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: _getContentChildren(),
+    );
+  }
+
+  List<Widget> _getContentChildren(){
+    final fieldWidgets = fields.map((e) => _buildFieldInputWidgetForField(e)).toList();
+    if(widget.templateSelectable){
+      return [
         ComponentActionButton(
           text: AppLocalizations.translateOf(context, "btn_select_template"),
           onPressed: () async {
             final result =
-                await Navigator.of(context).pushNamed("/templateSelection");
-            if(result != null){
-              fields = result;
+            await Navigator.of(context).pushNamed("/templateSelection");
+            if (result != null) {
+              fields = copyFieldsWithNewId(result);
               widget.onFieldsChanged(fields);
             }
           },
         ),
         SizedBox(height: 8.0),
-      ]..addAll(fields.map((e) => _buildFieldInputWidgetForField(e)).toList()),
-    );
+      ]..addAll(fieldWidgets);
+    } else {
+      return fieldWidgets;
+    }
   }
 
   Widget _buildFieldInputWidgetForField(Field e) {
@@ -66,4 +77,7 @@ class _TemplateSelectionWidgetState extends State<TemplateSelectionWidget> {
       ),
     );
   }
+
+  List<Field> copyFieldsWithNewId(List<Field> fields) =>
+      fields.map((e) => Field.copyWithNewId(e)).toList();
 }
