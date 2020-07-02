@@ -9,13 +9,16 @@ class ComponentListTile extends StatelessWidget {
   final String title;
   final String description;
   final Function onTap;
-  final Color avatarBorderColor;
+  final Color avatarBorderColor, avatarBackgroundColor, avatarTextColor;
 
-  ComponentListTile(
-      {@required this.title,
-      this.description,
-      this.onTap,
-      this.avatarBorderColor});
+  ComponentListTile({
+    @required this.title,
+    this.description,
+    this.onTap,
+    this.avatarBorderColor,
+    this.avatarBackgroundColor = Colors.white,
+    this.avatarTextColor = Colors.black,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +39,8 @@ class ComponentListTile extends StatelessWidget {
             },
           ),
           radius: 21,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
+          backgroundColor: avatarBackgroundColor,
+          foregroundColor: avatarTextColor,
         ),
       ),
       title: Text(_getTitle(context)),
@@ -65,11 +68,16 @@ class ComponentListTile extends StatelessWidget {
 class TitleOnlyComponentListTile extends StatelessWidget {
   final String title;
   final Function onTap;
-  final Color avatarBorderColor;
+  final Color avatarBorderColor, avatarTextColor, avatarBackgroundColor;
 
-  const TitleOnlyComponentListTile(
-      {Key key, this.title, this.onTap, this.avatarBorderColor})
-      : super(key: key);
+  const TitleOnlyComponentListTile({
+    Key key,
+    this.title,
+    this.onTap,
+    this.avatarBorderColor,
+    this.avatarTextColor,
+    this.avatarBackgroundColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +87,8 @@ class TitleOnlyComponentListTile extends StatelessWidget {
         onTap: onTap,
         title: title,
         avatarBorderColor: avatarBorderColor,
+        avatarTextColor: avatarTextColor,
+        avatarBackgroundColor: avatarBackgroundColor,
       ),
     );
   }
@@ -97,6 +107,9 @@ class BucketListTile extends StatelessWidget {
       onTap: onTap,
       title: bucket.name,
       description: bucket.description,
+      avatarBackgroundColor: Theme.of(context).primaryColor,
+      avatarBorderColor: Theme.of(context).primaryColor,
+      avatarTextColor: Colors.white,
     );
   }
 }
@@ -113,6 +126,9 @@ class TemplateListTile extends StatelessWidget {
     return TitleOnlyComponentListTile(
       onTap: onTap,
       title: template.name,
+      avatarBorderColor: Colors.transparent,
+      avatarTextColor: Colors.black,
+      avatarBackgroundColor: Colors.transparent,
     );
   }
 }
@@ -129,6 +145,8 @@ class TagListTile extends StatelessWidget {
       title: tag.name,
       onTap: onTap,
       avatarBorderColor: tag.colorAsColor,
+      avatarTextColor: Colors.black,
+      avatarBackgroundColor: Colors.white,
     );
   }
 }
