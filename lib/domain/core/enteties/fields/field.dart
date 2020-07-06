@@ -53,6 +53,11 @@ class Field extends UniqueComponent {
       );
 
   Map<String, dynamic> toJson() => _$FieldToJson(this);
+
+  static bool isFieldTypeStorageOnly(FieldType type) =>
+      type == FieldType.file ||
+      type == FieldType.image ||
+      type == FieldType.date;
 }
 
 enum FieldType { amount, date, image, text, file }

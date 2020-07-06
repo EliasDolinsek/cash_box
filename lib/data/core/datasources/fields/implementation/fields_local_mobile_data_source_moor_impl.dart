@@ -53,4 +53,9 @@ class FieldsLocalMobileDataSourceMoorImpl extends FieldsLocalMobileDataSource {
       await removeType(id);
     }
   }
+
+  @override
+  void clear() {
+    // Nothing to clear
+  }
 }

@@ -56,4 +56,9 @@ class TemplatesLocalMobileDataSourceMoorImpl implements TemplatesLocalMobileData
     await database.updateTemplate(templatesMoorDataFromTemplate(updatedTemplate));
   }
 
+  @override
+  void clear() {
+    // Nothing to clear
+  }
+
 }

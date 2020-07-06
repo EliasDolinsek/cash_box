@@ -74,7 +74,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
       value: _accountType == AccountType.business,
       onChanged: (value) {
         setState(() {
-          if(value){
+          if (value) {
             _accountType = AccountType.business;
           } else {
             _accountType = AccountType.private;
@@ -82,7 +82,8 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
         });
       },
       title: Text("Create busniess account"),
-      subtitle: Text("Create a bussiness account if this will not be for private use only"),
+      subtitle: Text(
+          "Create a bussiness account if this will not be for private use only"),
     );
   }
 
@@ -363,8 +364,10 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
       if (failure is SignInFailure) {
         _displaySignInFailure(failure);
       } else {
-        setState(() =>
-            _signInFailureMessage = _getErrorMessageForSignInFailureType(null));
+        setState(
+          () => _signInFailureMessage =
+              _getErrorMessageForSignInFailureType(null),
+        );
       }
     }, (_) {
       sl<AuthBloc>().dispatch(LoadAuthStateEvent());

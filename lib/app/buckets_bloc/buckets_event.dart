@@ -24,7 +24,6 @@ class AddReceiptToBucketEvent extends BucketsEvent {
 class GetBucketsEvent extends BucketsEvent {}
 
 class RemoveBucketEvent extends BucketsEvent {
-
   final String bucketID;
 
   RemoveBucketEvent(this.bucketID);
@@ -34,7 +33,6 @@ class RemoveBucketEvent extends BucketsEvent {
 }
 
 class RemoveReceiptFromBucketEvent extends BucketsEvent {
-
   final String receiptID, bucketID;
 
   RemoveReceiptFromBucketEvent(this.receiptID, this.bucketID);
@@ -44,7 +42,6 @@ class RemoveReceiptFromBucketEvent extends BucketsEvent {
 }
 
 class UpdateBucketEvent extends BucketsEvent {
-
   final String id;
   final String name, description;
   final List<String> receiptIDs;

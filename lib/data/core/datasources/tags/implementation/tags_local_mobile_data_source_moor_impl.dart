@@ -32,4 +32,9 @@ class TagsLocalMobileDataSourceMoorImpl implements TagsLocalMobileDataSource {
     final update = Tag(id, name: tag.name, color: tag.color);
     await appDatabase.updateTag(tagsMoorDataFromTag(update));
   }
+
+  @override
+  void clear() {
+    // Nothing to clear
+  }
 }

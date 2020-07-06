@@ -8,6 +8,7 @@ abstract class DataSource<Type> {
   Future<void> addType(Type type);
   Future<void> removeType(String id);
   Future<void> updateType(String id, Type update);
+  void clear();
 
 }
 

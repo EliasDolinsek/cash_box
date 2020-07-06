@@ -2,6 +2,7 @@ import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
+import 'package:cash_box/data/core/datasources/receipts/implementation/receipts_remote_firebase_data_source_default_impl.dart';
 import 'package:cash_box/data/core/datasources/receipts/receipts_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/receipts/receipts_remote_firebase_data_source.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
@@ -34,7 +35,6 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository {
     } on DataStorageLocationException {
       return Left(DataStorageLocationFailure());
     } on Exception {
-      print("OK2");
       return Left(RepositoryFailure());
     }
   }
@@ -103,5 +103,15 @@ class ReceiptsRepositoryDefaultImpl implements ReceiptsRepository {
     } on Exception {
       return Left(RepositoryFailure());
     }
+  }
+
+  @override
+  void notifyUserIdChanged(String userId) async {
+    final firebaseDataSource = receiptsRemoteFirebaseDataSource;
+    if(firebaseDataSource is ReceiptsRemoteFirebaseDataSourceDefaultImpl){
+      firebaseDataSource.userID = userId;
+    }
+
+    (await dataSource).clear();
   }
 }

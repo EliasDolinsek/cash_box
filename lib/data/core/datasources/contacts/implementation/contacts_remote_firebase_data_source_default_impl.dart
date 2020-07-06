@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ContactsRemoteFirebaseDataSourceDefaultImpl implements ContactsRemoteFirebaseDataSource, FirestoreDataSource {
 
   final Firestore firestore;
-  final String userID;
+  String userID;
 
   List<Contact> contacts;
 
@@ -55,6 +55,11 @@ class ContactsRemoteFirebaseDataSourceDefaultImpl implements ContactsRemoteFireb
   @override
   Future<void> updateType(String id, Contact update) async {
     await baseCollection.document(id).setData(update.toJson());
+    contacts = null;
+  }
+
+  @override
+  void clear() {
     contacts = null;
   }
 

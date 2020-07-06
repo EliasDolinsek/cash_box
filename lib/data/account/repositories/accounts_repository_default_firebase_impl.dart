@@ -1,3 +1,4 @@
+
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/domain/account/repositories/accounts_repository.dart';

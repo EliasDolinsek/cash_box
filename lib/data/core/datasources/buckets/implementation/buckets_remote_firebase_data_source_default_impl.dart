@@ -7,7 +7,7 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
     implements BucketsRemoteFirebaseDataSource, FirestoreDataSource {
 
   final Firestore firestore;
-  final String userID;
+  String userID;
 
   List<Bucket> buckets;
 
@@ -50,4 +50,9 @@ class BucketsRemoteFirebaseDataSourceDefaultImpl
       .collection("buckets")
       .document(userID)
       .collection("user_buckets");
+
+  @override
+  void clear() {
+    buckets = null;
+  }
 }

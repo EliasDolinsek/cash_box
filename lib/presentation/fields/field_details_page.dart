@@ -240,13 +240,13 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
             AppLocalizations.translateOf(
                 context, "txt_use_as_information_only_description"),
           ),
-          value: storageOnly,
-          onChanged: type == FieldType.amount || type == FieldType.text
+          value: storageOnly || Field.isFieldTypeStorageOnly(type),
+          onChanged: !Field.isFieldTypeStorageOnly(type)
               ? _getOnChangedForUsageCheckbox
               : null,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: const EdgeInsets.only(left: 16.0, top: 8.0),
           child: _getNotAvailableInformationForUsageCheckboxIfNecessary(),
         )
       ],
@@ -278,9 +278,11 @@ class _FieldDetailsPageState extends State<FieldDetailsPage> {
             color: Theme.of(context).primaryColor,
           ),
           SizedBox(width: 8.0),
-          Text(
-            "The field type ${getFieldTypeAsString(type, localizations)} is only available as information",
-            style: TextStyle(color: Theme.of(context).primaryColor),
+          Flexible(
+            child: Text(
+              "The field type ${getFieldTypeAsString(type, localizations)} is only available as information",
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           )
         ],
       );

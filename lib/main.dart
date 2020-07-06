@@ -1,5 +1,4 @@
 import 'package:cash_box/domain/account/enteties/sign_in_state.dart';
-import 'package:cash_box/domain/core/enteties/fields/field.dart';
 import 'package:cash_box/domain/core/enteties/receipts/receipt.dart';
 import 'package:cash_box/presentation/auth/sign_in_page.dart';
 import 'package:cash_box/presentation/buckets/add_receipt_bucket_selection_page.dart';
@@ -12,7 +11,6 @@ import 'package:cash_box/presentation/templates/template_selection_page.dart';
 import 'package:cash_box/presentation/search/filter_page.dart';
 import 'package:cash_box/presentation/settings/buckets/bucket_details_page.dart';
 import 'package:cash_box/presentation/settings/buckets/bucket_settings_page.dart';
-import 'package:cash_box/presentation/settings/buckets/buckets_settings_widget.dart';
 import 'package:cash_box/presentation/settings/contacts/contact_details_page.dart';
 import 'package:cash_box/presentation/settings/contacts/contacts_settings_page.dart';
 import 'package:cash_box/presentation/settings/currency/currency_settings_page.dart';

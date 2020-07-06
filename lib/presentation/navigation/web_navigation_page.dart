@@ -1,7 +1,7 @@
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
-import 'package:cash_box/presentation/auth/sign_out_toolbox.dart';
+import 'package:cash_box/presentation/auth/auth_toolbox.dart';
 import 'package:cash_box/presentation/widgets/receipt_month_selection_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -117,10 +117,9 @@ class _WebNavigationPageState extends State<WebNavigationPage> {
                 ),
                 title: Text(AppLocalizations.translateOf(
                     context, "navigation_sign_out")),
-                onTap: () {
+                onTap: () async {
                   showSigningOutSnackbar(context);
-                  signOut();
-                  Navigator.pop(context);
+                  await signOut();
                 },
               )
             ],

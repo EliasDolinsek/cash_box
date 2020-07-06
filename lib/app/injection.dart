@@ -8,6 +8,7 @@ import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
+import 'package:cash_box/domain/core/usecases/notify_repositories_user_id_changed_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/filter_receipts_by_type_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
@@ -112,42 +113,248 @@ Future setup() async {
 }
 
 Future init() async {
-  //
-  // Moor database
-  //
+  _initFirebase();
+  final userId = (await sl<FirebaseAuth>().currentUser())?.uid;
 
-  sl.registerSingleton<QueryExecutor>(
-    FlutterQueryExecutor.inDatabaseFolder(path: "data.sqlit"),
+  _initMoorDatabase();
+
+  await _initSharedPreferences();
+
+  _initConfig();
+
+  _initFields();
+
+  _initContacts(userId);
+
+  _initReceipts(userId);
+
+  _initTags(userId);
+
+  _initTemplates(userId);
+
+  _initBuckets(userId);
+
+  _initSearch();
+
+  _initCurrency();
+
+  _initNotifyRepositoriesUserIdChangedUseCase();
+
+  _initAuthAndAccounts();
+}
+
+void _initNotifyRepositoriesUserIdChangedUseCase() {
+  sl.registerLazySingleton(
+    () => NotifyRepositoriesUserIdChangedUseCase(sl(), sl(), sl(), sl(), sl()),
+  );
+}
+
+void _initCurrency() {
+  sl.registerLazySingleton(() => FormatCurrencyUseCase());
+}
+
+void _initSearch() {
+  // UseCases
+  sl.registerLazySingleton(() => FilterReceiptsUseCase(sl()));
+
+  // BLoC
+  sl.registerLazySingleton(() => SearchBloc(filterReceiptsUseCase: sl()));
+}
+
+void _initBuckets(String userId) {
+  // DataSources
+  sl.registerLazySingleton<BucketsLocalMobileDataSource>(
+      () => BucketsLocalMobileDataSourceMoorImpl(sl()));
+
+  sl.registerLazySingleton<BucketsRemoteFirebaseDataSource>(
+      () => BucketsRemoteFirebaseDataSourceDefaultImpl(sl(), userId));
+
+  // Repositories
+  sl.registerLazySingleton<BucketsRepository>(
+    () => BucketsRepositoryDefaultImpl(
+      bucketsLocalMobileDataSource: sl(),
+      bucketsRemoteFirebaseDataSource: sl(),
+      config: sl(),
+    ),
   );
 
-  sl.registerSingleton(MoorAppDatabase(sl()));
+  // UseCases
+  sl.registerLazySingleton(() => AddBucketUseCase(sl()));
+  sl.registerLazySingleton(() => AddReceiptToBucketUseCase(sl()));
+  sl.registerLazySingleton(() => GetBucketUseCase(sl()));
+  sl.registerLazySingleton(() => GetBucketsUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveBucketUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveReceiptFromBucketUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateBucketUseCase(sl()));
 
+  // BLoC
+  sl.registerLazySingleton(
+    () => BucketsBloc(
+        addBucketUseCase: sl(),
+        addReceiptToBucketUseCase: sl(),
+        getBucketsUseCase: sl(),
+        removeBucketUseCase: sl(),
+        removeReceiptFromBucketUseCase: sl(),
+        updateBucketUseCase: sl()),
+  );
+}
+
+void _initTemplates(String userId) {
+  // DataSources
+  sl.registerLazySingleton<TemplatesLocalMobileDataSource>(
+      () => TemplatesLocalMobileDataSourceMoorImpl(sl(), sl()));
+
+  sl.registerLazySingleton<TemplatesRemoteFirebaseDataSource>(
+      () => TemplatesRemoteFirebaseDataSourceDefaultImpl(sl(), userId));
+
+  // Repositories
+  sl.registerLazySingleton<TemplatesRepository>(
+    () => TemplatesRepositoryDefaultImpl(
+        config: sl(),
+        localMobileDataSource: sl(),
+        remoteMobileFirebaseDataSource: sl()),
+  );
+
+  // UseCases
+  sl.registerLazySingleton(() => AddTemplateUseCase(sl()));
+  sl.registerLazySingleton(() => GetTemplateUseCase(sl()));
+  sl.registerLazySingleton(() => GetTemplatesUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveTemplateUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateTemplateUseCase(sl()));
+
+  // BLoC
+  sl.registerLazySingleton(
+    () => TemplatesBloc(
+        addTemplateUseCase: sl(),
+        getTemplateUseCase: sl(),
+        getTemplatesUseCase: sl(),
+        removeTemplateUseCase: sl(),
+        updateTemplateUseCase: sl()),
+  );
+}
+
+void _initTags(String userId) {
+  // DataSources
+  sl.registerLazySingleton<TagsLocalMobileDataSource>(
+      () => TagsLocalMobileDataSourceMoorImpl(sl()));
+  sl.registerLazySingleton<TagsRemoteFirebaseDataSource>(
+      () => TagsRemoteFirebaseDataSourceDefaultImpl(sl(), userId));
+
+  // Repository
+  sl.registerLazySingleton<TagsRepository>(
+    () => TagsRepositoryDefaultImpl(
+        config: sl(),
+        localMobileDataSource: sl(),
+        remoteFirebaseDataSource: sl()),
+  );
+
+  // UseCases
+  sl.registerLazySingleton(() => AddTagUseCase(sl()));
+  sl.registerLazySingleton(() => GetTagUseCase(sl()));
+  sl.registerLazySingleton(() => GetTagsUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveTagUseCase(sl(), sl()));
+  sl.registerLazySingleton(() => UpdateTagUseCase(sl()));
+
+  // BLoCs
+  sl.registerLazySingleton(
+    () => TagsBloc(
+        addTagUseCase: sl(),
+        getTagUseCase: sl(),
+        getTagsUseCase: sl(),
+        removeTagUseCase: sl(),
+        updateTagUseCase: sl()),
+  );
+}
+
+void _initReceipts(String userId) {
+  // DataSources
+  sl.registerLazySingleton<ReceiptsLocalMobileDataSource>(
+      () => ReceiptsLocalMobileDataSourceMoorImpl(sl(), sl()));
+
+  sl.registerLazySingleton<ReceiptsRemoteFirebaseDataSource>(
+      () => ReceiptsRemoteFirebaseDataSourceDefaultImpl(sl(), userId));
+
+  // Repositories
+  sl.registerLazySingleton<ReceiptsRepository>(() =>
+      ReceiptsRepositoryDefaultImpl(
+          config: sl(),
+          receiptsLocalMobileDataSource: sl(),
+          receiptsRemoteFirebaseDataSource: sl()));
+
+  // UseCases
+  sl.registerLazySingleton(() => AddReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceiptsUseCase(sl()));
+  sl.registerLazySingleton(() => GetReceiptsInReceiptMonthUseCase(sl()));
+  sl.registerLazySingleton(() => RemoveReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateReceiptUseCase(sl()));
+  sl.registerLazySingleton(() => GetTotalAmountOfReceiptsUseCase());
+
+  sl.registerLazySingleton(() => GetAmountOfReceiptsUseCase());
+  sl.registerLazySingleton(() => FilterReceiptByTypeUseCase());
+  sl.registerLazySingleton(() => GetIncomesOutcomesUseCase(sl(), sl()));
+
+  // BLoC
+  sl.registerLazySingleton(
+    () => ReceiptsBloc(
+        addReceiptUseCase: sl(),
+        getReceiptsUseCase: sl(),
+        getReceiptsInReceiptMonthUseCase: sl(),
+        updateReceiptUseCase: sl(),
+        removeReceiptUseCase: sl(),
+        searchBloc: sl()),
+  );
+}
+
+void _initContacts(String userId) {
   //
-  // Config
+  // Contacts
   //
 
-  sl.registerLazySingleton<Config>(() => ConfigDefaultImpl(sl()));
+  // DataSources
+  sl.registerLazySingleton<ContactsLocalMobileDataSource>(
+      () => ContactsLocalMobileDataSourceMoorImpl(sl(), sl()));
 
-  //
-  // Shared Preferences
-  //
+  sl.registerLazySingleton<ContactsRemoteFirebaseDataSource>(
+      () => ContactsRemoteFirebaseDataSourceDefaultImpl(sl(), userId));
 
-  final sharedPreferences = await SharedPreferences.getInstance();
-  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+  // Repositories
+  sl.registerLazySingleton<ContactsRepository>(
+    () => ContactsRepositoryDefaultImpl(
+      config: sl(),
+      localMobileDataSource: sl(),
+      remoteFirebaseDataSource: sl(),
+    ),
+  );
 
-  //
-  // Firebase
-  //
+  // UseCases
+  sl.registerLazySingleton(() => AddContactUseCase(sl()));
 
-  sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
-  sl.registerSingleton<Firestore>(Firestore.instance);
+  sl.registerLazySingleton(() => GetContactUseCase(sl()));
 
-  final userID = (await sl<FirebaseAuth>().currentUser())?.uid;
+  sl.registerLazySingleton(() => GetContactsUseCase(sl()));
 
-  //
-  // Auth, Accounts
-  //
+  sl.registerLazySingleton(() => RemoveContactUseCase(sl()));
 
+  sl.registerLazySingleton(() => UpdateContactUseCase(sl()));
+
+  //BLoCs
+  sl.registerLazySingleton(
+    () => ContactsBloc(
+        addContactUseCase: sl(),
+        getContactUseCase: sl(),
+        getContactsUseCase: sl(),
+        removeContactUseCase: sl(),
+        updateContactUseCase: sl()),
+  );
+}
+
+void _initFields() {
+  sl.registerLazySingleton<FieldsLocalMobileDataSource>(
+      () => FieldsLocalMobileDataSourceMoorImpl(sl()));
+}
+
+void _initAuthAndAccounts() {
   // Auth Usecases
 
   sl.registerLazySingleton<SendResetPasswordEmailUseCase>(
@@ -183,233 +390,38 @@ Future init() async {
   sl.registerLazySingleton<AccountsRepository>(
       () => AccountsRepositoryDefaultFirebaseImpl(sl()));
 
-  // Bloc
+  // Blocs
 
-  sl.registerSingleton<AuthBloc>(
-    AuthBloc(getSignInStateUseCase: sl()),
-  );
+  sl.registerSingleton<AuthBloc>(AuthBloc(getSignInStateUseCase: sl()));
 
   sl.registerSingleton<AccountsBloc>(
     AccountsBloc(
-        createAccountUseCase: sl(),
-        deleteAccountUseCase: sl(),
-        getAccountUseCase: sl(),
-        updateAccountUseCase: sl()),
-  );
-
-  //
-  // Fields
-  //
-
-  sl.registerLazySingleton<FieldsLocalMobileDataSource>(
-      () => FieldsLocalMobileDataSourceMoorImpl(sl()));
-
-  //
-  // Contacts
-  //
-
-  // DataSources
-  sl.registerLazySingleton<ContactsLocalMobileDataSource>(
-      () => ContactsLocalMobileDataSourceMoorImpl(sl(), sl()));
-
-  sl.registerLazySingleton<ContactsRemoteFirebaseDataSource>(
-      () => ContactsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
-
-  // Repositories
-  sl.registerLazySingleton<ContactsRepository>(
-    () => ContactsRepositoryDefaultImpl(
-      config: sl(),
-      localMobileDataSource: sl(),
-      remoteFirebaseDataSource: sl(),
+      createAccountUseCase: sl(),
+      deleteAccountUseCase: sl(),
+      getAccountUseCase: sl(),
+      updateAccountUseCase: sl(),
     ),
   );
+}
 
-  // UseCases
-  sl.registerLazySingleton(() => AddContactUseCase(sl()));
+void _initFirebase() {
+  sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+  sl.registerSingleton<Firestore>(Firestore.instance);
+}
 
-  sl.registerLazySingleton(() => GetContactUseCase(sl()));
+void _initConfig() {
+  sl.registerLazySingleton<Config>(() => ConfigDefaultImpl(sl()));
+}
 
-  sl.registerLazySingleton(() => GetContactsUseCase(sl()));
+Future _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
 
-  sl.registerLazySingleton(() => RemoveContactUseCase(sl()));
-
-  sl.registerLazySingleton(() => UpdateContactUseCase(sl()));
-
-  //BLoCs
-  sl.registerLazySingleton(
-    () => ContactsBloc(
-        addContactUseCase: sl(),
-        getContactUseCase: sl(),
-        getContactsUseCase: sl(),
-        removeContactUseCase: sl(),
-        updateContactUseCase: sl()),
+void _initMoorDatabase() {
+  sl.registerSingleton<QueryExecutor>(
+    FlutterQueryExecutor.inDatabaseFolder(path: "data.sqlit"),
   );
 
-  //
-  // Receipts
-  //
-
-  // DataSources
-  sl.registerLazySingleton<ReceiptsLocalMobileDataSource>(
-      () => ReceiptsLocalMobileDataSourceMoorImpl(sl(), sl()));
-
-  sl.registerLazySingleton<ReceiptsRemoteFirebaseDataSource>(
-      () => ReceiptsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
-
-  // Repositories
-  sl.registerLazySingleton<ReceiptsRepository>(() =>
-      ReceiptsRepositoryDefaultImpl(
-          config: sl(),
-          receiptsLocalMobileDataSource: sl(),
-          receiptsRemoteFirebaseDataSource: sl()));
-
-  // UseCases
-  sl.registerLazySingleton(() => AddReceiptUseCase(sl()));
-  sl.registerLazySingleton(() => GetReceiptUseCase(sl()));
-  sl.registerLazySingleton(() => GetReceiptsUseCase(sl()));
-  sl.registerLazySingleton(() => GetReceiptsInReceiptMonthUseCase(sl()));
-  sl.registerLazySingleton(() => RemoveReceiptUseCase(sl()));
-  sl.registerLazySingleton(() => UpdateReceiptUseCase(sl()));
-  sl.registerLazySingleton(() => GetTotalAmountOfReceiptsUseCase());
-
-  sl.registerLazySingleton(() => GetAmountOfReceiptsUseCase());
-  sl.registerLazySingleton(() => FilterReceiptByTypeUseCase());
-  sl.registerLazySingleton(() => GetIncomesOutcomesUseCase(sl(), sl()));
-
-  // BLoC
-  sl.registerLazySingleton(
-    () => ReceiptsBloc(
-        addReceiptUseCase: sl(),
-        getReceiptsUseCase: sl(),
-        getReceiptsInReceiptMonthUseCase: sl(),
-        updateReceiptUseCase: sl(),
-        removeReceiptUseCase: sl(),
-        searchBloc: sl()),
-  );
-
-  //
-  // Tags
-  //
-
-  // DataSources
-  sl.registerLazySingleton<TagsLocalMobileDataSource>(
-      () => TagsLocalMobileDataSourceMoorImpl(sl()));
-  sl.registerLazySingleton<TagsRemoteFirebaseDataSource>(
-      () => TagsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
-
-  // Repository
-  sl.registerLazySingleton<TagsRepository>(
-    () => TagsRepositoryDefaultImpl(
-        config: sl(),
-        localMobileDataSource: sl(),
-        remoteFirebaseDataSource: sl()),
-  );
-
-  // UseCases
-  sl.registerLazySingleton(() => AddTagUseCase(sl()));
-  sl.registerLazySingleton(() => GetTagUseCase(sl()));
-  sl.registerLazySingleton(() => GetTagsUseCase(sl()));
-  sl.registerLazySingleton(() => RemoveTagUseCase(sl(), sl()));
-  sl.registerLazySingleton(() => UpdateTagUseCase(sl()));
-
-  // BLoCs
-  sl.registerLazySingleton(
-    () => TagsBloc(
-        addTagUseCase: sl(),
-        getTagUseCase: sl(),
-        getTagsUseCase: sl(),
-        removeTagUseCase: sl(),
-        updateTagUseCase: sl()),
-  );
-
-  //
-  // Templates
-  //
-
-  // DataSources
-  sl.registerLazySingleton<TemplatesLocalMobileDataSource>(
-      () => TemplatesLocalMobileDataSourceMoorImpl(sl(), sl()));
-
-  sl.registerLazySingleton<TemplatesRemoteFirebaseDataSource>(
-      () => TemplatesRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
-
-  // Repositories
-  sl.registerLazySingleton<TemplatesRepository>(
-    () => TemplatesRepositoryDefaultImpl(
-        config: sl(),
-        localMobileDataSource: sl(),
-        remoteMobileFirebaseDataSource: sl()),
-  );
-
-  // UseCases
-  sl.registerLazySingleton(() => AddTemplateUseCase(sl()));
-  sl.registerLazySingleton(() => GetTemplateUseCase(sl()));
-  sl.registerLazySingleton(() => GetTemplatesUseCase(sl()));
-  sl.registerLazySingleton(() => RemoveTemplateUseCase(sl()));
-  sl.registerLazySingleton(() => UpdateTemplateUseCase(sl()));
-
-  // BLoC
-  sl.registerLazySingleton(
-    () => TemplatesBloc(
-        addTemplateUseCase: sl(),
-        getTemplateUseCase: sl(),
-        getTemplatesUseCase: sl(),
-        removeTemplateUseCase: sl(),
-        updateTemplateUseCase: sl()),
-  );
-
-  //
-  // Buckets
-  //
-
-  // DataSources
-  sl.registerLazySingleton<BucketsLocalMobileDataSource>(
-      () => BucketsLocalMobileDataSourceMoorImpl(sl()));
-
-  sl.registerLazySingleton<BucketsRemoteFirebaseDataSource>(
-      () => BucketsRemoteFirebaseDataSourceDefaultImpl(sl(), userID));
-
-  // Repositories
-  sl.registerLazySingleton<BucketsRepository>(
-    () => BucketsRepositoryDefaultImpl(
-      bucketsLocalMobileDataSource: sl(),
-      bucketsRemoteFirebaseDataSource: sl(),
-      config: sl(),
-    ),
-  );
-
-  // UseCases
-  sl.registerLazySingleton(() => AddBucketUseCase(sl()));
-  sl.registerLazySingleton(() => AddReceiptToBucketUseCase(sl()));
-  sl.registerLazySingleton(() => GetBucketUseCase(sl()));
-  sl.registerLazySingleton(() => GetBucketsUseCase(sl()));
-  sl.registerLazySingleton(() => RemoveBucketUseCase(sl()));
-  sl.registerLazySingleton(() => RemoveReceiptFromBucketUseCase(sl()));
-  sl.registerLazySingleton(() => UpdateBucketUseCase(sl()));
-
-  // BLoC
-  sl.registerLazySingleton(
-    () => BucketsBloc(
-        addBucketUseCase: sl(),
-        addReceiptToBucketUseCase: sl(),
-        getBucketsUseCase: sl(),
-        removeBucketUseCase: sl(),
-        removeReceiptFromBucketUseCase: sl(),
-        updateBucketUseCase: sl()),
-  );
-
-  //
-  // Search
-  //
-
-  // UseCases
-  sl.registerLazySingleton(() => FilterReceiptsUseCase(sl()));
-
-  // BLoC
-  sl.registerLazySingleton(() => SearchBloc(filterReceiptsUseCase: sl()));
-
-  //
-  // Currency
-  //
-  sl.registerLazySingleton(() => FormatCurrencyUseCase());
+  sl.registerSingleton(MoorAppDatabase(sl()));
 }

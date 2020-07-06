@@ -1,2 +1,1 @@
-Settings -> Contacts -> Add -> No default contact name
-Account doesn't load after first login
+Horizontal View in TutorialPage

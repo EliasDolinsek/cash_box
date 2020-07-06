@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TagsRemoteFirebaseDataSourceDefaultImpl implements TagsRemoteFirebaseDataSource, FirestoreDataSource {
 
   final Firestore firestore;
-  final String userID;
+  String userID;
 
   List<Tag> tags;
 
@@ -44,6 +44,11 @@ class TagsRemoteFirebaseDataSourceDefaultImpl implements TagsRemoteFirebaseDataS
   @override
   Future<void> updateType(String id, Tag update) async {
     await baseCollection.document(id).setData(update.toJson());
+    tags = null;
+  }
+
+  @override
+  void clear() {
     tags = null;
   }
 

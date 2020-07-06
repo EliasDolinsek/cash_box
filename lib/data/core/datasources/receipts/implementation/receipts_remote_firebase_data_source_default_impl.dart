@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ReceiptsRemoteFirebaseDataSourceDefaultImpl
     implements ReceiptsRemoteFirebaseDataSource, FirestoreDataSource {
   final Firestore firestore;
-  final String userID;
+  String userID;
 
   ReceiptsCollection _receiptsCollection =
       ReceiptsCollection(null, null, false);
@@ -99,6 +99,11 @@ class ReceiptsRemoteFirebaseDataSourceDefaultImpl
     receiptJson["creationYear"] = receipt.creationDate.year;
 
     return receiptJson;
+  }
+
+  @override
+  void clear() {
+    _receiptsCollection.receipts = null;
   }
 }
 

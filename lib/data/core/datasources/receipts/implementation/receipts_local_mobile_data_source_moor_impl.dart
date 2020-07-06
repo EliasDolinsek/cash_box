@@ -80,4 +80,9 @@ class ReceiptsLocalMobileDataSourceMoorImpl
 
     return receipts;
   }
+
+  @override
+  void clear() {
+    // Nothing to clear
+  }
 }

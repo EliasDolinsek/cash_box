@@ -2,6 +2,7 @@ import 'package:cash_box/core/errors/exceptions.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
+import 'package:cash_box/data/core/datasources/templates/implementation/templates_remote_firebase_data_source_default_impl.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/templates/templates_remote_firebase_data_source.dart';
 import 'package:cash_box/domain/core/enteties/templates/template.dart';
@@ -85,5 +86,15 @@ class TemplatesRepositoryDefaultImpl implements TemplatesRepository {
     } on Exception {
       return Left(RepositoryFailure());
     }
+  }
+
+  @override
+  void notifyUserIdChanged(String userId) async {
+    final firebaseDataSource = remoteMobileFirebaseDataSource;
+    if(firebaseDataSource is TemplatesRemoteFirebaseDataSourceDefaultImpl){
+      firebaseDataSource.userID = userId;
+    }
+
+    (await dataSource).clear();
   }
 }

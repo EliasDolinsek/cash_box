@@ -2,6 +2,7 @@ import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_local_mobile_data_source.dart';
 import 'package:cash_box/data/core/datasources/buckets/buckets_remote_firebase_data_source.dart';
+import 'package:cash_box/data/core/datasources/buckets/implementation/buckets_remote_firebase_data_source_default_impl.dart';
 import 'package:cash_box/data/core/datasources/datasource.dart';
 import 'package:cash_box/domain/core/enteties/buckets/bucket.dart';
 import 'package:cash_box/domain/core/repositories/buckets_repository.dart';
@@ -88,5 +89,15 @@ class BucketsRepositoryDefaultImpl implements BucketsRepository {
 
         throw DataStorageLocationException();
     }
+  }
+
+  @override
+  void notifyUserIdChanged(String userId) async {
+    final firebaseDataSource = bucketsRemoteFirebaseDataSource;
+    if(firebaseDataSource is BucketsRemoteFirebaseDataSourceDefaultImpl){
+      firebaseDataSource.userID = userId;
+    }
+
+    (await dataSource).clear();
   }
 }

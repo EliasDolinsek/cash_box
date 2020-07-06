@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TemplatesRemoteFirebaseDataSourceDefaultImpl implements TemplatesRemoteFirebaseDataSource, FirestoreDataSource {
 
   final Firestore firestore;
-  final String userID;
+  String userID;
 
   List<Template> templates;
 
@@ -44,6 +44,11 @@ class TemplatesRemoteFirebaseDataSourceDefaultImpl implements TemplatesRemoteFir
   @override
   Future<void> updateType(String id, Template update) async {
     await baseCollection.document(id).setData(update.toJson());
+    templates = null;
+  }
+
+  @override
+  void clear() {
     templates = null;
   }
 

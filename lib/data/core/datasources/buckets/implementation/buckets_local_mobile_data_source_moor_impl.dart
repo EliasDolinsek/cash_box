@@ -36,4 +36,9 @@ class BucketsLocalMobileDataSourceMoorImpl
 
     return database.updateBucket(bucketsMoorDataFromBucket(update));
   }
+
+  @override
+  void clear() {
+    // Noting to clear
+  }
 }

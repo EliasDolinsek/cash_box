@@ -64,4 +64,9 @@ class ContactsLocalMobileDataSourceMoorImpl implements ContactsLocalMobileDataSo
     return contactFromContactsMoorData(contactsMoorData, fields);
   }
 
+  @override
+  void clear() {
+    // Nothing to clear
+  }
+
 }
