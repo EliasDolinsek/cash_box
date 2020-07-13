@@ -1,4 +1,3 @@
-import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/auth/sign_in_widget.dart';
 import 'package:cash_box/presentation/base/screen_type_layout.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,7 @@ class SignInPage extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: SignInInputWidget(),
+            child: SafeArea(child: SignInInputWidget()),
           ),
         )
       ],
@@ -46,9 +45,7 @@ class SignInPage extends StatelessWidget {
           padding: const EdgeInsets.only(left: 32.0, top: 16.0),
           child: Container(
             child: _buildLogoImage(),
-            constraints: BoxConstraints(
-              maxWidth: 200
-            ),
+            constraints: BoxConstraints(maxWidth: 200),
           ),
         ),
         Expanded(
@@ -69,7 +66,8 @@ class SignInPage extends StatelessWidget {
 
   Widget _buildLogoImage() {
     return Image(
-      image: AssetImage("res/imgs/logo.png"),
+      image: AssetImage("assets/imgs/logo.png"),
+      height: 125,
     );
   }
 }

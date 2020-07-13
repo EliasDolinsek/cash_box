@@ -7,8 +7,9 @@ import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
+import 'package:cash_box/domain/core/usecases/add_default_components_use_case.dart';
 import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
-import 'package:cash_box/domain/core/usecases/notify_repositories_user_id_changed_use_case.dart';
+import 'package:cash_box/domain/core/usecases/notify_user_id_changed_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/filter_receipts_by_type_use_case.dart';
 import 'package:cash_box/domain/core/usecases/receipts/get_incomes_outcomes_use_case.dart';
 import 'package:cash_box/data/account/repositories/accounts_repository_default_firebase_impl.dart';
@@ -87,6 +88,7 @@ import 'package:cash_box/domain/core/usecases/templates/get_template_use_case.da
 import 'package:cash_box/domain/core/usecases/templates/get_templates_use_case.dart';
 import 'package:cash_box/domain/core/usecases/templates/remove_template_use_case.dart';
 import 'package:cash_box/domain/core/usecases/templates/update_template_use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -140,12 +142,18 @@ Future init() async {
 
   _initNotifyRepositoriesUserIdChangedUseCase();
 
+  _initAddDefaultComponentsUseCase();
+
   _initAuthAndAccounts();
+}
+
+void _initAddDefaultComponentsUseCase() {
+  sl.registerLazySingleton(() => AddDefaultComponentsUseCase(sl(), sl(), sl()));
 }
 
 void _initNotifyRepositoriesUserIdChangedUseCase() {
   sl.registerLazySingleton(
-    () => NotifyRepositoriesUserIdChangedUseCase(sl(), sl(), sl(), sl(), sl()),
+    () => NotifyUserIdChangedUseCase(sl(), sl(), sl(), sl(), sl()),
   );
 }
 
@@ -361,10 +369,10 @@ void _initAuthAndAccounts() {
       () => SendResetPasswordEmailUseCase(sl()));
 
   sl.registerLazySingleton<SignInWithEmailAndPasswordUseCase>(
-      () => SignInWithEmailAndPasswordUseCase(sl()));
+      () => SignInWithEmailAndPasswordUseCase(sl(), sl()));
 
   sl.registerLazySingleton<RegisterWithEmailAndPasswordUseCase>(
-      () => RegisterWithEmailAndPasswordUseCase(sl()));
+      () => RegisterWithEmailAndPasswordUseCase(sl(), sl()));
 
   sl.registerLazySingleton<GetSignInStateUseCase>(
       () => GetSignInStateUseCase(sl()));
@@ -376,7 +384,7 @@ void _initAuthAndAccounts() {
 
   // Account UseCases
 
-  sl.registerLazySingleton(() => CreateAccountUseCase(sl()));
+  sl.registerLazySingleton(() => CreateAccountUseCase(sl(), sl()));
 
   sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
 

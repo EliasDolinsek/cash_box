@@ -44,6 +44,8 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        _buildSignInTypeSelection(),
+        SizedBox(height: 16.0),
         _buildNameInput(),
         _buildEmailTextField(),
         SizedBox(height: 16.0),
@@ -53,8 +55,6 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
         _buildSignInFailureText(),
         SizedBox(height: 8.0),
         _buildSignInBar(),
-        SizedBox(height: 16.0),
-        _buildSwitchSignInTypeButton(),
       ],
     );
   }
@@ -314,29 +314,42 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     }
   }
 
-  Widget _buildSwitchSignInTypeButton() {
-    return MaterialButton(
-      child: Text(_getButtonTextForSignInType()),
-      onPressed: () {
-        setState(() {
-          if (_signInType == SignInType.sign_in) {
-            _signInType = SignInType.register;
-          } else {
-            _signInType = SignInType.sign_in;
-          }
-        });
-      },
+  Widget _buildSignInTypeSelection() {
+    return Row(
+      children: <Widget>[
+        ChoiceChip(
+          label: Text(AppLocalizations.translateOf(
+              context, "sign_in_page_btn_sign_in")),
+          selected: _signInType == SignInType.sign_in,
+          onSelected: (value) =>
+              setState(() => _signInType = SignInType.sign_in),
+        ),
+        SizedBox(width: 16.0),
+        ChoiceChip(
+          label: Text(AppLocalizations.translateOf(
+              context, "sign_in_page_btn_register")),
+          selected: _signInType == SignInType.register,
+          onSelected: (value) =>
+              setState(() => _signInType = SignInType.register),
+        ),
+        Expanded(child: Container()),
+        MaterialButton(
+          child: Text(
+            "SKIP SIGN IN",
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          onPressed: () {
+            setState(() {
+              if (_signInType == SignInType.sign_in) {
+                _signInType = SignInType.register;
+              } else {
+                _signInType = SignInType.sign_in;
+              }
+            });
+          },
+        )
+      ],
     );
-  }
-
-  String _getButtonTextForSignInType() {
-    final appLocalizations = AppLocalizations.of(context);
-    if (_signInType == SignInType.sign_in) {
-      return appLocalizations.translate("sign_in_page_btn_create_account");
-    } else {
-      return appLocalizations
-          .translate("sign_in_page_btn_already_have_account");
-    }
   }
 
   void _checkAndSignInWithEmailAndPassword() {

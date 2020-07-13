@@ -120,7 +120,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
   # Images
-   - res/imgs/logo.png
+   - assets/imgs/logo.png
+   - assets/default_data/default_buckets.json
+   - assets/default_data/default_tags.json
+   - assets/default_data/default_templates.json
 
   # Languages
    - lang/

@@ -7,15 +7,15 @@ import 'package:cash_box/domain/core/repositories/templates_repository.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:equatable/equatable.dart';
 
-class NotifyRepositoriesUserIdChangedUseCase extends SecureSyncUseCase<
-    EmptyData, NotifyRepositoriesUserIdChangedUseCaseParams> {
+class NotifyUserIdChangedUseCase extends SecureSyncUseCase<
+    EmptyData, NotifyUserIdChangedUseCaseParams> {
   final BucketsRepository bucketsRepository;
   final ContactsRepository contactsRepository;
   final ReceiptsRepository receiptsRepository;
   final TagsRepository tagsRepository;
   final TemplatesRepository templatesRepository;
 
-  NotifyRepositoriesUserIdChangedUseCase(
+  NotifyUserIdChangedUseCase(
       this.bucketsRepository,
       this.contactsRepository,
       this.receiptsRepository,
@@ -23,7 +23,7 @@ class NotifyRepositoriesUserIdChangedUseCase extends SecureSyncUseCase<
       this.templatesRepository);
 
   @override
-  EmptyData call(NotifyRepositoriesUserIdChangedUseCaseParams params) {
+  EmptyData call(NotifyUserIdChangedUseCaseParams params) {
     final userId = params.userId;
 
     bucketsRepository.notifyUserIdChanged(userId);
@@ -36,10 +36,10 @@ class NotifyRepositoriesUserIdChangedUseCase extends SecureSyncUseCase<
   }
 }
 
-class NotifyRepositoriesUserIdChangedUseCaseParams extends Equatable {
+class NotifyUserIdChangedUseCaseParams extends Equatable {
   final String userId;
 
-  NotifyRepositoriesUserIdChangedUseCaseParams(this.userId);
+  NotifyUserIdChangedUseCaseParams(this.userId);
 
   @override
   List get props => [userId];

@@ -1,4 +1,5 @@
 import 'package:cash_box/core/errors/failure.dart';
+import 'package:cash_box/domain/core/usecases/notify_user_id_changed_use_case.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
@@ -6,9 +7,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterWithEmailAndPasswordUseCase
     extends AsyncUseCase<String, RegisterWithEmailAndPasswordUseCaseParams> {
-  final FirebaseAuth firebaseAuth;
 
-  RegisterWithEmailAndPasswordUseCase(this.firebaseAuth);
+  final FirebaseAuth firebaseAuth;
+  final NotifyUserIdChangedUseCase notifyUserIdChangedUseCase;
+
+  RegisterWithEmailAndPasswordUseCase(this.firebaseAuth, this.notifyUserIdChangedUseCase);
 
   @override
   Future<Either<Failure, String>> call(
@@ -17,7 +20,11 @@ class RegisterWithEmailAndPasswordUseCase
       final result = await firebaseAuth
           .createUserWithEmailAndPassword(
               email: params.email, password: params.password);
-      return Right(result.user.uid);
+
+      final userId = result.user.uid;
+      notifyUserIdChangedUseCase.call(NotifyUserIdChangedUseCaseParams(userId));
+
+      return Right(userId);
     } on Exception {
       return Left(FirebaseFailure());
     }

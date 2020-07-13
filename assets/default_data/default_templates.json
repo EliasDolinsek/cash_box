@@ -1,0 +1,17 @@
+{
+  "templates": [
+    {
+      "id": "1c6b240a-bad5-4d02-b530-382d29807509",
+      "name": "name",
+      "fields": [
+        {
+          "id": "9939b62c-8195-4943-bbb6-37c453ccffb5",
+          "type": "text",
+          "description": "description",
+          "value": "value",
+          "storageOnly": false
+        }
+      ]
+    }
+  ]
+}
