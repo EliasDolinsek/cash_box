@@ -8,7 +8,7 @@ import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:equatable/equatable.dart';
 
 class NotifyUserIdChangedUseCase extends SecureSyncUseCase<
-    EmptyData, NotifyUserIdChangedUseCaseParams> {
+    EmptyData, NotifyUserIdChangedParams> {
   final BucketsRepository bucketsRepository;
   final ContactsRepository contactsRepository;
   final ReceiptsRepository receiptsRepository;
@@ -23,7 +23,7 @@ class NotifyUserIdChangedUseCase extends SecureSyncUseCase<
       this.templatesRepository);
 
   @override
-  EmptyData call(NotifyUserIdChangedUseCaseParams params) {
+  EmptyData call(NotifyUserIdChangedParams params) {
     final userId = params.userId;
 
     bucketsRepository.notifyUserIdChanged(userId);
@@ -36,10 +36,10 @@ class NotifyUserIdChangedUseCase extends SecureSyncUseCase<
   }
 }
 
-class NotifyUserIdChangedUseCaseParams extends Equatable {
+class NotifyUserIdChangedParams extends Equatable {
   final String userId;
 
-  NotifyUserIdChangedUseCaseParams(this.userId);
+  NotifyUserIdChangedParams(this.userId);
 
   @override
   List get props => [userId];

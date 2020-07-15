@@ -1,14 +1,14 @@
-import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/errors/failure.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
-import 'package:cash_box/domain/account/enteties/subscription.dart';
-import 'package:cash_box/domain/account/usecases/register_with_email_and_password_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/register_with_email_and_password_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_in_anonymously_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
-import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
+import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -253,50 +253,19 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
 
   void _register() async {
     final useCase = sl<RegisterWithEmailAndPasswordUseCase>();
-    final params = RegisterWithEmailAndPasswordUseCaseParams(_email, _password);
+    final params = RegisterWithEmailAndPasswordUseCaseParams(
+        email: _email,
+        password: _password,
+        accountType: _accountType,
+        name: _name);
 
     _showLoadingSnackbar();
     final result = await useCase(params);
 
     result.fold((failure) => _displayRegisterFailure(), (userID) {
-      _createAccount(userID);
       sl<AuthBloc>().dispatch(LoadAuthStateEvent());
       Navigator.of(context).pushNamed("/tutorial", arguments: _name);
     });
-  }
-
-  void _createAccount(String userID) {
-    final accountsBloc = sl<AccountsBloc>();
-    final account = _getAccountFromEnteredDetails(userID);
-    final event = CreateAccountEvent(account);
-
-    accountsBloc.dispatch(event);
-  }
-
-  Account _getAccountFromEnteredDetails(String userID) {
-    return Account(
-      userID: userID,
-      signInSource: SignInSource.firebase,
-      accountType: _accountType,
-      email: _email,
-      appPassword: "",
-      name: _name,
-      currencyCode: "USD",
-      subscriptionInfo: SubscriptionInfo(
-        subscriptionType: _getSubscriptionTypeFromAccountType(),
-        purchaseDate: DateTime.now(),
-      ),
-    );
-  }
-
-  SubscriptionType _getSubscriptionTypeFromAccountType() {
-    if (_accountType == AccountType.private) {
-      return SubscriptionType.personal_free;
-    } else if (_accountType == AccountType.business) {
-      return SubscriptionType.business_free;
-    } else {
-      return null;
-    }
   }
 
   void _displayRegisterFailure() {
@@ -335,18 +304,10 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
         Expanded(child: Container()),
         MaterialButton(
           child: Text(
-            "SKIP SIGN IN",
+            AppLocalizations.translateOf(context, "btn_skip_sign_in"),
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
-          onPressed: () {
-            setState(() {
-              if (_signInType == SignInType.sign_in) {
-                _signInType = SignInType.register;
-              } else {
-                _signInType = SignInType.sign_in;
-              }
-            });
-          },
+          onPressed: () => _signInAnonymously(),
         )
       ],
     );
@@ -374,17 +335,29 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     final result = await useCase(params);
 
     result.fold((failure) {
-      if (failure is SignInFailure) {
-        _displaySignInFailure(failure);
-      } else {
-        setState(
-          () => _signInFailureMessage =
-              _getErrorMessageForSignInFailureType(null),
-        );
-      }
-    }, (_) {
-      sl<AuthBloc>().dispatch(LoadAuthStateEvent());
-    });
+      _handleFailureOnSignIn(failure);
+    }, (_) => sl<AuthBloc>().dispatch(LoadAuthStateEvent()));
+  }
+
+  void _signInAnonymously() async {
+    _clearFailures();
+
+    final params = SignInAnonymouslyUseCaseParams(_accountType);
+    final result = await sl<SignInAnonymouslyUseCase>().call(params);
+
+    result.fold(_handleFailureOnSignIn,
+        (_) => sl<AuthBloc>().dispatch(LoadAuthStateEvent()));
+  }
+
+  void _handleFailureOnSignIn(Failure failure) {
+    if (failure is SignInFailure) {
+      _displaySignInFailure(failure);
+    } else {
+      setState(
+        () =>
+            _signInFailureMessage = _getErrorMessageForSignInFailureType(null),
+      );
+    }
   }
 
   void _clearFailures() {

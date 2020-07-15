@@ -1,5 +1,5 @@
 import 'package:cash_box/core/errors/failure.dart';
-import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
+import 'package:cash_box/domain/account/usecases/sign_in/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';

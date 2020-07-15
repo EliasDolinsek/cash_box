@@ -7,6 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
+import 'sign_in_helper.dart' as signInHelper;
+
 class SignInWithEmailAndPasswordUseCase extends AsyncUseCase<EmptyData, SignInWithEmailAndPasswordUseCaseParams> {
 
   final FirebaseAuth firebaseAuth;
@@ -20,29 +22,18 @@ class SignInWithEmailAndPasswordUseCase extends AsyncUseCase<EmptyData, SignInWi
       final result = await firebaseAuth.signInWithEmailAndPassword(email: params.email, password: params.password);
 
       final userId = result.user.uid;
-      notifyUserIdChangedUseCase.call(NotifyUserIdChangedUseCaseParams(userId));
+      notifyUserIdChangedUseCase.call(NotifyUserIdChangedParams(userId));
 
       return Right(EmptyData());
     } catch (e) {
       if(e is PlatformException){
-        final failure = SignInFailure(_fromPlatformException(e));
+        final failure = SignInFailure(signInHelper.fromPlatformException(e));
         return Left(failure);
       } else {
         return Left(SignInFailure(SignInFailureType.other));
       }
     }
   }
-
-  SignInFailureType _fromPlatformException(PlatformException e){
-    if(e.code == "ERROR_USER_NOT_FOUND"){
-      return SignInFailureType.user_not_found;
-    } else if(e.code == "ERROR_WRONG_PASSWORD"){
-      return SignInFailureType.wrong_password;
-    } else {
-      return SignInFailureType.other;
-    }
-  }
-
 }
 
 class SignInWithEmailAndPasswordUseCaseParams extends Equatable {

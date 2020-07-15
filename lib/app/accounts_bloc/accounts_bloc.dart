@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:cash_box/domain/account/usecases/create_account_use_case.dart';
-import 'package:cash_box/domain/account/usecases/delete_account_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/create_account_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/delete_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:firebase_auth/firebase_auth.dart';

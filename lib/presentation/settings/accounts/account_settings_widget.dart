@@ -3,7 +3,7 @@ import 'package:cash_box/app/auth_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/config.dart';
 import 'package:cash_box/core/platform/entetie_converter.dart';
-import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_out_use_case.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/localizations/app_localizations.dart';

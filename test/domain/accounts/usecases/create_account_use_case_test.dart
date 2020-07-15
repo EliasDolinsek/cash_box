@@ -1,5 +1,5 @@
 import 'package:cash_box/domain/account/enteties/account.dart';
-import 'package:cash_box/domain/account/usecases/create_account_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/create_account_use_case.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';

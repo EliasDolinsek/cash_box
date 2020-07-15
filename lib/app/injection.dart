@@ -7,6 +7,8 @@ import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
 import 'package:cash_box/core/platform/config.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_in_anonymously_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/core/usecases/add_default_components_use_case.dart';
 import 'package:cash_box/domain/core/usecases/currency/format_currency_use_case.dart';
 import 'package:cash_box/domain/core/usecases/notify_user_id_changed_use_case.dart';
@@ -42,14 +44,13 @@ import 'package:cash_box/data/core/repositories/receipts_repository_default_impl
 import 'package:cash_box/data/core/repositories/tags_repository_default_impl.dart';
 import 'package:cash_box/data/core/repositories/templates_repository_default_impl.dart';
 import 'package:cash_box/domain/account/repositories/accounts_repository.dart';
-import 'package:cash_box/domain/account/usecases/create_account_use_case.dart';
-import 'package:cash_box/domain/account/usecases/delete_account_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/create_account_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/delete_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/get_sign_in_state_use_case.dart';
-import 'package:cash_box/domain/account/usecases/register_with_email_and_password_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/register_with_email_and_password_use_case.dart';
 import 'package:cash_box/domain/account/usecases/send_reset_password_email_use_case.dart';
-import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
-import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_out_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_account_use_case.dart';
 import 'package:cash_box/domain/account/usecases/update_password_use_case.dart';
 import 'package:cash_box/domain/core/repositories/buckets_repository.dart';
@@ -88,7 +89,6 @@ import 'package:cash_box/domain/core/usecases/templates/get_template_use_case.da
 import 'package:cash_box/domain/core/usecases/templates/get_templates_use_case.dart';
 import 'package:cash_box/domain/core/usecases/templates/remove_template_use_case.dart';
 import 'package:cash_box/domain/core/usecases/templates/update_template_use_case.dart';
-import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -371,20 +371,22 @@ void _initAuthAndAccounts() {
   sl.registerLazySingleton<SignInWithEmailAndPasswordUseCase>(
       () => SignInWithEmailAndPasswordUseCase(sl(), sl()));
 
+  sl.registerLazySingleton(() => SignInAnonymouslyUseCase(sl(), sl(), sl()));
+
   sl.registerLazySingleton<RegisterWithEmailAndPasswordUseCase>(
-      () => RegisterWithEmailAndPasswordUseCase(sl(), sl()));
+      () => RegisterWithEmailAndPasswordUseCase(sl(), sl(), sl()));
 
   sl.registerLazySingleton<GetSignInStateUseCase>(
       () => GetSignInStateUseCase(sl()));
 
-  sl.registerLazySingleton<SignOutUseCase>(() => SignOutUseCase(sl()));
+  sl.registerLazySingleton<SignOutUseCase>(() => SignOutUseCase(sl(), sl()));
 
   sl.registerLazySingleton<UpdateUserPasswordUseCase>(
       () => UpdateUserPasswordUseCase(sl()));
 
   // Account UseCases
 
-  sl.registerLazySingleton(() => CreateAccountUseCase(sl(), sl()));
+  sl.registerLazySingleton(() => CreateAccountUseCase(sl()));
 
   sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
 

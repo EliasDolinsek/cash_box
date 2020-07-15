@@ -29,7 +29,7 @@ class ConfigDefaultImpl implements Config {
       final locationAsString =
           sharedPreferences.getString(dataStorageLocationKey);
       if (locationAsString == null || locationAsString.isEmpty)
-        return DataStorageLocation.REMOTE_FIREBASE;
+        return DataStorageLocation.LOCAL_MOBILE;
       return dataStorageLocationFromString(locationAsString);
     } else {
       return DataStorageLocation.REMOTE_FIREBASE;
@@ -50,7 +50,7 @@ class ConfigDefaultImpl implements Config {
   @override
   void setDataStorageLocation(DataStorageLocation location) async {
     await sharedPreferences.setString(
-        dataStorageLocationKey, location.toString());
+        dataStorageLocationKey, location?.toString() ?? "");
     _reloadData();
   }
 

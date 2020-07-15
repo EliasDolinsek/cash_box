@@ -1,4 +1,4 @@
-import 'package:cash_box/domain/account/usecases/delete_account_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/delete_account_use_case.dart';
 import 'package:cash_box/domain/core/repositories/empty_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';

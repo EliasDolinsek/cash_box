@@ -11,7 +11,7 @@ import 'package:cash_box/app/receipts_bloc/bloc.dart';
 import 'package:cash_box/app/search_bloc/bloc.dart';
 import 'package:cash_box/app/tags_bloc/bloc.dart';
 import 'package:cash_box/app/templates_bloc/bloc.dart';
-import 'package:cash_box/domain/account/usecases/sign_out_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_out_use_case.dart';
 import 'package:cash_box/domain/core/usecases/notify_user_id_changed_use_case.dart';
 import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
@@ -23,7 +23,7 @@ Future signOut() async {
   await userCase(NoParams());
 
   final notifyUserIdChangedUseCase = sl<NotifyUserIdChangedUseCase>();
-  final params = NotifyUserIdChangedUseCaseParams(null);
+  final params = NotifyUserIdChangedParams(null);
   notifyUserIdChangedUseCase.call(params);
 
   sl<AuthBloc>().dispatch(LoadAuthStateEvent());

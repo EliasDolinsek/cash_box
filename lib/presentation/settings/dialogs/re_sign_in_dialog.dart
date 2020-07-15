@@ -2,9 +2,8 @@ import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
 import 'package:cash_box/app/accounts_bloc/bloc.dart';
 import 'package:cash_box/app/injection.dart';
 import 'package:cash_box/core/platform/input_converter.dart';
-import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
-import 'package:cash_box/domain/account/usecases/sign_in_with_email_and_password_use_case.dart';
+import 'package:cash_box/domain/account/usecases/auth/sign_in_with_email_and_password_use_case.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/static_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +33,8 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.translateOf(context, "re_sign_in_dialog_hint_password")),
+      title: Text(AppLocalizations.translateOf(
+          context, "re_sign_in_dialog_hint_password")),
       content: _buildContent(),
       actions: _buildActions(),
     );
@@ -43,12 +43,14 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
   List<Widget> _buildActions() {
     return [
       MaterialButton(
-          child: Text(AppLocalizations.translateOf(context, "dialog_btn_cancel")),
+          child:
+              Text(AppLocalizations.translateOf(context, "dialog_btn_cancel")),
           onPressed: () {
             Navigator.pop(context, false);
           }),
       MaterialButton(
-        child: Text(AppLocalizations.translateOf(context, "dialog_btn_confirm")),
+        child:
+            Text(AppLocalizations.translateOf(context, "dialog_btn_confirm")),
         onPressed: _email != null ? _checkAndReSignIn : null,
       ),
     ];
@@ -92,10 +94,10 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
     return TextField(
       controller: _passwordController,
       decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: AppLocalizations.translateOf(context, "re_sign_in_dialog_hint_password"),
-        errorText: _errorText
-      ),
+          border: InputBorder.none,
+          hintText: AppLocalizations.translateOf(
+              context, "re_sign_in_dialog_hint_password"),
+          errorText: _errorText),
       obscureText: true,
     );
   }
@@ -121,7 +123,8 @@ class _ReSignInDialogState extends State<ReSignInDialog> {
 
     result.fold((l) {
       setState(() {
-        _errorText = AppLocalizations.translateOf(context, "re_sign_in_dialog_wrong_password");
+        _errorText = AppLocalizations.translateOf(
+            context, "re_sign_in_dialog_wrong_password");
       });
     }, (r) {
       Navigator.of(context).pop(true);
