@@ -49,4 +49,4 @@ class Account extends Equatable {
 
 enum AccountType { private, business }
 
-enum SignInSource { firebase }
+enum SignInSource { email_password, anonymous }

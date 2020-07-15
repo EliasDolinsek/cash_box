@@ -46,7 +46,7 @@ class SignInAnonymouslyUseCase
   void _createAccount(String userId, AccountType accountType) {
     final account = getDefaultAccount(
       userId: userId,
-      signInSource: SignInSource.firebase,
+      signInSource: SignInSource.anonymous,
       accountType: accountType,
     );
 

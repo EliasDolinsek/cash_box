@@ -19,7 +19,7 @@ void main() {
   test("should call the repository to create a new account", () async {
     final testAccount = Account(
         userID: "user-id",
-        signInSource: SignInSource.firebase,
+        signInSource: SignInSource.email_password,
         accountType: AccountType.business,
         email: "elias.dolinsek@gmail.com",
         appPassword: "Test",

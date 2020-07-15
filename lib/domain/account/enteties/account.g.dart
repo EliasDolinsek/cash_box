@@ -53,7 +53,8 @@ T _$enumDecode<T>(
 }
 
 const _$SignInSourceEnumMap = {
-  SignInSource.firebase: 'firebase',
+  SignInSource.email_password: 'email_password',
+  SignInSource.anonymous: 'anonymous',
 };
 
 const _$AccountTypeEnumMap = {

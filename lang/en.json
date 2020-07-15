@@ -192,5 +192,9 @@
   "btn_add_contact": "ADD CONTACT",
   "txt_change_month_to_see_earlier_receipts": "Change month to see earlier receipts",
   "btn_select_template": "SELECT TEMPLATE",
-  "btn_skip_sign_in": "SKIP SIGN IN"
+  "btn_skip_sign_in": "SKIP SIGN IN",
+  "txt_sign_in": "Sign In",
+  "txt_sign_in_description": "Sign in to be able to access all CashBox features",
+  "sign_in_new_account_dialog_title": "Sign in with a new account",
+  "sign_in_new_account_dialog_description": "This action will override your current anonymous account, including it's selected currency"
 }

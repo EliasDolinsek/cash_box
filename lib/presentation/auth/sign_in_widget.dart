@@ -1,3 +1,5 @@
+import 'package:cash_box/app/accounts_bloc/accounts_bloc.dart';
+import 'package:cash_box/app/accounts_bloc/accounts_event.dart';
 import 'package:cash_box/app/auth_bloc/auth_bloc.dart';
 import 'package:cash_box/app/auth_bloc/auth_event.dart';
 import 'package:cash_box/app/injection.dart';
@@ -263,7 +265,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     final result = await useCase(params);
 
     result.fold((failure) => _displayRegisterFailure(), (userID) {
-      sl<AuthBloc>().dispatch(LoadAuthStateEvent());
+      _reloadAccount();
       Navigator.of(context).pushNamed("/tutorial", arguments: _name);
     });
   }
@@ -336,7 +338,7 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
 
     result.fold((failure) {
       _handleFailureOnSignIn(failure);
-    }, (_) => sl<AuthBloc>().dispatch(LoadAuthStateEvent()));
+    }, (_) => _reloadAccount());
   }
 
   void _signInAnonymously() async {
@@ -346,7 +348,12 @@ class _SignInInputWidgetState extends State<SignInInputWidget> {
     final result = await sl<SignInAnonymouslyUseCase>().call(params);
 
     result.fold(_handleFailureOnSignIn,
-        (_) => sl<AuthBloc>().dispatch(LoadAuthStateEvent()));
+        (_) => _reloadAccount());
+  }
+
+  void _reloadAccount(){
+    sl<AuthBloc>().dispatch(LoadAuthStateEvent());
+    sl<AccountsBloc>().dispatch(GetAccountEvent());
   }
 
   void _handleFailureOnSignIn(Failure failure) {

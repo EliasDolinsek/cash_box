@@ -41,7 +41,7 @@ class RegisterWithEmailAndPasswordUseCase
       String userId, RegisterWithEmailAndPasswordUseCaseParams params) {
     final account = getDefaultAccount(
       userId: userId,
-      signInSource: SignInSource.firebase,
+      signInSource: SignInSource.email_password,
       accountType: params.accountType,
     );
 

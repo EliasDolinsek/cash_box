@@ -41,6 +41,7 @@ class AccountsRepositoryDefaultFirebaseImpl extends AccountsRepository {
     try {
       final documentSnapshot = await usersCollectionReference.document(userID).get();
       final account = Account.fromJSON(documentSnapshot.data);
+
       return Right(account);
     } on Exception {
       return Left(AccountsRepositoryFailure());

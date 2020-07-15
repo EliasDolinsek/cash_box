@@ -8,6 +8,7 @@ import 'package:cash_box/domain/core/usecases/use_case.dart';
 import 'package:cash_box/domain/account/enteties/account.dart';
 import 'package:cash_box/localizations/app_localizations.dart';
 import 'package:cash_box/presentation/auth/auth_toolbox.dart';
+import 'package:cash_box/presentation/settings/accounts/sign_in_settings_list_tile_dialog.dart';
 import 'package:cash_box/presentation/settings/dialogs/data_storage_location_selection_dialog.dart';
 import 'package:cash_box/presentation/settings/name_email_settings_widget.dart';
 import 'package:cash_box/presentation/settings/password_settings_widget.dart';
@@ -24,17 +25,19 @@ class AccountSettingsWidget extends StatelessWidget {
     return SettingsWidget(
       title: AppLocalizations.translateOf(
           context, "account_settings_widget_account"),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          NameEmailSettingsWidget(),
-          SizedBox(height: 16.0),
-          PasswordSettingsWidget(),
-          SizedBox(height: 16.0),
-          SubscriptionTile(),
-          _buildDataStorageLocationTile(),
-          _buildSignOutTile(context)
-        ],
+      content: BlocBuilder(
+        bloc: sl<AccountsBloc>(),
+        builder: (context, state) {
+          if (state is AccountAvailableState) {
+            if (state.account != null) {
+              return _buildContent(context, state.account.signInSource);
+            } else {
+              return LoadingWidget();
+            }
+          } else {
+            return LoadingWidget();
+          }
+        },
       ),
     );
   }
@@ -61,6 +64,46 @@ class AccountSettingsWidget extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget _buildContent(BuildContext context, SignInSource signInSource) {
+    if (signInSource == SignInSource.anonymous) {
+      return _buildSignInListTile(context);
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          NameEmailSettingsWidget(),
+          SizedBox(height: 16.0),
+          PasswordSettingsWidget(),
+          SizedBox(height: 16.0),
+          SubscriptionTile(),
+          _buildDataStorageLocationTile(),
+          _buildSignOutTile(context)
+        ],
+      );
+    }
+  }
+
+  Widget _buildSignInListTile(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        child: Icon(Icons.account_circle),
+      ),
+      title: Text(AppLocalizations.translateOf(context, "txt_sign_in")),
+      subtitle: Text(
+          AppLocalizations.translateOf(context, "txt_sign_in_description")),
+      onTap: () => _onSignInListTileTapped(context),
+    );
+  }
+
+  void _onSignInListTileTapped(BuildContext context) async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) => SignInSettingsListTileDialog(),
+    );
+
+    if (result != null && result) signOut();
   }
 }
 

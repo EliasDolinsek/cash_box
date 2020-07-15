@@ -8,7 +8,7 @@ void main() {
         email: "elias.dolinsek@gmail.com",
         accountType: AccountType.business,
         appPassword: "Test",
-        signInSource: SignInSource.firebase,
+        signInSource: SignInSource.email_password,
         userID: "user-id-01");
 
     final accountMap = testAccount.toJSON();
