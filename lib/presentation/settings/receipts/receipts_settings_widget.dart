@@ -14,7 +14,7 @@ class ReceiptsSettingsWidget extends StatelessWidget {
             localizations.translate("receipt_settings_widget_edit_templates"),
         subtitle: localizations
             .translate("receipt_settings_widget_edit_templates_hint"),
-        icon: Icons.title,
+        icon: Icons.move_to_inbox,
         onTap:  () {
           Navigator.of(context).pushNamed("/receiptTemplatesSettings");
         },

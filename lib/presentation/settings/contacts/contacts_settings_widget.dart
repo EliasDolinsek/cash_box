@@ -15,13 +15,16 @@ class ContactsSettingsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SettingsListTile(
-            title: localizations.translate("contacts_settings_widget_edit_contacts"),
-            subtitle: localizations.translate("contacts_settings_widget_edit_contacts_hint"),
+            title: localizations
+                .translate("contacts_settings_widget_edit_contacts"),
+            subtitle: localizations
+                .translate("contacts_settings_widget_edit_contacts_hint"),
             icon: Icons.contacts,
             onTap: () {
               Navigator.of(context).pushNamed("/contactsSettings");
             },
           ),
+          /*
           SizedBox(height: 16.0),
           SettingsListTile(
             title: localizations.translate("contacts_settings_widget_import_contacts"),
@@ -40,6 +43,7 @@ class ContactsSettingsWidget extends StatelessWidget {
 
             },
           ),
+           */
         ],
       ),
     );

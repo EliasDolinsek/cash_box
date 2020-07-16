@@ -12,7 +12,7 @@ class BucketsSettingsWidget extends StatelessWidget {
         title: AppLocalizations.translateOf(context, "txt_buckets"),
         subtitle:
         AppLocalizations.translateOf(context, "txt_bucket_settings_hint"),
-        icon: Icons.folder,
+        icon: Icons.label_outline,
         onTap: () => Navigator.of(context).pushNamed("/bucketSettings"),),
     );
   }
